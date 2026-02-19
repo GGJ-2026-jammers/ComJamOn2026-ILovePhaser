@@ -52,31 +52,31 @@ export default class BootScene extends Phaser.Scene{
 
 
         //atlas
-        this.load.atlas('ui', 'srcJuego/ui/AtlasTexturas.png', 'srcJuego/ui/AtlasUI.json');
+        // this.load.atlas('ui', 'srcJuego/ui/AtlasTexturas.png', 'srcJuego/ui/AtlasUI.json');
 
         //images
-        this.load.image('heart', 'srcJuego/ui/Corazon.png');
+        //this.load.image('heart', 'srcJuego/ui/Corazon.png');
         
         //sprite sheets
-        this.load.spritesheet('player', 'srcJuego/sprites/Character/with_hands/SpriteSheets/walkSheet.png',
-            { frameWidth: 204, frameHeight: 204});
+        //this.load.spritesheet('player', 'srcJuego/sprites/Character/with_hands/SpriteSheets/walkSheet.png',
+        //    { frameWidth: 204, frameHeight: 204});
       
 
         
             
         //sonidos
-        this.load.audio('golpe','srcJuego/audio/golpe_VSDC.wav');
+        //this.load.audio('golpe','srcJuego/audio/golpe_VSDC.wav');
 
         //json
-        this.load.json('data', 'srcJuego/scripts/JSON/data.json');
+        //this.load.json('data', 'srcJuego/scripts/JSON/data.json');
 
         //TILEMAP, comentar si no hace falta
 
         //carga del tilemap
-        this.load.tilemapTiledJSON('tilemap','srcJuego/tiled/prueba2.json');
+        //this.load.tilemapTiledJSON('tilemap','srcJuego/tiled/prueba2.json');
 
         //carga del tileset
-        this.load.image('patronesTilemap','srcJuego/tiled/arte/Dungeon_Tileset.png');
+        //this.load.image('patronesTilemap','srcJuego/tiled/arte/Dungeon_Tileset.png');
     }
 
 

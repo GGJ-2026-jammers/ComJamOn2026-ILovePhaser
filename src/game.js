@@ -1,5 +1,5 @@
-import Boot from "./boot.js";
-import Title from "./title.js";
+import BootScene from "./scenes/boot.js";
+import Title from "./scenes/title.js";
 
 let config = {
 	type: Phaser.AUTO,
@@ -14,7 +14,7 @@ let config = {
 		height: 512,
 		zoom: 1
 	},
-	scene: [Boot,Title],
+	scene: [BootScene,Title],
 	physics: { 
 		default: 'arcade', 
 		arcade: { 
