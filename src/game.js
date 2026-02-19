@@ -1,4 +1,5 @@
 import BootScene from "./scenes/boot.js";
+import Menu from "./scenes/menu.js";
 import Title from "./scenes/title.js";
 
 let config = {
@@ -10,11 +11,11 @@ let config = {
 		// Configuramos phaser para que se adapte al tamaño de pantalla donde ejecutadmos
 		// con un mínimo y un máximo de tamaño
 		mode: Phaser.Scale.FIT,
-		width: 512,
-		height: 512,
+		width: 960,
+		height: 540,
 		zoom: 1
 	},
-	scene: [BootScene,Title],
+	scene: [BootScene,Title,Menu],
 	physics: { 
 		default: 'arcade', 
 		arcade: { 

@@ -8,6 +8,7 @@ export default class GameOver extends Phaser.Scene{
     }
 
     create(){
+        console.log("gameOver")
         this.winMessage = this.add.text(250,100,'YOU WON',{fontSize:60, fontFamily:'bitdragon',color:"#ff0000ff"}).setOrigin(0,0);
         this.add.text(350,300,'MENU',{fontSize:30, fontFamily:'bitdragon',color:"#ffffffff"}).setOrigin(0,0);
         //dependiendo de si se ha ganado o no se cambia el texto 

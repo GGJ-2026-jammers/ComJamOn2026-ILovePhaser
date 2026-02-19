@@ -13,7 +13,6 @@ export default class BootScene extends Phaser.Scene{
 
     //todo lo del preload quitarlo y dejar solo lo justo y necesario (carga de sprites, audios ,ect)
     preload(){
-        this.load.image('laRoca', 'assets/images/laFuckingRoca.jpg');
         
         //BARRA DE CARGA, comentar si no funciona
         //2 barras
@@ -41,11 +40,14 @@ export default class BootScene extends Phaser.Scene{
             progressBar.fillRect(710, 800, 500 * value, 30);
         });
 
+        this.load.image('laRoca', 'assets/images/laFuckingRoca.jpg');
+        this.load.image('fondo', 'assets/images/Fondo.jpg');
+        this.load.image('laRocaPresentadora', 'assets/images/laRocaPresentadora.png');
+        this.load.image('fondoJuego', 'assets/images/FondoJuego.jpg');
 
         //cuando termina la carga, llamar a la siguiente escena y dormir esta
         this.load.on('complete', () => {
-            console.log("KLK")
-            this.scene.run('StartMenu');
+            this.scene.run('menu');
             this.scene.sleep('boot');
         });
     }

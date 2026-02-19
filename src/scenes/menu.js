@@ -4,31 +4,27 @@ export default class Menu extends Phaser.Scene{
     }
 
     create(){
-        this.add.text(200,200,'TituloJuego',{fontSize:40, fontFamily:'fontDada',color:"#ffffff"});
-        let boton1 = this.add.text(200,300,'BotonJuego1',{fontSize:30, fontFamily:'fontDada',color:"#ffffff"}).setInteractive();
-        let boton2 = this.add.text(200,300,'BotonJuego1',{fontSize:30, fontFamily:'fontDada',color:"#ffffff"}).setInteractive();
-        //this.boton1 = new Button(this,200,300,'BotonJuego1',{fontSize:30, fontFamily:'fontDada',color:"#ffffff"},1,this.goLevel()) --->> usando class Button de carpeta Objects
-        //Math.floor(Math.random()*0xffffff).toString(16).padStart(6, "0") -> para un color random
-        //setStroke ->borde para textos
+        console.log("menu")
 
+        let laRoca = this.add.image(480, 300, "laRoca")
+
+        this.add.text(150,100,'La Roca-Chan',{fontSize:40, fontFamily:'fontDada',color:"#000000"});
+        this.add.text(150,140,'Games UwU',{fontSize:40, fontFamily:'fontDada',color:"#000000"});
+        let boton1 = this.add.text(150,225,'JUGAR',{fontSize:30, fontFamily:'fontDada',color:"#000000"}).setInteractive();
+        let boton2 = this.add.text(150,300,'BotonJuego2',{fontSize:30, fontFamily:'fontDada',color:"#000000"}).setInteractive();
+        
 
         //botones interactivos para llamar al level 1
         boton1.on('pointerdown', ()=>{
-            this.scene.start('level',n) //n = dataNecesaria en caso de necesitar
+            this.scene.start('title') //n = dataNecesaria en caso de necesitar
         })
         boton2.on('pointerdown', ()=>{
-            this.scene.start('level',n) //n = dataNecesaria en caso de necesitar
+            this.scene.start('level') //n = dataNecesaria en caso de necesitar
         })
-
-        //sonidos
-        this.menuMusic = this.sound.add('menu', {loop:true});
-        this.menuMusic.play();
     }
 
     goLevel(){
         this.scene.run('level')
         this.scene.sleep('menu');
-
-        this.menuMusic.stop(); //.pause guardaría el momento del audio que estaba en ejecucion
     }
 }

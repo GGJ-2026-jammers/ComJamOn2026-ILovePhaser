@@ -12,47 +12,18 @@ export default class Title extends Phaser.Scene {
     }
 
     create(){
-        this.drawText(this.game.config.width/2, 80,  "Pinguin-chan \n Wars", 65)
-        
-        this.drawText(this.game.config.width/2, 250,  "1P. Game", 25)
-        this.drawText(this.game.config.width/2, 300,  "VS. Game", 25)
+        console.log("Title")
+        this.fondo = this.add.image(0, 0, "fondo").setOrigin(0, 0);
+        this.fondo.setScale(0.5)
 
-        this.selector = this.add.image(180, 250, "ball").setOrigin(0, 0);
-        
-        this.P1 = true;
+        this.laRoca = this.add.image(50, 155, "laRocaPresentadora").setOrigin(0, 0);
+        this.laRoca.setScale(0.1)
 
-        this.wKey = this.input.keyboard.addKey("w")
-        this.sKey = this.input.keyboard.addKey("s")
-        this.spaceKey = this.input.keyboard.addKey("space")
-
-        this.wKey.on('down', ()=>{
-            this.moveSelector(); 
-        })
-
-        this.sKey.on('down', ()=>{
-            this.moveSelector(); 
-        })
-
-        this.spaceKey.on('down', ()=>{
-            //cambiar escena
-            this.scene.start("level", {P1mode: this.P1})
-        })
-
-    }
-
-    moveSelector() {
-        this.P1 = !this.P1;
-        this.selector.y = this.P1 ? 250 : 300;
+        this.fondoJuego = this.add.image(450, 145, "fondoJuego").setOrigin(0, 0);
+        this.fondoJuego.setScale(0.19)
     }
 
     update(t, dt){
-
-    }
-
-    drawText(x, y, text, size){
-        this.add.text(x, y,  text, {
-            fontFamily: "babelgam" , color: '#BD14D3', fontSize: size
-        }).setOrigin(0.5, 0)
 
     }
 }
