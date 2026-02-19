@@ -1,0 +1,150 @@
+export default class Boot extends Phaser.Scene {
+	/**
+	 * Constructor de la escena
+	 */
+	constructor() {
+		super({ key: 'boot' });
+	}
+
+	// Carga de recursos
+	preload(){
+		this.load.image('background', 'assets/background.png');
+		this.load.image('table', 'assets/table.png');
+		this.load.image('ball', 'assets/ball16.png');
+		this.load.image('score', 'assets/score.png');
+		
+		this.load.spritesheet('penguin', 'assets/penguin40.png', {frameWidth: 40, frameHeight: 40});
+		this.load.spritesheet('rat', 'assets/rat32.png', {frameWidth: 32, frameHeight: 32});
+
+		this.load.audio("collide", "assets/sounds/collide.mp3");
+		this.load.audio("lose", "assets/sounds/lose.mp3");
+		this.load.audio("throw_ball", "assets/sounds/throw_ball.mp3");
+		this.load.audio("win", "assets/sounds/win.mp3");
+		this.load.audio("stun", "assets/sounds/stun.mp3");
+	}
+
+	// Creación de la escena.
+	create() {
+		this.createPenguinAnimations()
+		this.createRatAnimations()
+		this.scene.start('title');
+	}
+
+	// Animaciones del Pingüino
+	createPenguinAnimations(){
+		// Pingüino quieto (sin bola)
+		this.anims.create({
+			key: 'penguinIdle',
+			frames: this.anims.generateFrameNumbers('penguin', {start:0, end:0}),
+			frameRate: 5,
+			repeat: -1
+		});
+
+		// Pingüino quieto (sin bola)
+		this.anims.create({
+			key: 'penguinIdleBall',
+			frames: this.anims.generateFrameNumbers('penguin', {start:5, end:5}),
+			frameRate: 5,
+			repeat: -1
+		});
+
+		// Pingüino en movimiento (sin bola)
+		this.anims.create({
+			key: 'penguinMove',
+			frames: this.anims.generateFrameNumbers('penguin', {start:1, end:2}),
+			frameRate: 5,
+			repeat: -1
+		});
+
+		// Pingüino en movimiento (con bola)
+		this.anims.create({
+			key: 'penguinMoveBall',
+			frames: this.anims.generateFrameNumbers('penguin', {start:6, end:7}),
+			frameRate: 5,
+			repeat: -1
+		});
+
+		// Pingüino estuneado
+		this.anims.create({
+			key: 'penguinStun',
+			frames: this.anims.generateFrameNumbers('penguin', {start:9, end:10}),
+			frameRate: 5,
+			repeat: -1
+		});
+
+		// Pingüino que ha ganado
+		this.anims.create({
+			key: 'penguinWin',
+			frames: this.anims.generateFrameNumbers('penguin', {start:11, end:12}),
+			frameRate: 5,
+			repeat: -1
+		});
+
+		// Pingüino que ha perdido
+		this.anims.create({
+			key: 'penguinLoose',
+			frames: this.anims.generateFrameNumbers('penguin', {start:8, end:8}),
+			frameRate: 5,
+			repeat: -1
+		});
+	}
+
+	// Animaciones de la Rata
+	createRatAnimations(){
+		// Rata quieta (sin bola)
+		this.anims.create({
+			key: 'ratIdle',
+			frames: this.anims.generateFrameNumbers('rat', {start:5, end:5}),
+			frameRate: 5,
+			repeat: -1
+		});
+
+		// Rata quieta (con bola)
+		this.anims.create({
+			key: 'ratIdleBall',
+			frames: this.anims.generateFrameNumbers('rat', {start:0, end:0}),
+			frameRate: 5,
+			repeat: -1
+		});
+
+		// Rata en movimiento (sin bola)
+		this.anims.create({
+			key: 'ratMove',
+			frames: this.anims.generateFrameNumbers('rat', {start:3, end:4}),
+			frameRate: 5,
+			repeat: -1
+		});
+
+		// Rata en movimiento (con bola)
+		this.anims.create({
+			key: 'ratMoveBall',
+			frames: this.anims.generateFrameNumbers('rat', {start:1, end:2}),
+			frameRate: 5,
+			repeat: -1
+		});
+
+		// Rata estuneada
+		this.anims.create({
+			key: 'ratStun',
+			frames: this.anims.generateFrameNumbers('rat', {start:8, end:10}),
+			frameRate: 5,
+			repeat: -1
+		});
+
+		// Rata que ha ganado
+		this.anims.create({
+			key: 'ratWin',
+			frames: this.anims.generateFrameNumbers('rat', {start:6, end:6}),
+			frameRate: 5,
+			repeat: -1
+		});
+
+		// Rata que ha perdido
+		this.anims.create({
+			key: 'ratLoose',
+			frames: this.anims.generateFrameNumbers('rat', {start:11, end:12}),
+			frameRate: 5,
+			repeat: -1
+		});
+	}
+}
