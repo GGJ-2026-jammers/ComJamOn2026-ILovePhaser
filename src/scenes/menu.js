@@ -9,13 +9,13 @@ export default class Menu extends Phaser.Scene{
         let laRoca = this.add.image(700, 300, "laRoca2");
         laRoca.setScale(0.4)
 
-        this.add.text(100,100,'La Roca-Chan',{fontSize:50, fontFamily:'fontDada',color:"#000000"});
-        this.add.text(110,140,'Games UwU',{fontSize:50, fontFamily:'fontDada',color:"#000000"});
-        let boton1 = this.add.text(105,275,'JUGAR',{
-            fontSize: '75px',
-            fontFamily:'palabras',
+        this.add.text(100,50,'La Roca-Chan',{fontSize:100, fontFamily:'fuenteKLK',color:"#000000"});
+        this.add.text(140,125,'Games UwU',{fontSize:100, fontFamily:'fuenteKLK',color:"#000000"});
+        let boton1 = this.add.text(200,275,'JUGAR',{
+            fontSize: '100px',
+            fontFamily:'fuenteKLK',
             color:"#000000",
-            stroke: '#000000',
+            stroke: '#ffffff',
             strokeThickness: 4
         }).setInteractive();
 
@@ -26,10 +26,20 @@ export default class Menu extends Phaser.Scene{
             this.scene.start('title')
         })
         boton1.on('pointerover', () => {
-            boton1.setStroke('#ffffff', 6);
+            boton1.setStyle({
+                stroke: '#c4c4c4',
+                strokeThickness: 6,
+                fontFamily: 'fuenteKLK',
+                fontSize: '100px'  // el tamaño original
+            });
         });
         boton1.on('pointerout', () => {
-            boton1.setStroke('#000000', 4);
+            boton1.setStyle({
+                stroke: '#ffffff',
+                strokeThickness: 4,
+                fontFamily: 'fuenteKLK',
+                fontSize: '100px'
+            });
         });
     }
 

@@ -5,6 +5,11 @@
   src: url('../assets/Babelgam.ttf') format('truetype');
 }
 
+@font-face {
+    font-family: 'fuenteKLK';
+    src: url('../assets/images/KLK.otf') format('opentype');
+}
+
 h1 {
   text-align: center;
   font-family: 'babelgam';
