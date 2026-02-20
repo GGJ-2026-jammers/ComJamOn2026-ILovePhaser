@@ -1,6 +1,7 @@
 import BootScene from "./scenes/boot.js";
 import Menu from "./scenes/menu.js";
 import Title from "./scenes/title.js";
+import PauseScene from "./scenes/pauseScene.js";
 
 let config = {
 	type: Phaser.AUTO,
@@ -15,7 +16,7 @@ let config = {
 		height: 540,
 		zoom: 1
 	},
-	scene: [BootScene,Title,Menu],
+	scene: [BootScene,Title,Menu,PauseScene],
 	physics: { 
 		default: 'arcade', 
 		arcade: { 
