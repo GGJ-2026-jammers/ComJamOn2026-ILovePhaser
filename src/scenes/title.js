@@ -1,6 +1,7 @@
 import Word from "../objects/word.js"
 import Letter from "../objects/letter.js";
 import PauseScene from "../scenes/pauseScene.js";
+import textBox from "../objects/textBox.js";
 
 export default class Title extends Phaser.Scene {
     constructor() {
@@ -70,7 +71,7 @@ export default class Title extends Phaser.Scene {
             const letras = linea.split("")
             let palabra = []
             letras.forEach((letra, index) => {
-                palabra.push(new Letter(this, 0 + index * letterSpacing, 0, 'letras', this.font.get(letra)))
+                palabra.push(new Letter(this, 0 + index * letterSpacing, 0, 'letras', this.font.get(letra), letra))
             });
             palabras.set(linea, new Word(this, 30, 100 + index * offset, palabra))
         })
@@ -86,29 +87,22 @@ export default class Title extends Phaser.Scene {
 
     mainLoop(){
         if (this.mode === 'normal'){
-            do
-            {
-                if (this.currentWordIndex < this.maxWords / 3){this.nextWordTime = 3000}
-                else if (this.currentWordIndex < (this.maxWords / 3) * 2) {this.nextWordTime = 1700}
-                else if (this.currentWordIndex < this.maxWords) {this.nextWordTime = 1200}
-                let skipWord = false
-                let newWord = this.time.addEvent({
-                    delay: this.nextWordTime,
-                    callback: () => {
-                        skipWord = true
-                    }
-                })
-                // while(skipWord){
-                    
-                // }
-                this.currentWordIndex++
-            }
-            while (this.currentWordIndex < this.maxWords)
+            new textBox(this, 30, 300, this.currentWord);
+            if (this.currentWordIndex < this.maxWords / 3){this.nextWordTime = 3000}
+            else if (this.currentWordIndex < (this.maxWords / 3) * 2) {this.nextWordTime = 1700}
+            else if (this.currentWordIndex < this.maxWords) {this.nextWordTime = 1200}
         }
     }
 
     nextWord(){
         this.currentWordIndex++;
         this.currentWord =  this.words[this.currentWordIndex]; 
+    }
+
+    update(t, dt){
+        if (this.currentWordIndex < this.maxWords / 3){this.nextWordTime = 3000}
+        else if (this.currentWordIndex < (this.maxWords / 3) * 2) {this.nextWordTime = 1700}
+        else if (this.currentWordIndex < this.maxWords) {this.nextWordTime = 1200}
+        
     }
 }
