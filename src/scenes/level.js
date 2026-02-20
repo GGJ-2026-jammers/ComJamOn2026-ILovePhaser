@@ -32,7 +32,7 @@ export default class Level extends Phaser.Scene{
         frames.forEach((frame, index) => {
             this.lettersSprites.set(frame, index)   
         });
-         let offset = 100;
+        let offset = 100;
         let letterSpacing = 50;
         
                 lineas.forEach((linea, index) => {
