@@ -27,7 +27,7 @@ export default class Title extends Phaser.Scene {
         const palabras = new Map()
         
         const txt = this.cache.text.get('palabras')
-        const lineas = txt.replace(/\r\n/g, "\n").split("\n").filter(l => l.trim() !== "");
+        const lineas = txt.replace(/\r\n/g, "\n").split("\n");
 
         let offset = 100;
         let letterSpacing = 50;
@@ -36,7 +36,7 @@ export default class Title extends Phaser.Scene {
             const letras = linea.split("")
             let palabra = []
             letras.forEach((letra, index) => {
-                palabra.push(new Letter(this, 0 + index * letterSpacing, 0, `letra_${letra}`))
+                palabra.push(new Letter(this, 0 + index * letterSpacing, 0, letra))
             });
             palabras.set(linea, new Word(this, 400, 100 + index * offset, palabra))
         })

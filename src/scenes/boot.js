@@ -53,7 +53,7 @@ export default class BootScene extends Phaser.Scene{
         // Cargar letras del abecedario
         const abecedario = "abcdefghijklmnopqrstuvwxyzñ";
         for (const letra of abecedario) {
-            this.load.image(`letra_${letra}`, `assets/images/${letra}.png`);
+            this.load.image(`${letra}`, `assets/images/${letra}.png`);
         }
 
         //cuando termina la carga, llamar a la siguiente escena y dormir esta
