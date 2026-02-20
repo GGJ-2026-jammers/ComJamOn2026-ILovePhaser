@@ -62,21 +62,20 @@ export default class Title extends Phaser.Scene {
             });
             palabras.set(linea, new Word(this, 30, 100 + index * offset, palabra))
         })
-
-        const inicio = this.add.timeline([
-            {
-                at: 1000,
-                run: () => {
-                    // animacion inicial del presentador
-                }
-            },
-            {
-                at: 5000,
-                run: () => {
-                    this.mainLoop()
-                }
-            }
-        ])
+        // const inicio = this.add.timeline([
+        //     {
+        //         at: 1000,
+        //         run: () => {
+        //             // animacion inicial del presentador
+        //         }
+        //     },
+        //     {
+        //         at: 5000,
+        //         run: () => {
+        //             this.mainLoop()
+        //         }
+        //     }
+        // ])
     }
 
     mainLoop(){
@@ -94,7 +93,7 @@ export default class Title extends Phaser.Scene {
                     }
                 })
                 while(skipWord){
-
+                    
                 }
 
             }
