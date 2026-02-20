@@ -11,9 +11,9 @@ export default class Button extends Phaser.GameObjects.Text{
      * @param {boolean} hoverChangeColor bool para si se cambia el color del texto al pasar por encima
      * @param {string} hoverColor color al que cambiar el texto en caso de que hoverChangeColor sea true
      */
-    constructor(scene, x, y, text,config,baseScale,func,hover = true,hoverChangeColor = false, hoverColor= ''){
+    constructor(scene, x, y, text, config, baseScale, func, hover = true,hoverChangeColor = false, hoverColor= ''){
 
-        super(scene, x,y, text,config);
+        super(scene, x, y, text, config);
 
         this.setOrigin(0.5 , 0.5)
         this.setScale(baseScale,baseScale);
@@ -29,7 +29,7 @@ export default class Button extends Phaser.GameObjects.Text{
         //al poner el raton encima
         this.on('pointerover',function(){
             if(hover){
-                this.setScale(baseScale+0.03,baseScale+0.03);
+                this.setScale(baseScale+3,baseScale+3);
             }
 
             if(hoverChangeColor){
