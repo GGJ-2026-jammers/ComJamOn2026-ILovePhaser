@@ -1,0 +1,16 @@
+{
+  "compilerOptions": {
+    "checkJs": true,
+    "lib": [
+      "ES2015",
+      "DOM"
+    ],
+    "typeRoots": [
+      "./types"
+    ]
+  },
+  "include": [
+    "src/**/*.js",
+    "types/**/*.d.ts"
+  ]
+}

@@ -5,9 +5,8 @@ export default class Button extends Phaser.GameObjects.Text{
      * @param {*} scene 
      * @param {*} x 
      * @param {*} y 
-     * @param {string} key clave para acceder al sprite del boton
      * @param {number} baseScale escala a la que poner el sprite designado
-     * @param {funcion} func funcion llamada al pulsar el boton
+     * @param {Function} func funcion llamada al pulsar el boton
      * @param {boolean} hover bool para si se cambia la escala del texto al pasar por encima
      * @param {boolean} hoverChangeColor bool para si se cambia el color del texto al pasar por encima
      * @param {string} hoverColor color al que cambiar el texto en caso de que hoverChangeColor sea true
