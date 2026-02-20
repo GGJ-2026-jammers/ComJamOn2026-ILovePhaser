@@ -25,6 +25,13 @@ export default class Title extends Phaser.Scene {
         this.fondoJuego = this.add.image(450, 145, "fondoJuego").setOrigin(0, 0);
         this.fondoJuego.setScale(0.19)
         const palabras = new Map()
+        const fuente = new Map()
+        let abecedario = "abcdefghijklmnopqrstuvwxyz"
+        const frames = abecedario.split("")
+        frames.forEach((frame, index) => {
+            fuente.set(frame, index)   
+        });
+
         
         const txt = this.cache.text.get('palabras')
         const lineas = txt.replace(/\r\n/g, "\n").split("\n");
@@ -36,9 +43,9 @@ export default class Title extends Phaser.Scene {
             const letras = linea.split("")
             let palabra = []
             letras.forEach((letra, index) => {
-                palabra.push(new Letter(this, 0 + index * letterSpacing, 0, letra))
+                palabra.push(new Letter(this, 0 + index * letterSpacing, 0, 'letras', fuente.get(letra)))
             });
-            palabras.set(linea, new Word(this, 400, 100 + index * offset, palabra))
+            palabras.set(linea, new Word(this, 30, 100 + index * offset, palabra))
         })
         
     }
