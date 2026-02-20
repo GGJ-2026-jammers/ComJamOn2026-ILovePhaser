@@ -1,20 +1,34 @@
 import Word from "../objects/word.js"
 import Letter from "../objects/letter.js";
+import PauseScene from "../scenes/pauseScene.js";
 
 export default class Title extends Phaser.Scene {
-    constructor(){
+    constructor() {
         super({ key: "title" });
     }
 
-    init(){
+    init() {
 
     }
 
-    preload(){
+    preload() {
 
     }
 
-    create(){
+    create() {
+        this.pauseScene = new PauseScene();
+        this.input.keyboard.on('keydown-P', () => {
+
+            if (!this.scene.isPaused()) {
+                console.log("Pausa");
+                this.scene.pause();
+                this.scene.launch('pauseScene');
+            }
+
+        });
+
+
+
         console.log("Title")
         this.fondo = this.add.image(0, 0, "fondo").setOrigin(0, 0);
         this.fondo.setScale(0.5)
@@ -29,10 +43,10 @@ export default class Title extends Phaser.Scene {
         let abecedario = "abcdefghijklmnopqrstuvwxyz"
         const frames = abecedario.split("")
         frames.forEach((frame, index) => {
-            fuente.set(frame, index)   
+            fuente.set(frame, index)
         });
 
-        
+
         const txt = this.cache.text.get('palabras')
         const lineas = txt.replace(/\r\n/g, "\n").split("\n");
 
@@ -47,10 +61,10 @@ export default class Title extends Phaser.Scene {
             });
             palabras.set(linea, new Word(this, 30, 100 + index * offset, palabra))
         })
-        
+
     }
 
-    update(t, dt){
+    update(t, dt) {
 
     }
 }
