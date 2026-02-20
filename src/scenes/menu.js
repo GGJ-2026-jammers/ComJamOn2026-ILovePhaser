@@ -19,7 +19,7 @@ export default class Menu extends Phaser.Scene{
             this.scene.start('title') //n = dataNecesaria en caso de necesitar
         })
         boton2.on('pointerdown', ()=>{
-            this.scene.start('level') //n = dataNecesaria en caso de necesitar
+            this.scene.start('Scene1') //n = dataNecesaria en caso de necesitar
         })
     }
 

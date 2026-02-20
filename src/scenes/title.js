@@ -43,9 +43,9 @@ export default class Title extends Phaser.Scene {
             const letras = linea.split("")
             let palabra = []
             letras.forEach((letra, index) => {
-                palabra.push(new Letter(this, 0 + index * letterSpacing, 0, 'letras', fuente.get(letra)))
+                palabra.push(new Letter(this, 0 + index * letterSpacing, 0, 'letras', fuente.get(letra), letra))
             });
-            palabras.set(linea, new Word(this, 30, 100 + index * offset, palabra))
+            palabras.set(linea, new Word(this, 30, 100 + index * offset, palabras[0]))
         })
         
     }

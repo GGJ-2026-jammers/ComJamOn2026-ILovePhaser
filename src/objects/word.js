@@ -3,9 +3,10 @@ export default class Word extends Phaser.GameObjects.Container{
         super(scene, x, y, letters)
         this.palabra = ""
         scene.add.existing(this);
+        this.letters = letters
         letters.forEach(letter => {
-            this.palabra += letter.name
-            console.log(`${letter.name}\n`)
+            this.palabra += letter.char
+            console.log(`${letter.char}\n`)
             this.add(letter)
         });
         console.log(this.palabra)
