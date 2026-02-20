@@ -1,8 +1,9 @@
 import Word from "../objects/word.js"
 import Letter from "../objects/letter.js";
+import PauseScene from "../scenes/pauseScene.js";
 
 export default class Title extends Phaser.Scene {
-    constructor(){
+    constructor() {
         super({ key: "title" });
         
     }
@@ -11,11 +12,22 @@ export default class Title extends Phaser.Scene {
         this.mode = data.mode
     }
 
-    preload(){
+    preload() {
 
     }
 
     create(){
+        this.pauseScene = new PauseScene();
+        this.input.keyboard.on('keydown-P', () => {
+
+            if (!this.scene.isPaused()) {
+                console.log("Pausa");
+                this.scene.pause();
+                this.scene.launch('pauseScene');
+            }
+
+        });
+
         this.rnd = new Phaser.Math.RandomDataGenerator();
         this.words = [];
         this.score = 0;
