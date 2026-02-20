@@ -1,3 +1,4 @@
+import Button from "../objects/button.js";
 class PauseScene extends Phaser.Scene {
     constructor() {
         super({ key: 'pauseScene' });
@@ -34,6 +35,11 @@ class PauseScene extends Phaser.Scene {
             }
         ).setOrigin(0.5).setDepth(102).setAlpha(0);
 
+        this.btnReanudar = new Button(this, centerX, centerY, 'Reanudar partida', { fontFamily: 'Babelgam', fontSize: '14px', color: '#ffffff' }, 1, () => {
+            console.log("Has dado al boton para reanudar partida");
+            this.scene.stop(); // cerrar pausa
+            this.scene.resume('title'); // reanudar Title
+        }).setDepth(100);
 
         // Botón fullscreen (esquina superior izquierda)
         const fsButton = this.add.rectangle(20, 20, 40, 40, 0xffffff)
