@@ -4,10 +4,11 @@ import Letter from "../objects/letter.js";
 export default class Title extends Phaser.Scene {
     constructor(){
         super({ key: "title" });
+        
     }
 
-    init(){
-
+    init(data){
+        this.mode = data.mode
     }
 
     preload(){
@@ -16,6 +17,9 @@ export default class Title extends Phaser.Scene {
 
     create(){
         console.log("Title")
+        this.maxPalabras = 30
+        this.inGame = true
+        this.nextWordTime = 2000
         this.fondo = this.add.image(0, 0, "fondo").setOrigin(0, 0);
         this.fondo.setScale(0.5)
 
@@ -47,10 +51,34 @@ export default class Title extends Phaser.Scene {
             });
             palabras.set(linea, new Word(this, 30, 100 + index * offset, palabra))
         })
-        
+
+        const inicio = this.add.timeline([
+            {
+                at: 1000,
+                run: () => {
+                    // animacion inicial del presentador
+                }
+            },
+            {
+                at: 5000,
+                run: () => {
+                    this.mainLoop()
+                }
+            }
+        ])
     }
 
-    update(t, dt){
-
+    mainLoop(){
+        if (this.mode === 'normal'){
+            let index = 0;
+            do
+            {
+                if (index < this.maxPalabras){}
+                let newWord = this.time.addEvent({
+                    delay: this.nextWordTime
+                })
+            }
+            while (index < this.maxPalabras)
+        }
     }
 }
