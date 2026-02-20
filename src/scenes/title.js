@@ -74,20 +74,14 @@ export default class Title extends Phaser.Scene {
             });
             palabras.set(linea, new Word(this, 30, 100 + index * offset, palabra))
         })
-        // const inicio = this.add.timeline([
-        //     {
-        //         at: 1000,
-        //         run: () => {
-        //             // animacion inicial del presentador
-        //         }
-        //     },
-        //     {
-        //         at: 5000,
-        //         run: () => {
-        //             this.mainLoop()
-        //         }
-        //     }
-        // ])
+
+        this.time.delayedCall(1000, this.startAnimation)
+        this.time.delayedCall(1000, this.mainLoop)
+        
+    }
+
+    startAnimation(){
+
     }
 
     mainLoop(){
@@ -104,10 +98,10 @@ export default class Title extends Phaser.Scene {
                         skipWord = true
                     }
                 })
-                while(skipWord){
+                // while(skipWord){
                     
-                }
-
+                // }
+                this.currentWordIndex++
             }
             while (this.currentWordIndex < this.maxWords)
         }
