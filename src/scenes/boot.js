@@ -45,6 +45,7 @@ export default class BootScene extends Phaser.Scene{
         });
 
         this.load.image('laRoca', 'assets/images/laFuckingRoca.jpg');
+        this.load.image('laRoca2', 'assets/images/laRoca.jpg'); 
         this.load.image('fondo', 'assets/images/Fondo.jpg');
         this.load.image('laRocaPresentadora', 'assets/images/laRocaPresentadora.png');
         this.load.image('fondoJuego', 'assets/images/FondoJuego.jpg');
