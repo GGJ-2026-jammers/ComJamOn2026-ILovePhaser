@@ -71,7 +71,7 @@ export default class GuessWord {
                                     }
                                 });
 
-                                this.scene.time.delayedCall(200, () => {
+                                this.scene.time.delayedCall(50, () => {
                                     this.letters.forEach(element => {
                                         element.setTint(0xffffff);
                                     });
@@ -153,6 +153,16 @@ export default class GuessWord {
     }
 
     setWord(word) {
+        if (this.letters){
+            this.scene.tweens.add({
+                targets: this.letters,
+                duration: 500,
+                angle: 1080,
+                scale: 0,
+                alpha: 0
+                onComplete: 
+            })
+        }
         this.destroy();
         this.word = word;
         this.reset();
