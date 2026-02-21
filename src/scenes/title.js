@@ -79,6 +79,9 @@ export default class Title extends Phaser.Scene {
         this.MULTI_BONUS = 0.75;
         this.TIME_REDUCTION_STEP = 200;
         this.TIME_REDUCTION_EVERY_WORDS = 5;
+        this.REFERENCE_WORD_LENGTH = 8;
+        this.MIN_WORD_TIME = 2900;
+        this.MAX_WORD_TIME = 3600;
     }
 
     setRandomWords() {
@@ -86,7 +89,7 @@ export default class Title extends Phaser.Scene {
         this.words = [];
         this.wordsMap = new Map();
         this.score = 500;
-        this.maxWords = 5;
+        this.maxWords = 30;
         const txt = this.cache.text.get('palabras');
         const lineas = txt.replace(/\r\n/g, "\n").split("\n");
         this.mode = 0;
@@ -175,9 +178,11 @@ export default class Title extends Phaser.Scene {
     resetTime() {
         const reductionLevel = Math.floor(this.currentWordIndex / this.TIME_REDUCTION_EVERY_WORDS);
         const reductionMs = reductionLevel * this.TIME_REDUCTION_STEP;
-        const baseTime = this.BASE_NEXT_WORD_TIME + (this.words[this.currentWordIndex].length * this.LETTER_TIME);
+        const wordLength = this.words[this.currentWordIndex].length;
+        const lengthDelta = wordLength - this.REFERENCE_WORD_LENGTH;
+        const baseTime = this.BASE_NEXT_WORD_TIME + (lengthDelta * this.LETTER_TIME);
 
-        this.currentTime = baseTime - reductionMs;
+        this.currentTime = Phaser.Math.Clamp(baseTime - reductionMs, this.MIN_WORD_TIME, this.MAX_WORD_TIME);
         this.maxCurrentTime = this.currentTime;
         this.updateTimeBar();
     }
