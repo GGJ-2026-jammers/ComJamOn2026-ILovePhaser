@@ -31,14 +31,14 @@ export default class GameOver extends Phaser.Scene{
         if(this.runData.correctWords ===30) frame = 0;
 
         this.add.image(100,20,'infoRunPanel',frame).setOrigin(0,0).setDepth(0);
-        let maxScoreText = this.add.bitmapText(150,100,'bitFont',"Max Score: " + this.registry.get('maxScore')).setDepth(1);
-        let score = this.add.bitmapText(150,150,'bitFont',"Score: " + this.runData.score).setDepth(1);
-        let maxComboEver = this.add.bitmapText(150,200,'bitFont',"Max Combo Ever: " + this.registry.get('maxCombo')).setDepth(1);
-        let maxComboText = this.add.bitmapText(150,250,'bitFont',"Max Combo: " + this.runData.maxCombo).setDepth(1);
-        let correctWords = this.add.bitmapText(150,300,'bitFont',"Correct words: " + this.runData.correctWords).setDepth(1);
+        let maxScoreText = this.add.bitmapText(150,90,'bitFont',"Max Score: " + this.registry.get('maxScore')).setDepth(1);
+        let score = this.add.bitmapText(150,140,'bitFont',"Score: " + this.runData.score).setDepth(1);
+        let maxComboEver = this.add.bitmapText(150,210,'bitFont',"Max Combo Ever: " + this.registry.get('maxCombo')).setDepth(1);
+        let maxComboText = this.add.bitmapText(150,260,'bitFont',"Max Combo: " + this.runData.maxCombo).setDepth(1);
+        let correctWords = this.add.bitmapText(150,310,'bitFont',"Correct words: " + this.runData.correctWords).setDepth(1);
 
         if(newRecordScore){
-            let newRecordScoreText = this.add.bitmapText(150,80,'bitFont','New Record!!!',18).setTint(0x00ff00);
+            let newRecordScoreText = this.add.bitmapText(150,60,'bitFont','New Record!!!',18).setTint(0x00ff00);
             this.multiTween = this.tweens.add({
                 targets: newRecordScoreText,
                 scale: { from: 1, to: 1.15 },
