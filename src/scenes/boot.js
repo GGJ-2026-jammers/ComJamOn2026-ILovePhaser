@@ -64,6 +64,7 @@ export default class BootScene extends Phaser.Scene {
         this.load.audio("correct", "assets/sounds/correct.mp3");
         this.load.audio("incorrect", "assets/sounds/incorrect.mp3");
         this.load.audio('musica', "assets/sounds/musicaTestMario.mp3")
+        this.load.audio("cheer", "assets/sounds/cheer.wav");
 
         //Sonidos Letras
         for (let i = 0; i < 27; i++) {

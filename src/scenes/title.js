@@ -46,7 +46,9 @@ export default class Title extends Phaser.Scene {
         this.palabra = new GuessWord(this.words[0], this.font, this, () => { this.nextWord(true); });
         this.palabra.showWord();
 
-        this.multiplierText = this.add.text(700, 50, 'MULTI:' + this.multiplier, { fontSize: 30, fontFamily: 'babelgam', color: "#fd0000" })
+        this.multiplierText = this.add.text(404,130,'MULTI:' + this.multiplier,{fontSize:30, fontFamily:'babelgam',color:"#fd0000"})
+        this.multiplierText.setOrigin(0.5, 0.5);
+
         this.multiTween = this.tweens.add({
             targets: this.multiplierText,
             scale: { from: 1, to: 1.15 },
@@ -204,7 +206,9 @@ export default class Title extends Phaser.Scene {
             this.multiplier += this.MULTIPLIER;
             if (this.words[this.currentWordIndex].length >= 9) {
                 this.multiplier += this.MULTI_BONUS;
-                let bonusText = this.add.text(720, 80, "BONUS!!!", { fontSize: 30, fontFamily: 'babelgam', color: "#ffffff" })
+
+                let bonusText = this.add.text(404,160, "BONUS!!!",{fontSize:30, fontFamily:'babelgam',color:"#ffffff"}).setOrigin(0.5, 0.5);
+
                 // Tween de pulso (scale + alpha)
                 this.tweens.add({
                     targets: bonusText,
@@ -217,6 +221,7 @@ export default class Title extends Phaser.Scene {
                 });
 
                 const rainbowTween = this.tweens.addCounter({
+                    
                     from: 0,
                     to: 1,
                     duration: 1200,
