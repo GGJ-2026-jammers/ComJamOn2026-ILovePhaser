@@ -22,12 +22,14 @@ export default class Title extends Phaser.Scene {
 
         this.setRandomWords();
         console.log("Title")
-    
+        
         this.inGame = true
-        this.nextWordTime = 2000
-        this.currentWordIndex = 0
+        this.BASE_NEXT_WORD_TIME = 2000;
+        this.LETTER_TIME = 100;
+        this.currentTime = this.BASE_NEXT_WORD_TIME;
+        this.currentWordIndex = 0;
         this.fondo = this.add.image(0, 0, "fondo").setOrigin(0, 0);
-        this.fondo.setScale(0.5)
+        this.fondo.setScale(0.5);
 
         this.laRoca = this.add.image(50, 155, "laRocaPresentadora").setOrigin(0, 0);
         this.laRoca.setScale(0.1)
@@ -53,7 +55,7 @@ export default class Title extends Phaser.Scene {
         this.rnd = new Phaser.Math.RandomDataGenerator();
         this.words = [];
         this.score = 0;
-        this.maxWords = 30;
+        this.maxWords = 2;
         const txt = this.cache.text.get('palabras');
         const lineas = txt.replace(/\r\n/g, "\n").split("\n");
 
@@ -61,6 +63,8 @@ export default class Title extends Phaser.Scene {
         for (let i = 0; i < this.maxWords; i++) {
             this.words.push(lineas[this.rnd.integerInRange(0, lineas.length - 1)]);
         }
+
+        this.rightAnswers = 0;
     }
 
     createPauseScene() {
@@ -76,10 +80,30 @@ export default class Title extends Phaser.Scene {
 
     update(t, dt){
         this.palabra.update(dt);
+        this.currentTime -= dt;
+        if(this.currentTime <= 0){
+            this.nextWord(false);
+        }
     }
-
-    nextWord(){
-        this.currentWordIndex++;
-        this.palabra.setWord(this.words[this.currentWordIndex]);
+    
+    resetTime() {
+        this.currentTime = this.BASE_NEXT_WORD_TIME + (this.words[this.currentWordIndex].length * this.LETTER_TIME);
+    }
+    
+    /**
+     * @param {boolean} correct si se ha acertado o no la palabra
+     */
+    nextWord(correct){
+        if(this.currentWordIndex === this.words.length-1){
+            this.scene.sleep();
+            this.scene.run('gameOver')
+        }else{
+            this.currentWordIndex++;
+            this.palabra.setWord(this.words[this.currentWordIndex]);
+            this.resetTime();
+            if(correct){
+                this.rightAnswers++;
+            }
+        }
     }
 }

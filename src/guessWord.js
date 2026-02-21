@@ -60,18 +60,11 @@ export default class GuessWord {
                 }
             }
         });
-
-        if(this.lettersWritten === this.word.length-1){
-            console.log('klkkkkkkk')
-            this.scene.nextWord();
-        }
     }
     
     update(delta) {
-        //this.letters[this.lettersWritten].setTint(0x0000ff);
-          if(this.lettersWritten === this.word.length){
-            console.log('klkkkkkkk')
-            this.scene.nextWord();
+        if(this.lettersWritten === this.word.length){
+            this.scene.nextWord(true);
         }
         
     }
@@ -105,7 +98,6 @@ export default class GuessWord {
                 "letras", this.font.get(this.word[i]), this.word[i]
             );
 
-            console.log(this.initialX);
             letter.setVisible(false);
             letters.push(letter);
         }

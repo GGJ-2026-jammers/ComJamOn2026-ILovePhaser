@@ -29,7 +29,7 @@ export default class Button extends Phaser.GameObjects.Text{
         //al poner el raton encima
         this.on('pointerover',function(){
             if(hover){
-                this.setScale(baseScale+3,baseScale+3);
+                this.setScale(baseScale*1.2,baseScale*1.2);
             }
 
             if(hoverChangeColor){
