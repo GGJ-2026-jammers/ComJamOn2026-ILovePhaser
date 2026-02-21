@@ -12,11 +12,11 @@ class AudioManager {
         // Volúmenes persistentes
         this.musicVolume = parseFloat(localStorage.getItem('musicVolume'));
         if (isNaN(this.musicVolume)) this.musicVolume = 1;
-        
+
         this.sfxVolume = parseFloat(localStorage.getItem('sfxVolume'));
         if (isNaN(this.sfxVolume)) this.sfxVolume = 1;
 
-        this.music = null;  
+        this.music = null;
 
         AudioManager.instance = this;
     }
@@ -63,9 +63,12 @@ class AudioManager {
     }
 
     // SFX
-    playSFX(key) {
+    playSFX(key, volumeMultiplier = 1) {
+        // volumen final = volumen global * multiplicador
+        const finalVolume = Phaser.Math.Clamp(this.sfxVolume * volumeMultiplier, 0, 1);
+
         this.sound.play(key, {
-            volume: this.sfxVolume
+            volume: finalVolume
         });
     }
 
