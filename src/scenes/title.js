@@ -42,7 +42,7 @@ export default class Title extends Phaser.Scene {
         let offset = 100;
         let letterSpacing = 50;
         
-        this.palabra = new GuessWord(this.words[0], this.font, this);
+        this.palabra = new GuessWord(this.words[0], this.font, this, this.nextWord);
         this.palabra.showWord();
 
         this.multiplierText = this.add.text(700,50,'MULTI:' + this.multiplier,{fontSize:30, fontFamily:'babelgam',color:"#fd0000"})
@@ -109,7 +109,6 @@ export default class Title extends Phaser.Scene {
     }
 
     update(t, dt){
-        this.palabra.update(dt);
         this.currentTime -= dt;
         if(this.currentTime <= 0){
             this.nextWord(false);

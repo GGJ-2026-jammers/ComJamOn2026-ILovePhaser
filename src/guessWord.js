@@ -1,34 +1,37 @@
 import Letter from "../src/objects/letter.js"
 
 export default class GuessWord {
-    constructor(word, font, scene){
+    constructor(word, font, scene, callback, x=100 ,y=100, spacing=50) {
         this.word = word
         this.font = font
         this.scene = scene
+        this.callback = callback;
 
-        this.initialX = 100;
-        this.initialY = 100;
-        this.spacing = 50;
+        this.initialX = x;
+        this.initialY = y;
+        this.spacing = spacing;
 
         this.letters = this.generateLetters();
         this.lettersWritten = 0;
 
         this.wrongLetterPressed = false;
 
-        this.scene.input.keyboard.on('keydown', event =>
-        {
+        this.scene.input.keyboard.on('keydown', event => {
             if (event.repeat || this.wrongLetterPressed) return;
 
-            if ((event.keyCode >= Phaser.Input.Keyboard.KeyCodes.A  && event.keyCode <= Phaser.Input.Keyboard.KeyCodes.Z ))
-            {
+            if ((event.keyCode >= Phaser.Input.Keyboard.KeyCodes.A && event.keyCode <= Phaser.Input.Keyboard.KeyCodes.Z)) {
                 let now = event.keyCode;
                 let letter = this.word[this.lettersWritten];
-                if(letter){
-                    let letterChar = this.word[this.lettersWritten].charCodeAt(0)-32;
+                if (letter) {
+                    let letterChar = this.word[this.lettersWritten].charCodeAt(0) - 32;
 
-                    if(now === letterChar){
+                    if (now === letterChar) {
                         this.letters[this.lettersWritten].setTint(0x00ff00);
                         this.lettersWritten++;
+                        if (this.lettersWritten >= this.word.length){
+                            if (this.callback) this.callback();
+                            this.destroy();
+                        }
                     }
                     else {
                         this.wrongLetterPressed = true;
@@ -55,18 +58,18 @@ export default class GuessWord {
                             },
                             repeat: 0,
                             delay: 550
-                         });
+                        });
                     }
                 }
             }
         });
     }
-    
-    update(delta) {
-        if(this.lettersWritten === this.word.length){
-            this.scene.nextWord(true);
+
+    destroy() {
+        if (this.letters) {
+            this.letters.forEach(letra => letra.destroy());
+            this.letters = []; // Vaciamos el array
         }
-        
     }
 
     showWord() {
@@ -89,12 +92,12 @@ export default class GuessWord {
     }
 
     generateLetters() {
-        let letters = []; 
+        let letters = [];
         for (let i = 0; i < this.word.length; i++) {
             let letter = new Letter(
-                this.scene, 
-                this.initialX + i * this.spacing, 
-                -20, 
+                this.scene,
+                this.initialX + i * this.spacing,
+                -20,
                 "letras", this.font.get(this.word[i]), this.word[i]
             );
 
@@ -111,9 +114,12 @@ export default class GuessWord {
         this.showWord();
     }
 
-    setWord(word){
-        this.letters.forEach(l => l.destroy());
+    setWord(word) {
         this.word = word;
         this.reset();
+    }
+
+    isCompleted() {
+        return this.lettersWritten >= this.word.length;
     }
 }
