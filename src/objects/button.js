@@ -1,27 +1,28 @@
-export default class Button extends Phaser.GameObjects.Text{
+export default class Button extends Phaser.GameObjects.BitmapText{
     /**
      * clase boton generico que realiza la accion que se le indique al pulsar
      * al pasar el raton por encima se altera un poco el tamaño del sprite
      * @param {*} scene 
      * @param {*} x 
      * @param {*} y 
-     * @param {number} baseScale escala a la que poner el sprite designado
+     * @param {number} size escala a la que poner el sprite designado
      * @param {Function} func funcion llamada al pulsar el boton
      * @param {boolean} hover bool para si se cambia la escala del texto al pasar por encima
      * @param {boolean} hoverChangeColor bool para si se cambia el color del texto al pasar por encima
      * @param {string} hoverColor color al que cambiar el texto en caso de que hoverChangeColor sea true
      */
-    constructor(scene, x, y, text, config, baseScale, func, hover = true,hoverChangeColor = false, hoverColor= ''){
+    constructor(scene, x, y, text, font, size, func, hover = true,hoverChangeColor = false, hoverColor= ''){
 
-        super(scene, x, y, text, config);
+        super(scene, x, y, font, text, size);
 
         this.setOrigin(0.5 , 0.5)
-        this.setScale(baseScale,baseScale);
-        this.originalColor = this.style.color;
+        this.setScale(1,1);
         this.setInteractive();
         
         this.scene.add.existing(this);
-
+        this.texture.setFilter(Phaser.Textures.FilterMode.NEAREST);
+        this.setLetterSpacing(4);
+        
         //al hacer click
         this.on('pointerdown',function(){
             func(this.text);
@@ -29,7 +30,7 @@ export default class Button extends Phaser.GameObjects.Text{
         //al poner el raton encima
         this.on('pointerover',function(){
             if(hover){
-                this.setScale(baseScale*1.2,baseScale*1.2);
+                this.setScale(1.2,1.2);
             }
 
             if(hoverChangeColor){
@@ -39,7 +40,7 @@ export default class Button extends Phaser.GameObjects.Text{
         //al quitar el raton
         this.on('pointerout',function(){
             if(hover){
-                this.setScale(baseScale,baseScale);
+                this.setScale(1,1);
             }
             if(hoverChangeColor){
                 this.setColor(this.originalColor);

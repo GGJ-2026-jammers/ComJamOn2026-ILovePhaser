@@ -3,11 +3,13 @@ import Menu from "./scenes/menu.js";
 import Title from "./scenes/title.js";
 import PauseScene from "./scenes/pauseScene.js";
 import GameOver from "./scenes/gameOver.js";
+import Tutorial from "./scenes/tutorial.js";
 
 let config = {
 	type: Phaser.AUTO,
 	parent: 'juego',
 	pixelArt: true,
+	roundPixels: true,
 	scale: {
 		autoCenter: Phaser.Scale.CENTER_HORIZONTALLY,
 		// Configuramos phaser para que se adapte al tamaño de pantalla donde ejecutadmos
@@ -17,7 +19,7 @@ let config = {
 		height: 540,
 		zoom: 1
 	},
-	scene: [BootScene,Title,Menu,PauseScene,GameOver],
+	scene: [BootScene,Title,Menu,PauseScene,GameOver,Tutorial],
 	physics: { 
 		default: 'arcade', 
 		arcade: { 

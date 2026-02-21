@@ -1,12 +1,12 @@
-export default class BootScene extends Phaser.Scene{
+export default class BootScene extends Phaser.Scene {
 
-    constructor(){
+    constructor() {
         //nombre de la escena
-        super({key:"boot"})
+        super({ key: "boot" })
     }
 
     //init vacio
-    init(){
+    init() {
 
     }
 
@@ -20,7 +20,7 @@ export default class BootScene extends Phaser.Scene{
         var progressBox = this.add.graphics();
 
         //textos de relleno
-        let textosRandom =["Cargando imagenes", "Cargando mapa","Cargando sonidos"]
+        let textosRandom = ["Cargando imagenes", "Cargando mapa", "Cargando sonidos"]
 
         const { centerX, centerY } = this.cameras.main;
         const minLoadMs = 1200;
@@ -37,17 +37,16 @@ export default class BootScene extends Phaser.Scene{
         this.load.on('progress', function (value) {
             texto.setText(textosRandom[value < 0.33 ? 0 : value < 0.66 ? 1 : 2]);
 
-            porcentaje.setText(Phaser.Math.RoundTo(value*100,0)+ '%');
+            porcentaje.setText(Phaser.Math.RoundTo(value * 100, 0) + '%');
             progressBar.clear();
 
             progressBar.fillStyle(0xffffff, 1);
             progressBar.fillRect(centerX - 250, centerY + 80, 500 * value, 30);
         });
 
-        this.load.image('laRoca', 'assets/images/laFuckingRoca.jpg');
-        this.load.image('laRoca2', 'assets/images/laRoca.jpg'); 
+        this.load.image('laRoca2', 'assets/images/laRoca.jpg');
         this.load.image('fondo', 'assets/images/Fondo.jpg');
-        this.load.image('laRocaPresentadora', 'assets/images/laRocaPresentadora.png');
+        this.load.image('laRocaPresentadora', 'assets/images/La_roca.webp');
         this.load.image('fondoJuego', 'assets/images/FondoJuego.jpg');
         this.load.text('palabras', "assets/palabras.txt")
         this.load.spritesheet('letras', 'assets/images/abecedario.png', { frameWidth: 100, frameHeight: 100 });
@@ -62,15 +61,17 @@ export default class BootScene extends Phaser.Scene{
                 this.scene.sleep('boot');
             });
         });
+
+        this.load.bitmapFont('bitFont', 'assets/font/bitFont.png', 'assets/font/bitFont.xml')
     }
 
 
     //create vacio
-    create(){
+    create() {
         
     }
 
-    createAnims(){
+    createAnims() {
         //crear aqui las animaciones
     }
 }
