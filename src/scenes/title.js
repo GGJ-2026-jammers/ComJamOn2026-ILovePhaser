@@ -86,7 +86,7 @@ export default class Title extends Phaser.Scene {
         this.words = [];
         this.wordsMap = new Map();
         this.score = 500;
-        this.maxWords = 30;
+        this.maxWords = 5;
         const txt = this.cache.text.get('palabras');
         const lineas = txt.replace(/\r\n/g, "\n").split("\n");
         this.mode = 0;
@@ -145,7 +145,7 @@ export default class Title extends Phaser.Scene {
         }
 
         this.updateTimeBar();
-        this.multiTween.timeScale = Math.max(1, (1.2 ** this.wordsCombo))
+        this.multiTween.timeScale = Math.min(Math.max(1, (1.2 ** this.wordsCombo)),3);
     }
 
     createTimeBar() {
