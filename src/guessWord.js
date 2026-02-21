@@ -58,6 +58,16 @@ export default class GuessWord {
                             yoyo: true,
                             repeat: 6,
                             ease: 'Sine.easeInOut',
+                            onStart: () => {
+                                this.scene.time.delayedCall(50, () => {
+                                    this.letters.forEach(element => {
+                                        element.setTint(0xffffff);
+                                    });
+
+                                    this.lettersWritten = 0;
+                                    this.wrongLetterPressed = false;
+                                });
+                            },
                             onComplete: () => {
                                 this.scene.tweens.add({
                                     targets: wrongLetter,
@@ -69,15 +79,6 @@ export default class GuessWord {
                                     onComplete: () => {
                                         wrongLetter.destroy();
                                     }
-                                });
-
-                                this.scene.time.delayedCall(50, () => {
-                                    this.letters.forEach(element => {
-                                        element.setTint(0xffffff);
-                                    });
-
-                                    this.lettersWritten = 0;
-                                    this.wrongLetterPressed = false;
                                 });
                             }
                         });
@@ -157,9 +158,14 @@ export default class GuessWord {
             this.scene.tweens.add({
                 targets: this.letters,
                 duration: 500,
-                angle: 1080,
+                angle: 720,
                 scale: 0,
                 alpha: 0,
+                onStart: () => {
+                    this.letters.forEach(element => {
+                        element.setTint(0xff0000);
+                    });
+                },
                 onComplete: () => {
                     this.destroy();
                     this.word = word;
