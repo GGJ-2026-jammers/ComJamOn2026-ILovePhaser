@@ -1,60 +1,37 @@
 import Word from "../objects/word.js"
 import Letter from "../objects/letter.js";
 import PauseScene from "../scenes/pauseScene.js";
+import textBox from "../objects/textBox.js";
+import GuessWord from "../guessWord.js";
 
 export default class Title extends Phaser.Scene {
     constructor() {
         super({ key: "title" });
-        
     }
 
     init(data){
         this.mode = data.mode
     }
 
-    preload() {
-
-    }
-
     create(){
-        this.pauseScene = new PauseScene();
-        this.input.keyboard.on('keydown-P', () => {
+        this.createPauseScene();
 
-            if (!this.scene.isPaused()) {
-                console.log("Pausa");
-                this.scene.pause();
-                this.scene.launch('pauseScene');
-            }
-
-        });
-
-        this.rnd = new Phaser.Math.RandomDataGenerator();
-        this.words = [];
-        this.score = 0;
-        this.maxWords = 30
-        //this.currentWordText;
-        this.wordWritten = "";
-        this.wordWrittenIndex = -1;
-        const txt = this.cache.text.get('palabras')
-        const lineas = txt.replace(/\r\n/g, "\n").split("\n");
-        
-        //establece de forma random 
-        for(let i = 0; i < this.maxWords;i++){
-            this.words.push(this.rnd.integerInRange(0,lineas.length))
-        }
+        this.setRandomWords();
         console.log("Title")
-    
-        this.inGame = true
-        this.nextWordTime = 2000
-        this.currentWordIndex = 0
+        
+        this.setConstants();
+        this.multiplier = 1;
+        this.currentTime = this.BASE_NEXT_WORD_TIME;
+        this.currentWordIndex = 0;
         this.fondo = this.add.image(0, 0, "fondo").setOrigin(0, 0);
-        this.fondo.setScale(0.5)
+        this.fondo.setScale(0.5);
 
         this.fondoPalabras = this.add.image(650,250,"fondoPalabras")
         this.fondoPalabras.setScale(0.85)
 
-        this.laRoca = this.add.image(50, 155, "laRocaPresentadora").setOrigin(0, 0);
-        this.laRoca.setScale(0.1)
+        this.laRoca = this.add.image(50, 100, "laRocaPresentadora").setOrigin(0, 0);
+        this.laRoca.setScale(1.5);
+
 
         const palabras = new Map()
         this.font = new Map()
@@ -66,50 +43,158 @@ export default class Title extends Phaser.Scene {
 
         let offset = 100;
         let letterSpacing = 50;
-
-        lineas.forEach((linea, index) => {
-            const letras = linea.split("")
-            let palabra = []
-            letras.forEach((letra, index) => {
-                palabra.push(new Letter(this, 0 + index * letterSpacing, 0, 'letras', this.font.get(letra)))
-            });
-            palabras.set(linea, new Word(this, 30, 100 + index * offset, palabra))
-        })
-
-        this.time.delayedCall(1000, this.startAnimation)
-        this.time.delayedCall(1000, this.mainLoop)
         
+        this.palabra = new GuessWord(this.words[0], this.font, this);
+        this.palabra.showWord();
+
+        this.multiplierText = this.add.text(700,50,'MULTI:' + this.multiplier,{fontSize:30, fontFamily:'babelgam',color:"#fd0000"})
+        this.multiTween = this.tweens.add({
+            targets: this.multiplierText,
+            scale: { from: 1, to: 1.15 },
+            alpha: { from: 0.7, to: 1 },
+            duration: 800,
+            yoyo: true,
+            repeat: -1,
+            ease: "Sine.easeInOut"
+        });
+
+        this.events.once('shutdown', () => {
+            console.log('mataos')
+            this.tweens.killAll();
+        });
     }
 
-    startAnimation(){
-
+    setConstants() {
+        this.BASE_WORD_SCORE = 300;
+        this.LETTER_SCORE = 50;
+        this.MULTIPLIER = 1.25;
+        this.BASE_NEXT_WORD_TIME = 4000;
+        this.LETTER_TIME = 100;
+        this.MULTI_BONUS = 0.75;
     }
 
-    mainLoop(){
-        if (this.mode === 'normal'){
-            do
-            {
-                if (this.currentWordIndex < this.maxWords / 3){this.nextWordTime = 3000}
-                else if (this.currentWordIndex < (this.maxWords / 3) * 2) {this.nextWordTime = 1700}
-                else if (this.currentWordIndex < this.maxWords) {this.nextWordTime = 1200}
-                let skipWord = false
-                let newWord = this.time.addEvent({
-                    delay: this.nextWordTime,
-                    callback: () => {
-                        skipWord = true
-                    }
-                })
-                // while(skipWord){
-                    
-                // }
-                this.currentWordIndex++
+    setRandomWords() {
+        this.rnd = new Phaser.Math.RandomDataGenerator();
+        this.words = [];
+        this.score = 500;
+        this.maxWords = 5;
+        const txt = this.cache.text.get('palabras');
+        const lineas = txt.replace(/\r\n/g, "\n").split("\n");
+        this.mode = 0;
+        //mode 0 = modo por defecto
+        if(this.mode === 0){
+            //establece de forma random las palabras
+            for (let i = 0; i < this.maxWords; i++) {
+                this.words.push(lineas[this.rnd.integerInRange(0, lineas.length - 1)]);
             }
-            while (this.currentWordIndex < this.maxWords)
         }
+        else{
+            //se obtienen todas las palabras
+            for (let i = 0; i < lineas.length-1; i++) {
+                this.words.push(lineas[i]);
+            }
+        }
+
+        this.correctWords = 0;
+        this.wordsCombo = 0;
+        this.maxCombo = 0;
     }
 
-    nextWord(){
-        this.currentWordIndex++;
-        this.currentWord =  this.words[this.currentWordIndex]; 
+    createPauseScene() {
+        this.pauseScene = new PauseScene();
+        this.input.keyboard.on('keydown-TAB', () => {
+            if (!this.scene.isPaused()) {
+                console.log("Pausa");
+                this.scene.pause();
+                this.scene.launch('pauseScene');
+            }
+        });
+    }
+
+    update(t, dt){
+        this.palabra.update(dt);
+        this.currentTime -= dt;
+        if(this.currentTime <= 0){
+            this.nextWord(false);
+        }
+
+        this.multiTween.timeScale = Math.max(1, (1.2 ** this.wordsCombo))
+    }
+    
+    resetTime() {
+        this.currentTime = this.BASE_NEXT_WORD_TIME + (this.words[this.currentWordIndex].length * this.LETTER_TIME);
+    }
+    
+    /**
+     * @param {boolean} correct si se ha acertado o no la palabra
+     */
+    nextWord(correct){
+        if(correct){
+            this.wordsCombo++;
+            this.correctWords++;
+            if(this.wordsCombo > this.maxCombo) this.maxCombo = this.wordsCombo;
+            this.score +=  this.BASE_WORD_SCORE * this.multiplier;
+            this.multiplier += this.MULTIPLIER;
+            if(this.words[this.currentWordIndex].length >=6){
+                this.multiplier += this.MULTI_BONUS;
+                let bonusText = this.add.text(720,80, "BONUS!!!",{fontSize:30, fontFamily:'babelgam',color:"#fd0000"})
+                // Tween de pulso (scale + alpha)
+                this.tweens.add({
+                    targets: bonusText,
+                    scale: { from: 1, to: 1.15 },
+                    alpha: { from: 0.7, to: 1 },
+                    duration: 500,
+                    yoyo: true,
+                    repeat: -1,
+                    ease: "Sine.easeInOut"
+                });
+
+                // Tween arcoíris manual
+                this.rainbowTime = 0; // contador de tiempo
+
+                this.events.on('update', (time, delta) => {
+                    this.rainbowTime += delta * 0.001; // segundos
+
+                    // Cambia los colores con senos, da efecto arcoíris
+                    const r = Math.floor(128 + 127 * Math.sin(this.rainbowTime * 2 + 0));
+                    const g = Math.floor(128 + 127 * Math.sin(this.rainbowTime * 2 + 2));
+                    const b = Math.floor(128 + 127 * Math.sin(this.rainbowTime * 2 + 4));
+
+                    bonusText.setTint(Phaser.Display.Color.GetColor(r, g, b));
+                });
+
+                this.time.addEvent({
+                    callback: () => {
+                       bonusText.destroy();
+                    },
+                    repeat: 0,
+                    delay: 2550
+                })
+            }
+            this.multiplierText.setText("Multi: " + this.multiplier)
+        }
+        else{
+            this.multiplier = 1;
+            this.wordsCombo = 0;
+            this.score = Math.max(0,this.score - 100);
+            console.log(this.score);
+            this.multiplierText.setText("Multi: " + this.multiplier)
+        }
+            
+        
+
+        if(this.currentWordIndex === this.words.length-1){
+            this.scene.sleep();
+            this.scene.stop();
+            this.scene.run('gameOver',
+                {score:this.score,
+                maxCombo:this.maxCombo,
+                correctWords: this.correctWords
+            })
+        }else{
+            this.currentWordIndex++;
+            this.palabra.setWord(this.words[this.currentWordIndex]);
+            this.resetTime();
+        }
     }
 }
