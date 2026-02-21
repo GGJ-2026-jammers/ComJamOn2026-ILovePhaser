@@ -2,11 +2,11 @@ import Word from "../objects/word.js"
 import Letter from "../objects/letter.js";
 import PauseScene from "../scenes/pauseScene.js";
 import textBox from "../objects/textBox.js";
+import GuessWord from "../guessWord.js";
 
 export default class Title extends Phaser.Scene {
     constructor() {
         super({ key: "title" });
-        
     }
 
     init(data){
@@ -18,31 +18,9 @@ export default class Title extends Phaser.Scene {
     }
 
     create(){
-        this.pauseScene = new PauseScene();
-        this.input.keyboard.on('keydown-P', () => {
+        this.createPauseScene();
 
-            if (!this.scene.isPaused()) {
-                console.log("Pausa");
-                this.scene.pause();
-                this.scene.launch('pauseScene');
-            }
-
-        });
-
-        this.rnd = new Phaser.Math.RandomDataGenerator();
-        this.words = [];
-        this.score = 0;
-        this.maxWords = 30
-        //this.currentWordText;
-        this.wordWritten = "";
-        this.wordWrittenIndex = -1;
-        const txt = this.cache.text.get('palabras')
-        const lineas = txt.replace(/\r\n/g, "\n").split("\n");
-        
-        //establece de forma random 
-        for(let i = 0; i < this.maxWords;i++){
-            this.words.push(this.rnd.integerInRange(0,lineas.length))
-        }
+        this.setRandomWords();
         console.log("Title")
     
         this.inGame = true
@@ -66,43 +44,42 @@ export default class Title extends Phaser.Scene {
 
         let offset = 100;
         let letterSpacing = 50;
-
-        lineas.forEach((linea, index) => {
-            const letras = linea.split("")
-            let palabra = []
-            letras.forEach((letra, index) => {
-                palabra.push(new Letter(this, 0 + index * letterSpacing, 0, 'letras', this.font.get(letra), letra))
-            });
-            palabras.set(linea, new Word(this, 30, 100 + index * offset, palabra))
-        })
-
-        this.time.delayedCall(1000, this.startAnimation)
-        this.time.delayedCall(1000, this.mainLoop)
         
+        this.palabra = new GuessWord(this.words[0], this.font, this);
+        this.palabra.showWord();
     }
 
-    startAnimation(){
+    setRandomWords() {
+        this.rnd = new Phaser.Math.RandomDataGenerator();
+        this.words = [];
+        this.score = 0;
+        this.maxWords = 30;
+        const txt = this.cache.text.get('palabras');
+        const lineas = txt.replace(/\r\n/g, "\n").split("\n");
 
-    }
-
-    mainLoop(){
-        if (this.mode === 'normal'){
-            new textBox(this, 30, 300, this.currentWord);
-            if (this.currentWordIndex < this.maxWords / 3){this.nextWordTime = 3000}
-            else if (this.currentWordIndex < (this.maxWords / 3) * 2) {this.nextWordTime = 1700}
-            else if (this.currentWordIndex < this.maxWords) {this.nextWordTime = 1200}
+        //establece de forma random 
+        for (let i = 0; i < this.maxWords; i++) {
+            this.words.push(lineas[this.rnd.integerInRange(0, lineas.length - 1)]);
         }
+    }
+
+    createPauseScene() {
+        this.pauseScene = new PauseScene();
+        this.input.keyboard.on('keydown-P', () => {
+            if (!this.scene.isPaused()) {
+                console.log("Pausa");
+                this.scene.pause();
+                this.scene.launch('pauseScene');
+            }
+        });
+    }
+
+    update(t, dt){
+        this.palabra.update(dt);
     }
 
     nextWord(){
         this.currentWordIndex++;
-        this.currentWord =  this.words[this.currentWordIndex]; 
-    }
-
-    update(t, dt){
-        if (this.currentWordIndex < this.maxWords / 3){this.nextWordTime = 3000}
-        else if (this.currentWordIndex < (this.maxWords / 3) * 2) {this.nextWordTime = 1700}
-        else if (this.currentWordIndex < this.maxWords) {this.nextWordTime = 1200}
-        
+        this.palabra.setWord(this.words[this.currentWordIndex]);
     }
 }

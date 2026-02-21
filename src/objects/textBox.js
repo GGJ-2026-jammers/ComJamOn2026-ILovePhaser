@@ -6,14 +6,14 @@ export default class textBox extends Phaser.GameObjects.Container{
         this.create();
         this.word = word;
          console.log("Escribe palabra", this.word);
-
     }
+
     init() {
         console.log("TextBoxCreated");
         this.scene.add.text(10, 10, 'Escribe la palabra', { font: '32px Courier'});
     }
-    create () {
 
+    create () {
         const textEntry = this.scene.add.text(10, 50, '', { font: '32px Courier'});
 
         this.scene.input.keyboard.on('keydown', event =>
