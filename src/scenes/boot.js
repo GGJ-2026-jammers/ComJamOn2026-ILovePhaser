@@ -12,8 +12,8 @@ export default class BootScene extends Phaser.Scene {
 
 
     //todo lo del preload quitarlo y dejar solo lo justo y necesario (carga de sprites, audios ,ect)
-    preload(){
-        this.registry.set('maxScore',0);
+    preload() {
+        this.registry.set('maxScore', 0);
         //BARRA DE CARGA, comentar si no funciona
         //2 barras
         var progressBar = this.add.graphics();
@@ -49,7 +49,8 @@ export default class BootScene extends Phaser.Scene {
         this.load.image('laRocaPresentadora', 'assets/images/La_roca.webp');
         this.load.image('fondoPalabras', 'assets/images/FondoPalabras.png');
         this.load.image('paredPiedra', 'assets/images/paredKLK.webp');
-        this.load.text('palabras', "assets/palabras.txt")
+        this.load.image('fullScreen', 'assets/images/fullscreen-icon.png');
+        this.load.text('palabras', "assets/palabras.txt");
         this.load.spritesheet('letras', 'assets/images/abecedario.png', { frameWidth: 100, frameHeight: 100 });
 
         //Sonidos
@@ -57,14 +58,14 @@ export default class BootScene extends Phaser.Scene {
         this.load.audio("incorrect", "assets/sounds/incorrect.mp3");
 
         //Sonidos Letras
-        for (let i=0; i < 27; i++){
-            let letter = String.fromCharCode(i+65);
+        for (let i = 0; i < 27; i++) {
+            let letter = String.fromCharCode(i + 65);
             let string = "assets/sounds/letters/" + letter + ".mp3";
             console.log("String: ", string);
             this.load.audio(letter, string);
 
         }
-       
+
 
         //cuando termina la carga, llamar a la siguiente escena y dormir esta
         this.load.on('complete', () => {
@@ -82,7 +83,7 @@ export default class BootScene extends Phaser.Scene {
 
     //create vacio
     create() {
-        
+
     }
 
     createAnims() {

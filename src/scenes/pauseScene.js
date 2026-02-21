@@ -27,14 +27,14 @@ class PauseScene extends Phaser.Scene {
         const panel = this.add.rectangle(
             this.centerX,
             this.centerY,
-            420,
-            300,
+            390,
+            260,
             0x2c3e50
         )
-            .setDepth(100)
+            .setDepth(101)
             .setStrokeStyle(3, 0xe74c3c)
             .setAlpha(0)
-            .setScale(0.6);
+            .setScale(0.5);
 
         this.tweens.add({
             targets: panel,
@@ -83,7 +83,7 @@ class PauseScene extends Phaser.Scene {
                 this.scene.stop();
                 this.scene.resume('title');
             }
-        ).setDepth(100);
+        ).setDepth(102);
 
         this.btnOpciones = new Button(
             this,
@@ -96,7 +96,7 @@ class PauseScene extends Phaser.Scene {
                 this.scene.launch('options');
                 this.scene.pause();
             }
-        ).setDepth(100);
+        ).setDepth(102);
 
         this.btnMenu = new Button(
             this,
@@ -110,7 +110,7 @@ class PauseScene extends Phaser.Scene {
                 this.scene.stop('title');
                 this.scene.start('menu');
             }
-        ).setDepth(100);
+        ).setDepth(102);
 
         botones.push(this.btnReanudar, this.btnOpciones, this.btnMenu);
 
@@ -133,10 +133,15 @@ class PauseScene extends Phaser.Scene {
 
     fullscreen() {
         // Botón fullscreen (esquina superior izquierda)
-        const fsButton = this.add.rectangle(20, 20, 40, 40, 0xffffff)
+        // const fsButton = this.add.rectangle(20, 20, 40, 40, 0xffffff)
+        //     .setOrigin(0)
+        //     .setDepth(100)
+        //     .setInteractive({ useHandCursor: true });
+        const fsButton = this.add.image(20, 20, 'fullScreen')
             .setOrigin(0)
-            .setDepth(100)
+            .setDepth(102)
             .setInteractive({ useHandCursor: true });
+
 
         //Toggle fullscreen
         fsButton.on('pointerdown', () => {
@@ -149,11 +154,20 @@ class PauseScene extends Phaser.Scene {
 
         });
 
+        // primero tamaño final
+        fsButton.setDisplaySize(40, 40);
+
+        // guardamos escala final real
+        const finalScaleX = fsButton.scaleX;
+        const finalScaleY = fsButton.scaleY;
+
+        // empezamos en 0
         fsButton.setScale(0);
 
         this.tweens.add({
             targets: fsButton,
-            scale: 1,
+            scaleX: finalScaleX,
+            scaleY: finalScaleY,
             duration: 200,
             ease: 'Back.easeOut',
             delay: 200
@@ -164,7 +178,7 @@ class PauseScene extends Phaser.Scene {
     create() {
         this.centerX = this.cameras.main.width / 2;
         this.centerY = this.cameras.main.height / 2;
-        
+
 
         this.overlay();
         this.panel();
