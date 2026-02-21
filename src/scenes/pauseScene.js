@@ -84,7 +84,7 @@ class PauseScene extends Phaser.Scene {
         });
 
         // Tecla para reanudar
-        this.input.keyboard.on('keydown-P', () => {
+        this.input.keyboard.on('keydown-TAB', () => {
             console.log("REANUDAR");
             this.scene.stop(); // cerrar pausa
             this.scene.resume('title'); // reanudar Title

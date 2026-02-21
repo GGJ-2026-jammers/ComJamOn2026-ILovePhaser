@@ -65,7 +65,7 @@ export default class Title extends Phaser.Scene {
 
     createPauseScene() {
         this.pauseScene = new PauseScene();
-        this.input.keyboard.on('keydown-P', () => {
+        this.input.keyboard.on('keydown-TAB', () => {
             if (!this.scene.isPaused()) {
                 console.log("Pausa");
                 this.scene.pause();
