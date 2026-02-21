@@ -23,7 +23,7 @@ export default class Menu extends Phaser.Scene{
         
         //botones interactivos para llamar al level 1
         boton1.on('pointerdown', ()=>{
-            this.scene.start('title')
+            this.scene.start('title',{mode: 0})
         })
         boton1.on('pointerover', () => {
             boton1.setStyle({

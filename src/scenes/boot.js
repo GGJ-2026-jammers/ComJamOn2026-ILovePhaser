@@ -13,7 +13,7 @@ export default class BootScene extends Phaser.Scene{
 
     //todo lo del preload quitarlo y dejar solo lo justo y necesario (carga de sprites, audios ,ect)
     preload(){
-        
+        this.registry.set('maxScore',0);
         //BARRA DE CARGA, comentar si no funciona
         //2 barras
         var progressBar = this.add.graphics();

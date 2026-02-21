@@ -13,19 +13,14 @@ export default class Title extends Phaser.Scene {
         this.mode = data.mode
     }
 
-    preload() {
-
-    }
-
     create(){
         this.createPauseScene();
 
         this.setRandomWords();
         console.log("Title")
         
-        this.inGame = true
-        this.BASE_NEXT_WORD_TIME = 2000;
-        this.LETTER_TIME = 100;
+        this.setConstants();
+        this.multiplier = 1;
         this.currentTime = this.BASE_NEXT_WORD_TIME;
         this.currentWordIndex = 0;
         this.fondo = this.add.image(0, 0, "fondo").setOrigin(0, 0);
@@ -49,22 +44,57 @@ export default class Title extends Phaser.Scene {
         
         this.palabra = new GuessWord(this.words[0], this.font, this);
         this.palabra.showWord();
+
+        this.multiplierText = this.add.text(700,50,'MULTI:' + this.multiplier,{fontSize:30, fontFamily:'babelgam',color:"#fd0000"})
+        this.multiTween = this.tweens.add({
+            targets: this.multiplierText,
+            scale: { from: 1, to: 1.15 },
+            alpha: { from: 0.7, to: 1 },
+            duration: 800,
+            yoyo: true,
+            repeat: -1,
+            ease: "Sine.easeInOut"
+        });
+
+        this.events.once('shutdown', () => {
+            console.log('mataos')
+            this.tweens.killAll();
+        });
+    }
+
+    setConstants() {
+        this.BASE_WORD_SCORE = 300;
+        this.LETTER_SCORE = 50;
+        this.MULTIPLIER = 1.5;
+        this.BASE_NEXT_WORD_TIME = 4000;
+        this.LETTER_TIME = 100;
     }
 
     setRandomWords() {
         this.rnd = new Phaser.Math.RandomDataGenerator();
         this.words = [];
-        this.score = 0;
-        this.maxWords = 2;
+        this.score = 500;
+        this.maxWords = 5;
         const txt = this.cache.text.get('palabras');
         const lineas = txt.replace(/\r\n/g, "\n").split("\n");
 
-        //establece de forma random 
-        for (let i = 0; i < this.maxWords; i++) {
-            this.words.push(lineas[this.rnd.integerInRange(0, lineas.length - 1)]);
+        //mode 0 = modo por defecto
+        if(this.mode === 0){
+            //establece de forma random las palabras
+            for (let i = 0; i < this.maxWords; i++) {
+                this.words.push(lineas[this.rnd.integerInRange(0, lineas.length - 1)]);
+            }
+        }
+        else{
+            //se obtienen todas las palabras
+            for (let i = 0; i < lineas.length-1; i++) {
+                this.words.push(lineas[i]);
+            }
         }
 
-        this.rightAnswers = 0;
+        this.correctWords = 0;
+        this.wordsCombo = 0;
+        this.maxCombo = 0;
     }
 
     createPauseScene() {
@@ -84,6 +114,8 @@ export default class Title extends Phaser.Scene {
         if(this.currentTime <= 0){
             this.nextWord(false);
         }
+
+        this.multiTween.timeScale = Math.max(1, (1.05 * this.wordsCombo))
     }
     
     resetTime() {
@@ -94,16 +126,36 @@ export default class Title extends Phaser.Scene {
      * @param {boolean} correct si se ha acertado o no la palabra
      */
     nextWord(correct){
+        if(correct){
+            this.wordsCombo++;
+            this.correctWords++;
+            if(this.wordsCombo > this.maxCombo) this.maxCombo = this.wordsCombo;
+            this.score +=  this.BASE_WORD_SCORE * this.multiplier;
+            this.multiplier *= this.MULTIPLIER;
+            this.multiplierText.setText("Multi: " + this.multiplier)
+        }
+        else{
+            this.multiplier = 1;
+            this.wordsCombo = 0;
+            this.score = Math.max(0,this.score - 100);
+            console.log(this.score);
+            this.multiplierText.setText("Multi: " + this.multiplier)
+        }
+            
+        
+
         if(this.currentWordIndex === this.words.length-1){
             this.scene.sleep();
-            this.scene.run('gameOver')
+            this.scene.stop();
+            this.scene.run('gameOver',
+                {score:this.score,
+                maxCombo:this.maxCombo,
+                correctWords: this.correctWords
+            })
         }else{
             this.currentWordIndex++;
             this.palabra.setWord(this.words[this.currentWordIndex]);
             this.resetTime();
-            if(correct){
-                this.rightAnswers++;
-            }
         }
     }
 }
