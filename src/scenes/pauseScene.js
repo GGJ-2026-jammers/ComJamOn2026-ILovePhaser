@@ -146,12 +146,26 @@ class PauseScene extends Phaser.Scene {
         //Toggle fullscreen
         fsButton.on('pointerdown', () => {
 
-            if (this.scale.isFullscreen) {
+            const isFull = this.scale.isFullscreen;
+
+            if (isFull) {
                 this.scale.stopFullscreen();
+                fsButton.setTexture('fullScreen');
             } else {
                 this.scale.startFullscreen();
+                fsButton.setTexture('minimizeScreen');
             }
 
+            // reaplicar tamaño tras cambiar textura
+            fsButton.setDisplaySize(40, 40);
+
+            // micro feedback
+            this.tweens.add({
+                targets: fsButton,
+                scale: fsButton.scaleX * 0.9,
+                duration: 80,
+                yoyo: true
+            });
         });
 
         // primero tamaño final
@@ -172,6 +186,7 @@ class PauseScene extends Phaser.Scene {
             ease: 'Back.easeOut',
             delay: 200
         });
+
 
     }
 

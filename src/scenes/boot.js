@@ -12,9 +12,9 @@ export default class BootScene extends Phaser.Scene {
 
 
     //todo lo del preload quitarlo y dejar solo lo justo y necesario (carga de sprites, audios ,ect)
-    preload(){
-        this.registry.set('maxScore',0);
-        this.registry.set('maxCombo',0);
+    preload() {
+        this.registry.set('maxScore', 0);
+        this.registry.set('maxCombo', 0);
         //BARRA DE CARGA, comentar si no funciona
         //2 barras
         var progressBar = this.add.graphics();
@@ -51,9 +51,10 @@ export default class BootScene extends Phaser.Scene {
         this.load.image('fondoPalabras', 'assets/images/FondoPalabras.png');
         this.load.image('paredPiedra', 'assets/images/paredKLK.webp');
         this.load.image('fullScreen', 'assets/images/fullscreen-icon.png');
+        this.load.image('minimizeScreen', 'assets/images/minimizecreen-icon.png');
         this.load.text('palabras', "assets/palabras.txt");
         this.load.spritesheet('letras', 'assets/images/abecedario.png', { frameWidth: 100, frameHeight: 100 });
-        this.load.spritesheet('infoRunPanel', 'assets/images/ticketResultados.webp',{ frameWidth: 360, frameHeight: 500 });
+        this.load.spritesheet('infoRunPanel', 'assets/images/ticketResultados.webp', { frameWidth: 360, frameHeight: 500 });
 
         //Sonidos
         this.load.audio("correct", "assets/sounds/correct.mp3");
