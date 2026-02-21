@@ -57,6 +57,15 @@ export default class BootScene extends Phaser.Scene {
         this.load.audio("correct", "assets/sounds/correct.mp3");
         this.load.audio("incorrect", "assets/sounds/incorrect.mp3");
 
+        //Sonidos Letras
+        for (let i=0; i < 27; i++){
+            let letter = String.fromCharCode(i+65);
+            let string = "assets/sounds/letters/" + letter + ".mp3";
+            console.log("String: ", string);
+            this.load.audio(letter, string);
+
+        }
+       
 
         //cuando termina la carga, llamar a la siguiente escena y dormir esta
         this.load.on('complete', () => {

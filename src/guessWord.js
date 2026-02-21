@@ -19,10 +19,12 @@ export default class GuessWord {
         this.wrongLetterPressed = false;
 
         this.scene.input.keyboard.on('keydown', event => {
+            let now = event.keyCode;
+            // Sonido de letras
+            if(this.scene.letterSounds[now - 65]) this.scene.letterSounds[now - 65].play();
             if (event.repeat || this.wrongLetterPressed) return;
 
-            if ((event.keyCode >= Phaser.Input.Keyboard.KeyCodes.A && event.keyCode <= Phaser.Input.Keyboard.KeyCodes.Z && this.input)) {
-                let now = event.keyCode;
+            if ((event.keyCode >= Phaser.Input.Keyboard.KeyCodes.A && event.keyCode <= Phaser.Input.Keyboard.KeyCodes.Z)) {
                 let letter = this.word[this.lettersWritten];
                 if (letter) {
                     let letterChar = this.word[this.lettersWritten].charCodeAt(0) - 32;

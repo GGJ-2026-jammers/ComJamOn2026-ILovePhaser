@@ -14,6 +14,12 @@ export default class Title extends Phaser.Scene {
         this.correct = this.sound.add("correct");
         this.incorrect = this.sound.add("incorrect");
         
+        this.letterSounds = new Array();
+
+        for (let i=0; i < 13; i++){
+            let letter = String.fromCharCode(i+65);
+            this.letterSounds.push(this.sound.add(letter));
+        }
     }
 
     create(){
