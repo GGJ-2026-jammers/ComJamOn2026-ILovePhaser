@@ -13,6 +13,7 @@ export default class GuessWord {
 
         this.letters = this.generateLetters();
         this.lettersWritten = 0;
+        this.revealEvent = null;
 
         this.wrongLetterPressed = false;
 
@@ -29,8 +30,18 @@ export default class GuessWord {
                         this.letters[this.lettersWritten].setTint(0x00ff00);
                         this.lettersWritten++;
                         if (this.lettersWritten >= this.word.length){
-                            this.destroy();
-                            if (this.callback) this.callback();
+                            this.wrongLetterPressed = true;
+                            this.scene.tweens.add({
+                                targets: this.letters,
+                                duration: 500,
+                                x: '+=600',
+                                alpha: 0,
+                                ease: 'Quadratic.Out',
+                                onComplete: () => {
+                                    this.destroy();
+                                    if (this.callback) this.callback();
+                                }
+                            })
                         }
                     }
                     else {
@@ -39,25 +50,36 @@ export default class GuessWord {
                             'letras', this.font.get(event.key)
                         )
                         wrongLetter.setTint(0xff0000);
+                        const wrongLetterY = wrongLetter.y;
                         this.scene.tweens.add({
                             targets: wrongLetter,
-                            y: this.initialY + 300,
-                            duration: 500,
-                            ease: 'Bounce.easeOut'
-                        });
-
-                        this.scene.time.addEvent({
-                            callback: () => {
-                                this.letters.forEach(element => {
-                                    element.setTint(0xffffff);
+                            y: { from: wrongLetterY - 7, to: wrongLetterY + 7 },
+                            duration: 60,
+                            yoyo: true,
+                            repeat: 6,
+                            ease: 'Sine.easeInOut',
+                            onComplete: () => {
+                                this.scene.tweens.add({
+                                    targets: wrongLetter,
+                                    y: this.initialY + 400,
+                                    scale: 0,
+                                    angle: 1080,
+                                    duration: 1000,
+                                    ease: 'Cubic.Out',
+                                    onComplete: () => {
+                                        wrongLetter.destroy();
+                                    }
                                 });
 
-                                this.lettersWritten = 0;
-                                wrongLetter.destroy();
-                                this.wrongLetterPressed = false;
-                            },
-                            repeat: 0,
-                            delay: 550
+                                this.scene.time.delayedCall(200, () => {
+                                    this.letters.forEach(element => {
+                                        element.setTint(0xffffff);
+                                    });
+
+                                    this.lettersWritten = 0;
+                                    this.wrongLetterPressed = false;
+                                });
+                            }
                         });
                     }
                 }
@@ -66,6 +88,11 @@ export default class GuessWord {
     }
 
     destroy() {
+        if (this.revealEvent) {
+            this.revealEvent.remove(false);
+            this.revealEvent = null;
+        }
+
         if (this.letters) {
             this.letters.forEach(letra => letra.destroy());
             this.letters = []; // Vaciamos el array
@@ -75,11 +102,21 @@ export default class GuessWord {
     showWord() {
         const length = this.word.length;
         let i = 0;
-        this.scene.time.addEvent({
+        if (this.revealEvent) {
+            this.revealEvent.remove(false);
+            this.revealEvent = null;
+        }
+
+        this.revealEvent = this.scene.time.addEvent({
             callback: () => {
-                this.letters[i].setVisible(true);
+                const letter = this.letters[i];
+                if (!letter) {
+                    return;
+                }
+
+                letter.setVisible(true);
                 this.scene.tweens.add({
-                    targets: this.letters[i],
+                    targets: letter,
                     y: this.initialY,
                     duration: 200,
                     ease: 'Power2'
@@ -109,6 +146,7 @@ export default class GuessWord {
     }
 
     reset() {
+        this.wrongLetterPressed = false;
         this.lettersWritten = 0;
         this.letters = this.generateLetters();
         this.showWord();

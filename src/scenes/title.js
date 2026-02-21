@@ -142,9 +142,9 @@ export default class Title extends Phaser.Scene {
             if(this.wordsCombo > this.maxCombo) this.maxCombo = this.wordsCombo;
             this.score +=  this.BASE_WORD_SCORE * this.multiplier;
             this.multiplier += this.MULTIPLIER;
-            if(this.words[this.currentWordIndex].length >=6){
+            if(this.words[this.currentWordIndex].length >=9 ){
                 this.multiplier += this.MULTI_BONUS;
-                let bonusText = this.add.text(720,80, "BONUS!!!",{fontSize:30, fontFamily:'babelgam',color:"#fd0000"})
+                let bonusText = this.add.text(720,80, "BONUS!!!",{fontSize:30, fontFamily:'babelgam',color:"#ffffff"})
                 // Tween de pulso (scale + alpha)
                 this.tweens.add({
                     targets: bonusText,
@@ -156,22 +156,23 @@ export default class Title extends Phaser.Scene {
                     ease: "Sine.easeInOut"
                 });
 
-                // Tween arcoíris manual
-                this.rainbowTime = 0; // contador de tiempo
-
-                this.events.on('update', (time, delta) => {
-                    this.rainbowTime += delta * 0.001; // segundos
-
-                    // Cambia los colores con senos, da efecto arcoíris
-                    const r = Math.floor(128 + 127 * Math.sin(this.rainbowTime * 2 + 0));
-                    const g = Math.floor(128 + 127 * Math.sin(this.rainbowTime * 2 + 2));
-                    const b = Math.floor(128 + 127 * Math.sin(this.rainbowTime * 2 + 4));
-
-                    bonusText.setTint(Phaser.Display.Color.GetColor(r, g, b));
+                const rainbowTween = this.tweens.addCounter({
+                    from: 0,
+                    to: 1,
+                    duration: 1200,
+                    repeat: -1,
+                    onUpdate: (tween) => {
+                        const hsvColor = Phaser.Display.Color.HSVToRGB(tween.getValue(), 1, 1);
+                        const red = 'r' in hsvColor ? hsvColor.r : hsvColor.red;
+                        const green = 'g' in hsvColor ? hsvColor.g : hsvColor.green;
+                        const blue = 'b' in hsvColor ? hsvColor.b : hsvColor.blue;
+                        bonusText.setTint(Phaser.Display.Color.GetColor(red, green, blue));
+                    }
                 });
 
                 this.time.addEvent({
                     callback: () => {
+                       rainbowTween.stop();
                        bonusText.destroy();
                     },
                     repeat: 0,
