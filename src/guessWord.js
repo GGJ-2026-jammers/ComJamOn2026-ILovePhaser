@@ -31,6 +31,7 @@ export default class GuessWord {
                         this.letters[this.lettersWritten].setTint(0x00ff00);
                         this.lettersWritten++;
                         if (this.lettersWritten >= this.word.length){
+                            this.scene.correct.play(); // Sonido Correcto
                             this.wrongLetterPressed = true;
                             this.scene.tweens.add({
                                 targets: this.letters,
@@ -52,6 +53,7 @@ export default class GuessWord {
                         )
                         wrongLetter.setTint(0xff0000);
                         const wrongLetterY = wrongLetter.y;
+                        this.scene.incorrect.play(); // Sonido Correcto
                         this.scene.tweens.add({
                             targets: wrongLetter,
                             y: { from: wrongLetterY - 7, to: wrongLetterY + 7 },
