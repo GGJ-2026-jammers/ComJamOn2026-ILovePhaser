@@ -33,7 +33,7 @@ export default class GuessWord {
                         this.letters[this.lettersWritten].setTint(0x00ff00);
                         this.lettersWritten++;
                         if (this.lettersWritten >= this.word.length) {
-                            this.scene.registry.get('audio').playSFX('correct'); // Sonido Correcto
+                            this.scene.registry.get('audio').playSFX('cheer'); // Sonido Correcto
                             this.wrongLetterPressed = true;
                             this.scene.tweens.add({
                                 targets: this.letters,
