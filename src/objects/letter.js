@@ -3,6 +3,6 @@ export default class Letter extends Phaser.GameObjects.Sprite{
         super(scene, x, y, texture, frame)
         scene.add.existing(this);
         this.name = char;
-        this.setScale(0.6);
+        this.setScale(0.5);
     }
 }

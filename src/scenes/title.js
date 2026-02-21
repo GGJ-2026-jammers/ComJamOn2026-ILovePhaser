@@ -36,11 +36,11 @@ export default class Title extends Phaser.Scene {
         this.fondo = this.add.image(0, 0, "fondo").setOrigin(0, 0);
         this.fondo.setScale(0.5);
 
-        this.fondoPalabras = this.add.image(650,250,"fondoPalabras")
-        this.fondoPalabras.setScale(0.85)
+        // this.fondoPalabras = this.add.image(650,250,"fondoPalabras")
+        // this.fondoPalabras.setScale(0.85)
 
-        this.laRoca = this.add.image(50, 100, "laRocaPresentadora").setOrigin(0, 0);
-        this.laRoca.setScale(1.5);
+        // this.laRoca = this.add.image(50, 100, "laRocaPresentadora").setOrigin(0, 0);
+        // this.laRoca.setScale(1.5);
 
 
         const palabras = new Map()
@@ -51,9 +51,6 @@ export default class Title extends Phaser.Scene {
             this.font.set(frame, index)   
         });
 
-        let offset = 100;
-        let letterSpacing = 50;
-        
         this.palabra = new GuessWord(this.words[0], this.font, this, () => { this.nextWord(true); });
         this.palabra.showWord();
 
@@ -158,10 +155,10 @@ export default class Title extends Phaser.Scene {
     }
 
     createTimeBar() {
-        this.timeBarX = 429;
-        this.timeBarY = 354;
-        this.timeBarWidth = 443;
-        this.timeBarHeight = 18;
+        this.timeBarX = 0;
+        this.timeBarY = 454;
+        this.timeBarWidth = 870;
+        this.timeBarHeight = 73;
         this.timeBar = this.add.graphics();
         this.timeBar.setDepth(10);
     }
@@ -176,8 +173,6 @@ export default class Title extends Phaser.Scene {
         const barColor = Phaser.Display.Color.GetColor(red, green, 70);
 
         this.timeBar.clear();
-        this.timeBar.fillStyle(0x000000, 0.4);
-        this.timeBar.fillRect(this.timeBarX, this.timeBarY, this.timeBarWidth, this.timeBarHeight);
         this.timeBar.fillStyle(barColor, 1);
         this.timeBar.fillRect(this.timeBarX, this.timeBarY, fillWidth, this.timeBarHeight);
 
