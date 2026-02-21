@@ -6,6 +6,7 @@ export default class GuessWord {
         this.font = font
         this.scene = scene
         this.callback = callback;
+        this.input = true
 
         this.initialX = x;
         this.initialY = y;
@@ -20,7 +21,7 @@ export default class GuessWord {
         this.scene.input.keyboard.on('keydown', event => {
             if (event.repeat || this.wrongLetterPressed) return;
 
-            if ((event.keyCode >= Phaser.Input.Keyboard.KeyCodes.A && event.keyCode <= Phaser.Input.Keyboard.KeyCodes.Z)) {
+            if ((event.keyCode >= Phaser.Input.Keyboard.KeyCodes.A && event.keyCode <= Phaser.Input.Keyboard.KeyCodes.Z && this.input)) {
                 let now = event.keyCode;
                 let letter = this.word[this.lettersWritten];
                 if (letter) {
@@ -114,7 +115,9 @@ export default class GuessWord {
                 if (!letter) {
                     return;
                 }
-
+                this.scene.time.delayedCall(600, () => {
+                    this.input = true
+                })
                 letter.setVisible(true);
                 this.scene.tweens.add({
                     targets: letter,
@@ -142,7 +145,6 @@ export default class GuessWord {
             letter.setVisible(false);
             letters.push(letter);
         }
-
         return letters;
     }
 
@@ -154,6 +156,7 @@ export default class GuessWord {
     }
 
     setWord(word) {
+        this.input = false
         if (this.letters){
             this.scene.tweens.add({
                 targets: this.letters,
