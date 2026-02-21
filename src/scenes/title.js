@@ -26,11 +26,13 @@ export default class Title extends Phaser.Scene {
         this.fondo = this.add.image(0, 0, "fondo").setOrigin(0, 0);
         this.fondo.setScale(0.5);
 
+        this.fondoPalabras = this.add.image(650,250,"fondoPalabras")
+        this.fondoPalabras.setScale(0.85)
+
         this.laRoca = this.add.image(50, 100, "laRocaPresentadora").setOrigin(0, 0);
         this.laRoca.setScale(1.5);
 
-        this.fondoJuego = this.add.image(450, 145, "fondoJuego").setOrigin(0, 0);
-        this.fondoJuego.setScale(0.19)
+
         const palabras = new Map()
         this.font = new Map()
         let abecedario = "abcdefghijklmnopqrstuvwxyz"
@@ -65,9 +67,10 @@ export default class Title extends Phaser.Scene {
     setConstants() {
         this.BASE_WORD_SCORE = 300;
         this.LETTER_SCORE = 50;
-        this.MULTIPLIER = 1.5;
+        this.MULTIPLIER = 1.25;
         this.BASE_NEXT_WORD_TIME = 4000;
         this.LETTER_TIME = 100;
+        this.MULTI_BONUS = 0.75;
     }
 
     setRandomWords() {
@@ -77,7 +80,7 @@ export default class Title extends Phaser.Scene {
         this.maxWords = 5;
         const txt = this.cache.text.get('palabras');
         const lineas = txt.replace(/\r\n/g, "\n").split("\n");
-
+        this.mode = 0;
         //mode 0 = modo por defecto
         if(this.mode === 0){
             //establece de forma random las palabras
@@ -114,7 +117,7 @@ export default class Title extends Phaser.Scene {
             this.nextWord(false);
         }
 
-        this.multiTween.timeScale = Math.max(1, (1.05 * this.wordsCombo))
+        this.multiTween.timeScale = Math.max(1, (1.2 ** this.wordsCombo))
     }
     
     resetTime() {
@@ -130,7 +133,43 @@ export default class Title extends Phaser.Scene {
             this.correctWords++;
             if(this.wordsCombo > this.maxCombo) this.maxCombo = this.wordsCombo;
             this.score +=  this.BASE_WORD_SCORE * this.multiplier;
-            this.multiplier *= this.MULTIPLIER;
+            this.multiplier += this.MULTIPLIER;
+            if(this.words[this.currentWordIndex].length >=6){
+                this.multiplier += this.MULTI_BONUS;
+                let bonusText = this.add.text(720,80, "BONUS!!!",{fontSize:30, fontFamily:'babelgam',color:"#fd0000"})
+                // Tween de pulso (scale + alpha)
+                this.tweens.add({
+                    targets: bonusText,
+                    scale: { from: 1, to: 1.15 },
+                    alpha: { from: 0.7, to: 1 },
+                    duration: 500,
+                    yoyo: true,
+                    repeat: -1,
+                    ease: "Sine.easeInOut"
+                });
+
+                // Tween arcoíris manual
+                this.rainbowTime = 0; // contador de tiempo
+
+                this.events.on('update', (time, delta) => {
+                    this.rainbowTime += delta * 0.001; // segundos
+
+                    // Cambia los colores con senos, da efecto arcoíris
+                    const r = Math.floor(128 + 127 * Math.sin(this.rainbowTime * 2 + 0));
+                    const g = Math.floor(128 + 127 * Math.sin(this.rainbowTime * 2 + 2));
+                    const b = Math.floor(128 + 127 * Math.sin(this.rainbowTime * 2 + 4));
+
+                    bonusText.setTint(Phaser.Display.Color.GetColor(r, g, b));
+                });
+
+                this.time.addEvent({
+                    callback: () => {
+                       bonusText.destroy();
+                    },
+                    repeat: 0,
+                    delay: 2550
+                })
+            }
             this.multiplierText.setText("Multi: " + this.multiplier)
         }
         else{
