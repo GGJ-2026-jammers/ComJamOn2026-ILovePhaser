@@ -159,13 +159,19 @@ export default class GuessWord {
                 duration: 500,
                 angle: 1080,
                 scale: 0,
-                alpha: 0
-                onComplete: 
+                alpha: 0,
+                onComplete: () => {
+                    this.destroy();
+                    this.word = word;
+                    this.reset();
+                }
             })
         }
-        this.destroy();
-        this.word = word;
-        this.reset();
+        else {
+            this.destroy();
+            this.word = word;
+            this.reset();
+        }
     }
 
     isCompleted() {
