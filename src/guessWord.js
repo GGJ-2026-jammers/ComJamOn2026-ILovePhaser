@@ -24,7 +24,7 @@ export default class GuessWord {
             if(this.scene.letterSounds[now - 65]) this.scene.letterSounds[now - 65].play();
             if (event.repeat || this.wrongLetterPressed) return;
 
-            if ((event.keyCode >= Phaser.Input.Keyboard.KeyCodes.A && event.keyCode <= Phaser.Input.Keyboard.KeyCodes.Z)) {
+            if ((event.keyCode >= Phaser.Input.Keyboard.KeyCodes.A && event.keyCode <= Phaser.Input.Keyboard.KeyCodes.Z && this.input)) {
                 let letter = this.word[this.lettersWritten];
                 if (letter) {
                     let letterChar = this.word[this.lettersWritten].charCodeAt(0) - 32;
@@ -157,6 +157,7 @@ export default class GuessWord {
         this.lettersWritten = 0;
         this.letters = this.generateLetters();
         this.showWord();
+        this.input = true;
     }
 
     setWord(word) {

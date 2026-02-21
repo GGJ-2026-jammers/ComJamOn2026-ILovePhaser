@@ -36,14 +36,6 @@ export default class Title extends Phaser.Scene {
         this.fondo = this.add.image(0, 0, "fondo").setOrigin(0, 0);
         this.fondo.setScale(0.5);
 
-        // this.fondoPalabras = this.add.image(650,250,"fondoPalabras")
-        // this.fondoPalabras.setScale(0.85)
-
-        // this.laRoca = this.add.image(50, 100, "laRocaPresentadora").setOrigin(0, 0);
-        // this.laRoca.setScale(1.5);
-
-
-        const palabras = new Map()
         this.font = new Map()
         let abecedario = "abcdefghijklmnopqrstuvwxyz"
         const frames = abecedario.split("")
@@ -92,7 +84,7 @@ export default class Title extends Phaser.Scene {
         this.words = [];
         this.wordsMap = new Map();
         this.score = 500;
-        this.maxWords = 6;
+        this.maxWords = 30;
         const txt = this.cache.text.get('palabras');
         const lineas = txt.replace(/\r\n/g, "\n").split("\n");
         this.mode = 0;
@@ -107,7 +99,7 @@ export default class Title extends Phaser.Scene {
                     console.log(this.words);
                     this.words.push(lineas[rndNum]);
                     this.wordsMap.set(rndNum);
-                     i++;
+                    i++;
             }}
         }
         else{
