@@ -74,9 +74,11 @@ export default class Title extends Phaser.Scene {
         this.BASE_WORD_SCORE = 300;
         this.LETTER_SCORE = 50;
         this.MULTIPLIER = 1.25;
-        this.BASE_NEXT_WORD_TIME = 4000;
-        this.LETTER_TIME = 100;
+        this.BASE_NEXT_WORD_TIME = 3000;
+        this.LETTER_TIME = 80;
         this.MULTI_BONUS = 0.75;
+        this.TIME_REDUCTION_STEP = 200;
+        this.TIME_REDUCTION_EVERY_WORDS = 5;
     }
 
     setRandomWords() {
@@ -84,7 +86,7 @@ export default class Title extends Phaser.Scene {
         this.words = [];
         this.wordsMap = new Map();
         this.score = 500;
-        this.maxWords = 30;
+        this.maxWords = 5;
         const txt = this.cache.text.get('palabras');
         const lineas = txt.replace(/\r\n/g, "\n").split("\n");
         this.mode = 0;
@@ -143,7 +145,7 @@ export default class Title extends Phaser.Scene {
         }
 
         this.updateTimeBar();
-        this.multiTween.timeScale = Math.max(1, (1.2 ** this.wordsCombo))
+        this.multiTween.timeScale = Math.min(Math.max(1, (1.2 ** this.wordsCombo)),3);
     }
 
     createTimeBar() {
@@ -171,7 +173,11 @@ export default class Title extends Phaser.Scene {
     }
     
     resetTime() {
-        this.currentTime = this.BASE_NEXT_WORD_TIME + (this.words[this.currentWordIndex].length * this.LETTER_TIME);
+        const reductionLevel = Math.floor(this.currentWordIndex / this.TIME_REDUCTION_EVERY_WORDS);
+        const reductionMs = reductionLevel * this.TIME_REDUCTION_STEP;
+        const baseTime = this.BASE_NEXT_WORD_TIME + (this.words[this.currentWordIndex].length * this.LETTER_TIME);
+
+        this.currentTime = baseTime - reductionMs;
         this.maxCurrentTime = this.currentTime;
         this.updateTimeBar();
     }
