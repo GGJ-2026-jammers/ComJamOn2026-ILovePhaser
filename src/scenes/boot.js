@@ -49,6 +49,7 @@ export default class BootScene extends Phaser.Scene{
         this.load.image('fondo', 'assets/images/Fondo.jpg');
         this.load.image('laRocaPresentadora', 'assets/images/laRocaPresentadora.png');
         this.load.image('fondoJuego', 'assets/images/FondoJuego.jpg');
+        this.load.image('fondoPalabras', 'assets/images/FondoPalabras.png');
         this.load.text('palabras', "assets/palabras.txt")
         this.load.spritesheet('letras', 'assets/images/abecedario.png', { frameWidth: 100, frameHeight: 100 });
 

@@ -50,11 +50,12 @@ export default class Title extends Phaser.Scene {
         this.fondo = this.add.image(0, 0, "fondo").setOrigin(0, 0);
         this.fondo.setScale(0.5)
 
+        this.fondoPalabras = this.add.image(650,250,"fondoPalabras")
+        this.fondoPalabras.setScale(0.85)
+
         this.laRoca = this.add.image(50, 155, "laRocaPresentadora").setOrigin(0, 0);
         this.laRoca.setScale(0.1)
 
-        this.fondoJuego = this.add.image(450, 145, "fondoJuego").setOrigin(0, 0);
-        this.fondoJuego.setScale(0.19)
         const palabras = new Map()
         this.font = new Map()
         let abecedario = "abcdefghijklmnopqrstuvwxyz"
