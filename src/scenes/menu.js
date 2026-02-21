@@ -6,7 +6,9 @@ export default class Menu extends Phaser.Scene {
     }
 
     create() {
-        console.log("menu")
+        console.log("menu");
+        this.audio = this.registry.get('audio'); //GUARDAMOS EL AUDIO
+        this.audio.playMusic('musica');
 
         let laRoca = this.add.image(700, 300, "laRoca2");
         laRoca.setScale(0.4)

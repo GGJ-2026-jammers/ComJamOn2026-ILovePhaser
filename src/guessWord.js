@@ -1,7 +1,7 @@
 import Letter from "../src/objects/letter.js"
 
 export default class GuessWord {
-    constructor(word, font, scene, callback, x=74 ,y=255, spacing=60.5) {
+    constructor(word, font, scene, callback, x = 74, y = 255, spacing = 60.5) {
         this.word = word
         this.font = font
         this.scene = scene
@@ -17,11 +17,11 @@ export default class GuessWord {
         this.revealEvent = null;
 
         this.wrongLetterPressed = false;
-
+        const audio = this.scene.registry.get('audio');
         this.scene.input.keyboard.on('keydown', event => {
             let now = event.keyCode;
             // Sonido de letras
-            if(this.scene.letterSounds[now - 65]) this.scene.letterSounds[now - 65].play();
+            if (this.scene.letterSounds[now - 65]) audio.playSFX(this.scene.letterSounds[now - 65].key);
             if (event.repeat || this.wrongLetterPressed) return;
 
             if ((event.keyCode >= Phaser.Input.Keyboard.KeyCodes.A && event.keyCode <= Phaser.Input.Keyboard.KeyCodes.Z && this.input)) {
@@ -32,8 +32,8 @@ export default class GuessWord {
                     if (now === letterChar) {
                         this.letters[this.lettersWritten].setTint(0x00ff00);
                         this.lettersWritten++;
-                        if (this.lettersWritten >= this.word.length){
-                            this.scene.correct.play(); // Sonido Correcto
+                        if (this.lettersWritten >= this.word.length) {
+                            this.scene.registry.get('audio').playSFX('correct'); // Sonido Correcto
                             this.wrongLetterPressed = true;
                             this.scene.tweens.add({
                                 targets: this.letters,
@@ -55,7 +55,7 @@ export default class GuessWord {
                         )
                         wrongLetter.setTint(0xff0000);
                         const wrongLetterY = wrongLetter.y;
-                        this.scene.incorrect.play(); // Sonido Correcto
+                        this.scene.registry.get('audio').playSFX('incorrect'); // Sonido Correcto
                         this.scene.tweens.add({
                             targets: wrongLetter,
                             y: { from: wrongLetterY - 7, to: wrongLetterY + 7 },
@@ -162,7 +162,7 @@ export default class GuessWord {
 
     setWord(word) {
         this.input = false
-        if (this.letters){
+        if (this.letters) {
             this.scene.tweens.add({
                 targets: this.letters,
                 duration: 500,
