@@ -11,6 +11,8 @@ export default class Title extends Phaser.Scene {
 
     init(data){
         this.mode = data.mode
+        this.correct = this.sound.add("correct");
+        this.incorrect = this.sound.add("incorrect");
     }
 
     create(){

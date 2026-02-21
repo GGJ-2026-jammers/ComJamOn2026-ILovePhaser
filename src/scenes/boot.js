@@ -52,6 +52,11 @@ export default class BootScene extends Phaser.Scene {
         this.load.text('palabras', "assets/palabras.txt")
         this.load.spritesheet('letras', 'assets/images/abecedario.png', { frameWidth: 100, frameHeight: 100 });
 
+        //Sonidos
+        this.load.audio("correct", "assets/sounds/correct.mp3");
+        this.load.audio("incorrect", "assets/sounds/incorrect.mp3");
+
+
         //cuando termina la carga, llamar a la siguiente escena y dormir esta
         this.load.on('complete', () => {
             const elapsedMs = this.time.now - loadStartMs;
