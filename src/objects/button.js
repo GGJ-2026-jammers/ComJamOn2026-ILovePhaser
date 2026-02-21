@@ -30,7 +30,7 @@ export default class Button extends Phaser.GameObjects.BitmapText{
         //al poner el raton encima
         this.on('pointerover',function(){
             if(hover){
-                this.setScale(1.2,1.2);
+                this.setScale(1.1,1.1);
             }
 
             if(hoverChangeColor){
