@@ -5,6 +5,11 @@ export default class Tutorial extends Phaser.Scene{
         super({ key: 'tutorial' });
     }
 
+    init(){
+        this.correct = this.sound.add("correct");
+        this.incorrect = this.sound.add("incorrect");
+    }
+
     create() {
         console.log("Tutorial");
         this.laRoca = this.add.image(30, 180, "laRocaPresentadora").setOrigin(0, 0);

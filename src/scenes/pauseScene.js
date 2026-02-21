@@ -35,7 +35,7 @@ class PauseScene extends Phaser.Scene {
             }
         ).setOrigin(0.5).setDepth(102).setAlpha(0);
 
-        this.btnReanudar = new Button(this, centerX, centerY, 'Reanudar partida', { fontFamily: 'Babelgam', fontSize: '14px', color: '#ffffff' }, 1, () => {
+        this.btnReanudar = new Button(this, centerX, centerY, 'Reanudar partida', 'bitFont', 22, () => {
             console.log("Has dado al boton para reanudar partida");
             this.scene.stop(); // cerrar pausa
             this.scene.resume('title'); // reanudar Title
@@ -84,10 +84,20 @@ class PauseScene extends Phaser.Scene {
         });
 
         // Tecla para reanudar
-        this.input.keyboard.on('keydown-TAB', () => {
+        this.resumeKeyHandler = (event) => {
+            event.preventDefault();
             console.log("REANUDAR");
             this.scene.stop(); // cerrar pausa
             this.scene.resume('title'); // reanudar Title
+        };
+
+        this.input.keyboard.on('keydown-TAB', this.resumeKeyHandler, this);
+
+        this.events.once('shutdown', () => {
+            if (this.resumeKeyHandler) {
+                this.input.keyboard.off('keydown-TAB', this.resumeKeyHandler, this);
+                this.resumeKeyHandler = null;
+            }
         });
     }
 }

@@ -13,6 +13,7 @@ export default class Title extends Phaser.Scene {
         this.mode = data.mode
         this.correct = this.sound.add("correct");
         this.incorrect = this.sound.add("incorrect");
+        
     }
 
     create(){
@@ -24,6 +25,7 @@ export default class Title extends Phaser.Scene {
         this.setConstants();
         this.multiplier = 1;
         this.currentTime = this.BASE_NEXT_WORD_TIME;
+        this.maxCurrentTime = this.currentTime;
         this.currentWordIndex = 0;
         this.fondo = this.add.image(0, 0, "fondo").setOrigin(0, 0);
         this.fondo.setScale(0.5);
@@ -60,8 +62,15 @@ export default class Title extends Phaser.Scene {
             ease: "Sine.easeInOut"
         });
 
+        this.createTimeBar();
+        this.resetTime();
+
         this.events.once('shutdown', () => {
             console.log('mataos')
+            if (this.pauseKeyHandler) {
+                this.input.keyboard.off('keydown-TAB', this.pauseKeyHandler, this);
+                this.pauseKeyHandler = null;
+            }
             this.tweens.killAll();
         });
     }
@@ -111,33 +120,77 @@ export default class Title extends Phaser.Scene {
     }
 
     createPauseScene() {
-        this.pauseScene = new PauseScene();
-        this.input.keyboard.on('keydown-TAB', () => {
-            if (!this.scene.isPaused()) {
+        if (this.pauseKeyHandler) {
+            this.input.keyboard.off('keydown-TAB', this.pauseKeyHandler, this);
+        }
+
+        this.pauseKeyHandler = (event) => {
+            event.preventDefault();
+            if (!this.scene.isActive('pauseScene')) {
                 console.log("Pausa");
-                this.scene.pause();
                 this.scene.launch('pauseScene');
+                this.scene.pause();
             }
-        });
+        };
+
+        this.input.keyboard.on('keydown-TAB', this.pauseKeyHandler, this);
     }
 
     update(t, dt){
-        this.currentTime -= dt;
-        if(this.currentTime <= 0){
+        const wordAlreadyCompleted = this.palabra && this.palabra.isCompleted();
+
+        if (!wordAlreadyCompleted) {
+            this.currentTime = Math.max(0, this.currentTime - dt);
+        }
+
+        if(this.currentTime <= 0 && !wordAlreadyCompleted){
             this.nextWord(false);
         }
 
+        this.updateTimeBar();
         this.multiTween.timeScale = Math.max(1, (1.2 ** this.wordsCombo))
+    }
+
+    createTimeBar() {
+        this.timeBarX = 429;
+        this.timeBarY = 354;
+        this.timeBarWidth = 443;
+        this.timeBarHeight = 18;
+        this.timeBar = this.add.graphics();
+        this.timeBar.setDepth(10);
+    }
+
+    updateTimeBar() {
+        if (!this.timeBar) return;
+
+        const ratio = this.maxCurrentTime > 0 ? Phaser.Math.Clamp(this.currentTime / this.maxCurrentTime, 0, 1) : 0;
+        const fillWidth = this.timeBarWidth * ratio;
+        const red = Math.floor(255 * (1 - ratio));
+        const green = Math.floor(255 * ratio);
+        const barColor = Phaser.Display.Color.GetColor(red, green, 70);
+
+        this.timeBar.clear();
+        this.timeBar.fillStyle(0x000000, 0.4);
+        this.timeBar.fillRect(this.timeBarX, this.timeBarY, this.timeBarWidth, this.timeBarHeight);
+        this.timeBar.fillStyle(barColor, 1);
+        this.timeBar.fillRect(this.timeBarX, this.timeBarY, fillWidth, this.timeBarHeight);
+
     }
     
     resetTime() {
         this.currentTime = this.BASE_NEXT_WORD_TIME + (this.words[this.currentWordIndex].length * this.LETTER_TIME);
+        this.maxCurrentTime = this.currentTime;
+        this.updateTimeBar();
     }
     
     /**
      * @param {boolean} correct si se ha acertado o no la palabra
      */
     nextWord(correct){
+        if (correct && (!this.palabra || !this.palabra.isCompleted())) {
+            return;
+        }
+
         if(correct){
             this.wordsCombo++;
             this.correctWords++;
