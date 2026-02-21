@@ -44,11 +44,12 @@ export default class BootScene extends Phaser.Scene {
             progressBar.fillRect(centerX - 250, centerY + 80, 500 * value, 30);
         });
 
-        this.load.image('laRoca2', 'assets/images/laRoca.jpg');
+        this.load.image('laRoca2', 'assets/images/laRoca.webp');
         this.load.image('fondo', 'assets/images/Fondo.jpg');
         this.load.image('laRocaPresentadora', 'assets/images/La_roca.webp');
         this.load.image('fondoJuego', 'assets/images/FondoJuego.jpg');
         this.load.image('fondoPalabras', 'assets/images/FondoPalabras.png');
+        this.load.image('paredPiedra', 'assets/images/paredKLK.webp');
         this.load.text('palabras', "assets/palabras.txt")
         this.load.spritesheet('letras', 'assets/images/abecedario.png', { frameWidth: 100, frameHeight: 100 });
 
@@ -70,7 +71,6 @@ export default class BootScene extends Phaser.Scene {
 
         this.load.bitmapFont('bitFont', 'assets/font/bitFont.png', 'assets/font/bitFont.xml')
     }
-
 
     //create vacio
     create() {
