@@ -4,6 +4,7 @@ import Title from "./scenes/title.js";
 import PauseScene from "./scenes/pauseScene.js";
 import GameOver from "./scenes/gameOver.js";
 import Tutorial from "./scenes/tutorial.js";
+import VolumeOption from "./scenes/volumeOptionScene.js"
 
 let config = {
 	type: Phaser.AUTO,
@@ -19,12 +20,12 @@ let config = {
 		height: 540,
 		zoom: 1
 	},
-	scene: [BootScene,Title,Menu,PauseScene,GameOver,Tutorial],
-	physics: { 
-		default: 'arcade', 
-		arcade: { 
+	scene: [BootScene, Title, Menu, PauseScene, GameOver, Tutorial, VolumeOption],
+	physics: {
+		default: 'arcade',
+		arcade: {
 			//gravity: { y: 200 }, 
-			debug: true 
+			debug: true
 		},
 		checkCollision: {
 			up: true,

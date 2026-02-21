@@ -5,6 +5,39 @@ class PauseScene extends Phaser.Scene {
     }
 
 
+
+    create() {
+        this.centerX = this.cameras.main.width / 2;
+        this.centerY = this.cameras.main.height / 2;
+
+
+        this.overlay();
+        this.panel();
+        this.titulo();
+        this.botones();
+        this.fullscreen();
+
+
+
+        // Tecla para reanudar
+        this.resumeKeyHandler = (event) => {
+            event.preventDefault();
+            this.scene.stop(); // cerrar pausa
+            this.scene.resume('title'); // reanudar Title
+        };
+
+        this.input.keyboard.on('keydown-TAB', this.resumeKeyHandler, this);
+
+        this.events.once('shutdown', () => {
+            if (this.resumeKeyHandler) {
+                this.input.keyboard.off('keydown-TAB', this.resumeKeyHandler, this);
+                this.resumeKeyHandler = null;
+            }
+        });
+    }
+
+
+
     overlay() {
         // Fondo oscuro
         const overlay = this.add.rectangle(
@@ -93,8 +126,9 @@ class PauseScene extends Phaser.Scene {
             'bitFont',
             26,
             () => {
-                this.scene.launch('options');
                 this.scene.pause();
+                this.scene.launch('options', { returnTo: 'pauseScene' });
+
             }
         ).setDepth(102);
 
@@ -132,11 +166,7 @@ class PauseScene extends Phaser.Scene {
     }
 
     fullscreen() {
-        // Botón fullscreen (esquina superior izquierda)
-        // const fsButton = this.add.rectangle(20, 20, 40, 40, 0xffffff)
-        //     .setOrigin(0)
-        //     .setDepth(100)
-        //     .setInteractive({ useHandCursor: true });
+
         const fsButton = this.add.image(20, 20, 'fullScreen')
             .setOrigin(0)
             .setDepth(102)
@@ -187,37 +217,6 @@ class PauseScene extends Phaser.Scene {
             delay: 200
         });
 
-
-    }
-
-    create() {
-        this.centerX = this.cameras.main.width / 2;
-        this.centerY = this.cameras.main.height / 2;
-
-
-        this.overlay();
-        this.panel();
-        this.titulo();
-        this.botones();
-        this.fullscreen();
-
-
-
-        // Tecla para reanudar
-        this.resumeKeyHandler = (event) => {
-            event.preventDefault();
-            this.scene.stop(); // cerrar pausa
-            this.scene.resume('title'); // reanudar Title
-        };
-
-        this.input.keyboard.on('keydown-TAB', this.resumeKeyHandler, this);
-
-        this.events.once('shutdown', () => {
-            if (this.resumeKeyHandler) {
-                this.input.keyboard.off('keydown-TAB', this.resumeKeyHandler, this);
-                this.resumeKeyHandler = null;
-            }
-        });
     }
 }
 

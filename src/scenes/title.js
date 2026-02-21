@@ -9,25 +9,25 @@ export default class Title extends Phaser.Scene {
         super({ key: "title" });
     }
 
-    init(data){
+    init(data) {
         this.mode = data.mode
         this.correct = this.sound.add("correct");
         this.incorrect = this.sound.add("incorrect");
-        
+
         this.letterSounds = new Array();
 
-        for (let i=0; i < 13; i++){
-            let letter = String.fromCharCode(i+65);
+        for (let i = 0; i < 13; i++) {
+            let letter = String.fromCharCode(i + 65);
             this.letterSounds.push(this.sound.add(letter));
         }
     }
 
-    create(){
+    create() {
         this.createPauseScene();
-
+        this.audio = this.registry.get('audio'); //GUARDAMOS EL AUDIO
         this.setRandomWords();
         console.log("Title")
-        
+
         this.setConstants();
         this.multiplier = 1;
         this.currentTime = this.BASE_NEXT_WORD_TIME;
@@ -40,13 +40,13 @@ export default class Title extends Phaser.Scene {
         let abecedario = "abcdefghijklmnopqrstuvwxyz"
         const frames = abecedario.split("")
         frames.forEach((frame, index) => {
-            this.font.set(frame, index)   
+            this.font.set(frame, index)
         });
 
         this.palabra = new GuessWord(this.words[0], this.font, this, () => { this.nextWord(true); });
         this.palabra.showWord();
 
-        this.multiplierText = this.add.text(700,50,'MULTI:' + this.multiplier,{fontSize:30, fontFamily:'babelgam',color:"#fd0000"})
+        this.multiplierText = this.add.text(700, 50, 'MULTI:' + this.multiplier, { fontSize: 30, fontFamily: 'babelgam', color: "#fd0000" })
         this.multiTween = this.tweens.add({
             targets: this.multiplierText,
             scale: { from: 1, to: 1.15 },
@@ -94,22 +94,23 @@ export default class Title extends Phaser.Scene {
         const lineas = txt.replace(/\r\n/g, "\n").split("\n");
         this.mode = 0;
         //mode 0 = modo por defecto
-        if(this.mode === 0){
+        if (this.mode === 0) {
             let i = 0;
             while (i < this.maxWords) {
                 let rndNum = this.rnd.integerInRange(0, lineas.length - 1);
                 console.log(this.wordsMap.has(rndNum));
                 console.log(this.wordsMap);
-                if(!this.wordsMap.has(rndNum)){
+                if (!this.wordsMap.has(rndNum)) {
                     console.log(this.words);
                     this.words.push(lineas[rndNum]);
                     this.wordsMap.set(rndNum);
                     i++;
-            }}
+                }
+            }
         }
-        else{
+        else {
             //se obtienen todas las palabras
-            for (let i = 0; i < lineas.length-1; i++) {
+            for (let i = 0; i < lineas.length - 1; i++) {
                 this.words.push(lineas[i]);
             }
         }
@@ -136,19 +137,19 @@ export default class Title extends Phaser.Scene {
         this.input.keyboard.on('keydown-TAB', this.pauseKeyHandler, this);
     }
 
-    update(t, dt){
+    update(t, dt) {
         const wordAlreadyCompleted = this.palabra && this.palabra.isCompleted();
 
         if (!wordAlreadyCompleted) {
             this.currentTime = Math.max(0, this.currentTime - dt);
         }
 
-        if(this.currentTime <= 0 && !wordAlreadyCompleted){
+        if (this.currentTime <= 0 && !wordAlreadyCompleted) {
             this.nextWord(false);
         }
 
         this.updateTimeBar();
-        this.multiTween.timeScale = Math.min(Math.max(1, (1.2 ** this.wordsCombo)),3);
+        this.multiTween.timeScale = Math.min(Math.max(1, (1.2 ** this.wordsCombo)), 3);
     }
 
     createTimeBar() {
@@ -174,7 +175,7 @@ export default class Title extends Phaser.Scene {
         this.timeBar.fillRect(this.timeBarX, this.timeBarY, fillWidth, this.timeBarHeight);
 
     }
-    
+
     resetTime() {
         const reductionLevel = Math.floor(this.currentWordIndex / this.TIME_REDUCTION_EVERY_WORDS);
         const reductionMs = reductionLevel * this.TIME_REDUCTION_STEP;
@@ -186,24 +187,24 @@ export default class Title extends Phaser.Scene {
         this.maxCurrentTime = this.currentTime;
         this.updateTimeBar();
     }
-    
+
     /**
      * @param {boolean} correct si se ha acertado o no la palabra
      */
-    nextWord(correct){
+    nextWord(correct) {
         if (correct && (!this.palabra || !this.palabra.isCompleted())) {
             return;
         }
 
-        if(correct){
+        if (correct) {
             this.wordsCombo++;
             this.correctWords++;
-            if(this.wordsCombo > this.maxCombo) this.maxCombo = this.wordsCombo;
-            this.score +=  this.BASE_WORD_SCORE * this.multiplier;
+            if (this.wordsCombo > this.maxCombo) this.maxCombo = this.wordsCombo;
+            this.score += this.BASE_WORD_SCORE * this.multiplier;
             this.multiplier += this.MULTIPLIER;
-            if(this.words[this.currentWordIndex].length >=9 ){
+            if (this.words[this.currentWordIndex].length >= 9) {
                 this.multiplier += this.MULTI_BONUS;
-                let bonusText = this.add.text(720,80, "BONUS!!!",{fontSize:30, fontFamily:'babelgam',color:"#ffffff"})
+                let bonusText = this.add.text(720, 80, "BONUS!!!", { fontSize: 30, fontFamily: 'babelgam', color: "#ffffff" })
                 // Tween de pulso (scale + alpha)
                 this.tweens.add({
                     targets: bonusText,
@@ -231,8 +232,8 @@ export default class Title extends Phaser.Scene {
 
                 this.time.addEvent({
                     callback: () => {
-                       rainbowTween.stop();
-                       bonusText.destroy();
+                        rainbowTween.stop();
+                        bonusText.destroy();
                     },
                     repeat: 0,
                     delay: 2550
@@ -240,25 +241,26 @@ export default class Title extends Phaser.Scene {
             }
             this.multiplierText.setText("Multi: " + this.multiplier)
         }
-        else{
+        else {
             this.multiplier = 1;
             this.wordsCombo = 0;
-            this.score = Math.max(0,this.score - 100);
+            this.score = Math.max(0, this.score - 100);
             console.log(this.score);
             this.multiplierText.setText("Multi: " + this.multiplier)
         }
-            
-        
 
-        if(this.currentWordIndex === this.words.length-1){
+
+
+        if (this.currentWordIndex === this.words.length - 1) {
             this.scene.sleep();
             this.scene.stop();
             this.scene.run('gameOver',
-                {score:this.score,
-                maxCombo:this.maxCombo,
-                correctWords: this.correctWords
-            })
-        }else{
+                {
+                    score: this.score,
+                    maxCombo: this.maxCombo,
+                    correctWords: this.correctWords
+                })
+        } else {
             this.currentWordIndex++;
             this.palabra.setWord(this.words[this.currentWordIndex]);
             this.resetTime();

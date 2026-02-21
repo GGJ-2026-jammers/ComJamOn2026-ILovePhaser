@@ -1,3 +1,4 @@
+import AudioManager from "../managers/audioManager.js";
 export default class BootScene extends Phaser.Scene {
 
     constructor() {
@@ -13,6 +14,9 @@ export default class BootScene extends Phaser.Scene {
 
     //todo lo del preload quitarlo y dejar solo lo justo y necesario (carga de sprites, audios ,ect)
     preload() {
+        const audio = AudioManager.getInstance(this);
+        this.registry.set('audio', audio);
+
         this.registry.set('maxScore', 0);
         this.registry.set('maxCombo', 0);
         //BARRA DE CARGA, comentar si no funciona
