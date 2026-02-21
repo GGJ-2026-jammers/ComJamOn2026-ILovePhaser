@@ -29,8 +29,8 @@ export default class GuessWord {
                         this.letters[this.lettersWritten].setTint(0x00ff00);
                         this.lettersWritten++;
                         if (this.lettersWritten >= this.word.length){
-                            if (this.callback) this.callback();
                             this.destroy();
+                            if (this.callback) this.callback();
                         }
                     }
                     else {
@@ -115,6 +115,7 @@ export default class GuessWord {
     }
 
     setWord(word) {
+        this.destroy();
         this.word = word;
         this.reset();
     }

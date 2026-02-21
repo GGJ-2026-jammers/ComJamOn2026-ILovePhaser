@@ -1,3 +1,5 @@
+import Button from "../objects/button.js";
+
 export default class Menu extends Phaser.Scene{
     constructor(){
         super({key:'menu'});
@@ -9,38 +11,12 @@ export default class Menu extends Phaser.Scene{
         let laRoca = this.add.image(700, 300, "laRoca2");
         laRoca.setScale(0.4)
 
-        this.add.text(100,50,'La Roca-Chan',{fontSize:100, fontFamily:'fuenteKLK',color:"#000000"});
-        this.add.text(140,125,'Games UwU',{fontSize:100, fontFamily:'fuenteKLK',color:"#000000"});
-        let boton1 = this.add.text(200,275,'JUGAR',{
-            fontSize: '100px',
-            fontFamily:'fuenteKLK',
-            color:"#000000",
-            stroke: '#ffffff',
-            strokeThickness: 4
-        }).setInteractive();
+        this.add.bitmapText(100,50, 'bitFont','La Roca-Chan').setScale(2);
+        this.add.bitmapText(140,150, 'bitFont','Games').setScale(2).setCenterAlign();
+        let jugarBtn = new Button(this, 200, 275, 'JUGAR', 'bitFont', 32, () => {this.goLevel('title')})
+        let tutorialBtn = new Button(this, 200, 375, 'TUTORIAL', 'bitFont', 32, () => {this.goLevel('tutorial')})
 
         this.cameras.main.setBackgroundColor('#ffffff');
-        
-        //botones interactivos para llamar al level 1
-        boton1.on('pointerdown', ()=>{
-            this.goLevel('title')
-        })
-        boton1.on('pointerover', () => {
-            boton1.setStyle({
-                stroke: '#c4c4c4',
-                strokeThickness: 6,
-                fontFamily: 'fuenteKLK',
-                fontSize: '100px'  // el tamaño original
-            });
-        });
-        boton1.on('pointerout', () => {
-            boton1.setStyle({
-                stroke: '#ffffff',
-                strokeThickness: 4,
-                fontFamily: 'fuenteKLK',
-                fontSize: '100px'
-            });
-        });
     }
 
     goLevel(key){
