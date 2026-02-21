@@ -76,17 +76,25 @@ export default class Title extends Phaser.Scene {
     setRandomWords() {
         this.rnd = new Phaser.Math.RandomDataGenerator();
         this.words = [];
+        this.wordsMap = new Map();
         this.score = 500;
-        this.maxWords = 5;
+        this.maxWords = 6;
         const txt = this.cache.text.get('palabras');
         const lineas = txt.replace(/\r\n/g, "\n").split("\n");
         this.mode = 0;
         //mode 0 = modo por defecto
         if(this.mode === 0){
-            //establece de forma random las palabras
-            for (let i = 0; i < this.maxWords; i++) {
-                this.words.push(lineas[this.rnd.integerInRange(0, lineas.length - 1)]);
-            }
+            let i = 0;
+            while (i < this.maxWords) {
+                let rndNum = this.rnd.integerInRange(0, lineas.length - 1);
+                console.log(this.wordsMap.has(rndNum));
+                console.log(this.wordsMap);
+                if(!this.wordsMap.has(rndNum)){
+                    console.log(this.words);
+                    this.words.push(lineas[rndNum]);
+                    this.wordsMap.set(rndNum);
+                     i++;
+            }}
         }
         else{
             //se obtienen todas las palabras
