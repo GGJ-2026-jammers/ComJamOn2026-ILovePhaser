@@ -37,6 +37,8 @@ export default class Level extends Phaser.Scene {
         this.fondo = this.add.image(0, 0, "fondo2").setOrigin(0, 0).setDepth(-1);
         this.fondo.setScale(2);
         this.initialCutscene();
+
+        this.wordsCountText = this.add.bitmapText(630, 100, 'bitFont', "Palabras\nCorrectas: 0");
     }
 
     initialCutscene() {
@@ -344,6 +346,8 @@ export default class Level extends Phaser.Scene {
             this.palabra.setWord(this.words[this.currentWordIndex]);
             this.resetTime();
         }
+
+        this.wordsCountText.text = "Palabras\n  Correctas: " + this.correctWords;
     }
     createLives() {
         this.livesImages = [];
