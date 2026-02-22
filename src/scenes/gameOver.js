@@ -66,6 +66,7 @@ export default class GameOver extends Phaser.Scene{
         let menuButton = new Button(this,700,400,'MENU PRINCIPAL','bitFont',24,()=>{
             console.log('menu')
             this.scene.sleep();
+            this.scene.stop();
             this.scene.run('menu');
         },true,false);
 

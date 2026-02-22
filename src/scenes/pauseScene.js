@@ -23,7 +23,7 @@ class PauseScene extends Phaser.Scene {
         this.resumeKeyHandler = (event) => {
             event.preventDefault();
             this.scene.stop(); // cerrar pausa
-            this.scene.resume('title'); // reanudar Title
+            this.scene.resume('level'); // reanudar Title
         };
 
         this.input.keyboard.on('keydown-TAB', this.resumeKeyHandler, this);
@@ -114,7 +114,7 @@ class PauseScene extends Phaser.Scene {
             26,
             () => {
                 this.scene.stop();
-                this.scene.resume('title');
+                this.scene.resume('level');
             }
         ).setDepth(102);
 
@@ -141,7 +141,7 @@ class PauseScene extends Phaser.Scene {
             26,
             () => {
                 this.scene.stop();
-                this.scene.stop('title');
+                this.scene.stop('level');
                 this.scene.start('menu');
             }
         ).setDepth(102);
