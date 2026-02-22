@@ -38,7 +38,7 @@ let config = {
 		}
 	},
 	pipeline: { 'TeleAntigua': TeleAntiguaPipeline },
-	title: "PVLI Ordinaria 23/24",
+	title: "ATRAPALABRAS por ILovePhaser",
 	version: "1.0.0",
 	transparent: false
 };

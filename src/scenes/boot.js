@@ -93,16 +93,13 @@ export default class BootScene extends Phaser.Scene {
 
         this.load.image('fondoPanel', 'assets/images/fondoPanel.webp');
         this.load.image('fondoMenu', 'assets/images/fondoMenu.webp');
-        this.load.image('laRoca2', 'assets/images/laRoca.webp');
         this.load.image('fondoCorcho', 'assets/images/fondoCorcho.webp');
         this.load.image('replayPanel', 'assets/images/replayPanel.webp');
         this.load.image('backMenuPanel', 'assets/images/backMenuPanel.webp');
-        this.load.image('fondo', 'assets/images/Fondo.jpg');
         this.load.image('fondo2', 'assets/images/Fondo3.webp');
         this.load.image('fondoTuto', 'assets/images/FondoTutorial2.webp');
         this.load.image('laRocaPresentadora', 'assets/images/La_roca.webp');
         this.load.image('fondoPalabras', 'assets/images/FondoPalabras.png');
-        this.load.image('paredPiedra', 'assets/images/paredKLK.webp');
         this.load.image('fullScreen', 'assets/images/fullscreen-icon.png');
         this.load.image('minimizeScreen', 'assets/images/minimizecreen-icon.png');
         this.load.image('facundo', 'assets/images/facundo.webp');
@@ -132,7 +129,6 @@ export default class BootScene extends Phaser.Scene {
         //Sonidos
         this.load.audio("correct", "assets/sounds/correct.mp3");
         this.load.audio("incorrect", "assets/sounds/incorrect.mp3");
-        this.load.audio('musica', "assets/sounds/musicaTestMario.mp3")
         this.load.audio('countdown', "assets/sounds/countdown.wav")
         this.load.audio('start', "assets/sounds/start.wav")
         this.load.audio('whistle', "assets/sounds/whistle.wav")

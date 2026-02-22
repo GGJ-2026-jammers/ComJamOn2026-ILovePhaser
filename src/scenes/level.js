@@ -37,7 +37,7 @@ export default class Level extends Phaser.Scene {
         this.fondo.setScale(2);
         this.initialCutscene();
 
-        this.add.bitmapText(800, 450, 'bitFont', 'Menu');
+        this.add.bitmapText(800, 450, 'bitFont', 'Pausa');
         this.tabulador = this.add.image(850, 500, "tabulador").setScale(2);
 
         this.wordsCountText = this.add.bitmapText(75, 450, 'bitFont', "Palabras\nCorrectas: 0");
