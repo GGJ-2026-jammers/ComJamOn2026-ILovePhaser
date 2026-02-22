@@ -1,7 +1,7 @@
 import Letter from "../src/objects/letter.js"
 
 export default class GuessWord {
-    constructor(word, font, scene, callback, x = 74, y = 255, spacing = 60.5) {
+    constructor(word, font, scene, callback, x = 68, y = 250, spacing = 58.5) {
         this.word = word
         this.font = font
         this.scene = scene

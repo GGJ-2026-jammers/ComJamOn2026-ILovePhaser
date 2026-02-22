@@ -32,8 +32,11 @@ export default class Level extends Phaser.Scene {
         this.multiplier = 1;
         this.currentTime = this.BASE_NEXT_WORD_TIME;
         this.maxCurrentTime = this.currentTime;
-        this.fondo = this.add.image(0, 0, "fondo").setOrigin(0, 0);
-        this.fondo.setScale(0.5);
+        this.fondo = this.add.image(0, 0, "fondo2").setOrigin(0, 0).setDepth(-1);
+        this.fondo.setScale(2);
+
+        this.add.image(840, 350, "laRocaPresentadora").setOrigin(0.5, 0.5).setDepth(-5).setScale(-1.25, 1.25);
+        this.add.bitmapText(771, 472, "bitFont", 'LA ROCA');
 
         this.font = new Map()
         let abecedario = "abcdefghijklmnopqrstuvwxyz"
@@ -44,7 +47,7 @@ export default class Level extends Phaser.Scene {
         this.palabra = new GuessWord(this.words[this.currentWordIndex], this.font, this, () => { this.nextWord(true); });
         this.palabra.showWord();
 
-        this.multiplierText = this.add.bitmapText(404, 125, 'bitFont', 'MULTI : ' + this.multiplier).setTint(0xd71818);
+        this.multiplierText = this.add.bitmapText(404, 95, 'bitFont', 'MULTI : ' + this.multiplier).setTint(0xd71818);
         this.multiplierText.setOrigin(0.5, 0.5).setDepth(1);
 
         this.multiTween = this.tweens.add({
@@ -67,9 +70,9 @@ export default class Level extends Phaser.Scene {
             }
             this.tweens.killAll();
         });
-        if(this.mode === 1)this.createLives();
+        if (this.mode === 1) this.createLives();
 
-        this.comboPanel = this.add.sprite(403, 135, "bonusPanel").setDepth(0).setScale(2);
+        this.comboPanel = this.add.sprite(403, 105, "bonusPanel").setDepth(0).setScale(2);
         this.comboPanel.play('panelLuces');
     }
 
@@ -85,8 +88,8 @@ export default class Level extends Phaser.Scene {
         this.REFERENCE_WORD_LENGTH = 8;
         this.MIN_WORD_TIME = 2900;
         this.MAX_WORD_TIME = 3600;
-        this.HEARTS_INI_X = 100;
-        this.HEARTS_INI_Y = 100;
+        this.HEARTS_INI_X = 300;
+        this.HEARTS_INI_Y = 330;
         this.HEARTS_SPACING = 40;
     }
 
@@ -99,7 +102,7 @@ export default class Level extends Phaser.Scene {
         this.currentWordIndex = 0;
         const txt = this.cache.text.get('palabras');
         const lineas = txt.replace(/\r\n/g, "\n").split("\n");
-        if(this.mode === 0){
+        if (this.mode === 0) {
             let i = 0;
             while (i < this.maxWords) {
                 let rndNum = this.rnd.integerInRange(0, lineas.length - 1);
@@ -114,8 +117,8 @@ export default class Level extends Phaser.Scene {
             }
         }
         else {
-          this.words = lineas;
-          this.currentWordIndex = this.rnd.integerInRange(0,this.words.length-1);
+            this.words = lineas;
+            this.currentWordIndex = this.rnd.integerInRange(0, this.words.length - 1);
         }
 
         this.correctWords = 0;
@@ -141,7 +144,7 @@ export default class Level extends Phaser.Scene {
         this.input.keyboard.on('keydown-TAB', this.pauseKeyHandler, this);
     }
 
-      update(t, dt) {
+    update(t, dt) {
         const wordAlreadyCompleted = this.palabra && this.palabra.isCompleted();
 
         if (!wordAlreadyCompleted) {
@@ -157,12 +160,17 @@ export default class Level extends Phaser.Scene {
     }
 
     createTimeBar() {
-        this.timeBarX = 0;
-        this.timeBarY = 454;
-        this.timeBarWidth = 870;
-        this.timeBarHeight = 73;
+        this.timeBarX = 27;
+        this.timeBarY = 192;
+        this.timeBarWidth = 733;
+        this.timeBarHeight = 110;
         this.timeBar = this.add.graphics();
-        this.timeBar.setDepth(10);
+        this.timeBar.setDepth(-2);
+
+        let rect = this.add.rectangle(
+           this.timeBarX + 367, this.timeBarY + 54,
+            this.timeBarWidth, this.timeBarHeight,
+            0x5596c7, 1).setOrigin(0.5,0.5).setDepth(-3);
     }
 
     updateTimeBar() {
@@ -202,15 +210,15 @@ export default class Level extends Phaser.Scene {
 
         if (correct) {
             this.wordsCombo++;
-            if(this.wordsCombo%40 == 0 && this.wordsCombo != 0) this.updateHearts();
+            if (this.wordsCombo % 40 == 0 && this.wordsCombo != 0) this.updateHearts();
             this.correctWords++;
             if (this.wordsCombo > this.maxCombo) this.maxCombo = this.wordsCombo;
             this.score += this.BASE_WORD_SCORE * this.multiplier;
             this.multiplier += this.MULTIPLIER;
-            if (this.words[this.currentWordIndex].length >= 1) {
+            if (this.words[this.currentWordIndex].length >= 0) {
                 this.multiplier += this.MULTI_BONUS;
 
-                let bonusText = this.add.bitmapText(404, 155, 'bitFont', "BONUS!!!").setOrigin(0.5, 0.5);
+                let bonusText = this.add.bitmapText(404, 125, 'bitFont', "BONUS!!!").setOrigin(0.5, 0.5);
                 this.comboPanel.play("panelCombo");
                 // Tween de pulso (scale + alpha)
                 this.tweens.add({
@@ -255,63 +263,65 @@ export default class Level extends Phaser.Scene {
             this.score = Math.max(0, this.score - 100);
             console.log(this.score);
             this.multiplierText.setText("Multi: " + this.multiplier)
-            if(this.mode === 1) this.updateHearts(false); 
+            if (this.mode === 1) this.updateHearts(false);
         }
-            
-        
-        if(this.mode ===0){
-            if(this.currentWordIndex === this.words.length-1){
+
+
+        if (this.mode === 0) {
+            if (this.currentWordIndex === this.words.length - 1) {
                 this.scene.sleep();
                 this.scene.stop();
                 this.scene.run('gameOver',
-                    {score:this.score,
-                    maxCombo:this.maxCombo,
-                    correctWords: this.correctWords,
-                    mode: this.mode
-                })
-            }else{
+                    {
+                        score: this.score,
+                        maxCombo: this.maxCombo,
+                        correctWords: this.correctWords,
+                        mode: this.mode
+                    })
+            } else {
                 this.currentWordIndex++;
                 this.palabra.setWord(this.words[this.currentWordIndex]);
                 this.resetTime();
             }
         }
-        else{
+        else {
             let lastWord = this.currentWordIndex;
-            do{
-                this.currentWordIndex = this.rnd.integerInRange(0,this.words.length-1);
-            }while(this.currentWordIndex == lastWord)
+            do {
+                this.currentWordIndex = this.rnd.integerInRange(0, this.words.length - 1);
+            } while (this.currentWordIndex == lastWord)
             this.palabra.setWord(this.words[this.currentWordIndex]);
             this.resetTime();
         }
     }
-    createLives(){
+    createLives() {
         this.livesImages = [];
-        for(let i  = 0 ; i < this.lives;i++){
-            let heart = this.add.image(this.HEARTS_INI_X + (this.HEARTS_SPACING *i), this.HEARTS_INI_Y, 'lives',0).setDepth(100);
+        for (let i = 0; i < this.lives; i++) {
+            let heart = this.add.image(this.HEARTS_INI_X + (this.HEARTS_SPACING * i), this.HEARTS_INI_Y, 'lives', 0).setDepth(100);
             this.livesImages.push(heart);
         }
     }
 
-    updateHearts(add = true){
-        if(add && this.lives < this.livesImages.length){
+    updateHearts(add = true) {
+        if (add && this.lives < this.livesImages.length) {
             this.livesImages[this.lives].setFrame(0);
             this.lives++;
         }
-        else if(!add){
+        else if (!add) {
             this.lives--;
             this.livesImages[this.lives].setFrame(1);
         }
 
-        if(this.lives ===0){
+        if (this.lives === 0) {
             this.scene.sleep();
             this.scene.stop();
             this.scene.start('gameOver',
-                {score:this.score,
-                maxCombo:this.maxCombo,
-                correctWords: this.correctWords,
-                mode: this.mode
-            });
-                
+                {
+                    score: this.score,
+                    maxCombo: this.maxCombo,
+                    correctWords: this.correctWords,
+                    mode: this.mode
+                });
+
         }
     }
 
