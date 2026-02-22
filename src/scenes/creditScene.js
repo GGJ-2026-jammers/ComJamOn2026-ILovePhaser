@@ -46,7 +46,6 @@ class CreditScene extends Phaser.Scene {
 
         pages.push(createPage(
             `MIEMBROS DEL EQUIPO
-
 Gabriel Garcia
 Samuel Manzaneque
 Diego Jimenez
