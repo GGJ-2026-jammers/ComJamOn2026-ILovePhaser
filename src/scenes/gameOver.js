@@ -64,13 +64,15 @@ export default class GameOver extends Phaser.Scene{
         }
 
         let menuButton = new Button(this,700,400,'MENU PRINCIPAL','bitFont',24,()=>{
+            console.log('menu')
             this.scene.sleep();
             this.scene.run('menu');
         },true,false);
 
         let playButton = new Button(this,700,200,'VOLVER A \n JUGAR','bitFont',24,()=>{
             this.scene.sleep();
-            this.scene.start('title');
+            this.scene.stop();
+            this.scene.start('level', {mode: this.runData.mode});
         },true,false);
     }
 }

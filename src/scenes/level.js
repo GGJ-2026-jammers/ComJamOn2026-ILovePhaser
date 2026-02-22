@@ -1,19 +1,19 @@
 import Word from "../objects/word.js"
 import Letter from "../objects/letter.js";
-import PauseScene from "../scenes/pauseScene.js";
+import PauseScene from "./pauseScene.js";
 import textBox from "../objects/textBox.js";
 import GuessWord from "../guessWord.js";
 
-export default class Title extends Phaser.Scene {
+export default class Level extends Phaser.Scene {
     constructor() {
-        super({ key: "title" });
+        super({ key: "level" });
     }
 
     init(data) {
         this.mode = data.mode
         this.correct = this.sound.add("correct");
         this.incorrect = this.sound.add("incorrect");
-
+        this.lives = 5;
         this.letterSounds = new Array();
 
         for (let i = 0; i < 13; i++) {
@@ -32,7 +32,6 @@ export default class Title extends Phaser.Scene {
         this.multiplier = 1;
         this.currentTime = this.BASE_NEXT_WORD_TIME;
         this.maxCurrentTime = this.currentTime;
-        this.currentWordIndex = 0;
         this.fondo = this.add.image(0, 0, "fondo").setOrigin(0, 0);
         this.fondo.setScale(0.5);
 
@@ -42,8 +41,7 @@ export default class Title extends Phaser.Scene {
         frames.forEach((frame, index) => {
             this.font.set(frame, index)
         });
-
-        this.palabra = new GuessWord(this.words[0], this.font, this, () => { this.nextWord(true); });
+        this.palabra = new GuessWord(this.words[this.currentWordIndex], this.font, this, () => { this.nextWord(true); });
         this.palabra.showWord();
 
         this.multiplierText = this.add.text(404,130,'MULTI:' + this.multiplier,{fontSize:30, fontFamily:'babelgam',color:"#fd0000"})
@@ -63,13 +61,13 @@ export default class Title extends Phaser.Scene {
         this.resetTime();
 
         this.events.once('shutdown', () => {
-            console.log('mataos')
             if (this.pauseKeyHandler) {
                 this.input.keyboard.off('keydown-TAB', this.pauseKeyHandler, this);
                 this.pauseKeyHandler = null;
             }
             this.tweens.killAll();
         });
+        if(this.mode === 1)this.createLives();
     }
 
     setConstants() {
@@ -84,6 +82,9 @@ export default class Title extends Phaser.Scene {
         this.REFERENCE_WORD_LENGTH = 8;
         this.MIN_WORD_TIME = 2900;
         this.MAX_WORD_TIME = 3600;
+        this.HEARTS_INI_X = 100;
+        this.HEARTS_INI_Y = 100;
+        this.HEARTS_SPACING = 40;
     }
 
     setRandomWords() {
@@ -91,12 +92,11 @@ export default class Title extends Phaser.Scene {
         this.words = [];
         this.wordsMap = new Map();
         this.score = 500;
-        this.maxWords = 30;
+        this.maxWords = 5;
+        this.currentWordIndex = 0;
         const txt = this.cache.text.get('palabras');
         const lineas = txt.replace(/\r\n/g, "\n").split("\n");
-        this.mode = 0;
-        //mode 0 = modo por defecto
-        if (this.mode === 0) {
+        if(this.mode === 0){
             let i = 0;
             while (i < this.maxWords) {
                 let rndNum = this.rnd.integerInRange(0, lineas.length - 1);
@@ -111,16 +111,15 @@ export default class Title extends Phaser.Scene {
             }
         }
         else {
-            //se obtienen todas las palabras
-            for (let i = 0; i < lineas.length - 1; i++) {
-                this.words.push(lineas[i]);
-            }
+          this.words = lineas;
+          this.currentWordIndex = this.rnd.integerInRange(0,this.words.length-1);
         }
 
         this.correctWords = 0;
         this.wordsCombo = 0;
         this.maxCombo = 0;
     }
+
 
     createPauseScene() {
         if (this.pauseKeyHandler) {
@@ -139,7 +138,7 @@ export default class Title extends Phaser.Scene {
         this.input.keyboard.on('keydown-TAB', this.pauseKeyHandler, this);
     }
 
-    update(t, dt) {
+      update(t, dt) {
         const wordAlreadyCompleted = this.palabra && this.palabra.isCompleted();
 
         if (!wordAlreadyCompleted) {
@@ -200,15 +199,14 @@ export default class Title extends Phaser.Scene {
 
         if (correct) {
             this.wordsCombo++;
+            if(this.wordsCombo%40 == 0 && this.wordsCombo != 0) this.updateHearts();
             this.correctWords++;
             if (this.wordsCombo > this.maxCombo) this.maxCombo = this.wordsCombo;
             this.score += this.BASE_WORD_SCORE * this.multiplier;
             this.multiplier += this.MULTIPLIER;
             if (this.words[this.currentWordIndex].length >= 9) {
                 this.multiplier += this.MULTI_BONUS;
-
-                let bonusText = this.add.text(404,160, "BONUS!!!",{fontSize:30, fontFamily:'babelgam',color:"#ffffff"}).setOrigin(0.5, 0.5);
-
+                let bonusText = this.add.text(720, 80, "BONUS!!!", { fontSize: 30, fontFamily: 'babelgam', color: "#ffffff" })
                 // Tween de pulso (scale + alpha)
                 this.tweens.add({
                     targets: bonusText,
@@ -221,7 +219,6 @@ export default class Title extends Phaser.Scene {
                 });
 
                 const rainbowTween = this.tweens.addCounter({
-                    
                     from: 0,
                     to: 1,
                     duration: 1200,
@@ -252,23 +249,64 @@ export default class Title extends Phaser.Scene {
             this.score = Math.max(0, this.score - 100);
             console.log(this.score);
             this.multiplierText.setText("Multi: " + this.multiplier)
+            if(this.mode === 1) this.updateHearts(false); 
         }
-
-
-
-        if (this.currentWordIndex === this.words.length - 1) {
-            this.scene.sleep();
-            this.scene.stop();
-            this.scene.run('gameOver',
-                {
-                    score: this.score,
-                    maxCombo: this.maxCombo,
-                    correctWords: this.correctWords
+            
+        
+        if(this.mode ===0){
+            if(this.currentWordIndex === this.words.length-1){
+                this.scene.sleep();
+                this.scene.stop();
+                this.scene.run('gameOver',
+                    {score:this.score,
+                    maxCombo:this.maxCombo,
+                    correctWords: this.correctWords,
+                    mode: this.mode
                 })
-        } else {
-            this.currentWordIndex++;
+            }else{
+                this.currentWordIndex++;
+                this.palabra.setWord(this.words[this.currentWordIndex]);
+                this.resetTime();
+            }
+        }
+        else{
+            let lastWord = this.currentWordIndex;
+            do{
+                this.currentWordIndex = this.rnd.integerInRange(0,this.words.length-1);
+            }while(this.currentWordIndex == lastWord)
             this.palabra.setWord(this.words[this.currentWordIndex]);
             this.resetTime();
         }
     }
+    createLives(){
+        this.livesImages = [];
+        for(let i  = 0 ; i < this.lives;i++){
+            let heart = this.add.image(this.HEARTS_INI_X + (this.HEARTS_SPACING *i), this.HEARTS_INI_Y, 'lives',0).setDepth(100);
+            this.livesImages.push(heart);
+        }
+    }
+
+    updateHearts(add = true){
+        if(add && this.lives < this.livesImages.length){
+            this.livesImages[this.lives].setFrame(0);
+            this.lives++;
+        }
+        else if(!add){
+            this.lives--;
+            this.livesImages[this.lives].setFrame(1);
+        }
+
+        if(this.lives ===0){
+            this.scene.sleep();
+            this.scene.stop();
+            this.scene.start('gameOver',
+                {score:this.score,
+                maxCombo:this.maxCombo,
+                correctWords: this.correctWords,
+                mode: this.mode
+            });
+                
+        }
+    }
+
 }

@@ -1,6 +1,6 @@
 import BootScene from "./scenes/boot.js";
 import Menu from "./scenes/menu.js";
-import Title from "./scenes/title.js";
+import Level from "./scenes/level.js";
 import PauseScene from "./scenes/pauseScene.js";
 import GameOver from "./scenes/gameOver.js";
 import Tutorial from "./scenes/tutorial.js";
@@ -20,7 +20,7 @@ let config = {
 		height: 540,
 		zoom: 1
 	},
-	scene: [BootScene, Title, Menu, PauseScene, GameOver, Tutorial, VolumeOption],
+	scene: [BootScene, Level, Menu, PauseScene, GameOver, Tutorial, VolumeOption],
 	physics: {
 		default: 'arcade',
 		arcade: {

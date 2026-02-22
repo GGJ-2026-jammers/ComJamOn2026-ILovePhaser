@@ -58,6 +58,7 @@ export default class BootScene extends Phaser.Scene {
         this.load.image('minimizeScreen', 'assets/images/minimizecreen-icon.png');
         this.load.text('palabras', "assets/palabras.txt");
         this.load.spritesheet('letras', 'assets/images/abecedario.png', { frameWidth: 100, frameHeight: 100 });
+        this.load.spritesheet('lives', 'assets/images/hearts.webp', { frameWidth: 36, frameHeight: 36 });
         this.load.spritesheet('infoRunPanel', 'assets/images/ticketResultados.webp', { frameWidth: 360, frameHeight: 500 });
 
         //Sonidos
