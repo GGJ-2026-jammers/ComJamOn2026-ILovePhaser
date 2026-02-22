@@ -30,8 +30,7 @@ export default class Menu extends Phaser.Scene {
             yoyo: true,
             repeat: -1
         });
-        this.add.bitmapText(850, 450, 'bitFont', 'Menu');
-        this.tabulador = this.add.image(900, 500, "tabulador").setScale(2);
+
         this.createButtonsPanels();
 
         this.add.image(185, 75, "ILovePhaser").setScale(1.65)
@@ -76,13 +75,13 @@ export default class Menu extends Phaser.Scene {
         
         this.input.keyboard.on('keydown', event => {
             switch (event.key) {
-                case 'ArrowUp':
+                case 'ArrowUp':case'w':case'W':
                 this.menuButtons[this.activeButton].setSelected(false);
                 if(this.activeButton ==0) this.activeButton= this.menuButtons.length-1;
                 else this.activeButton--;
                 this.menuButtons[this.activeButton].setSelected(true);
                 break
-                case 'ArrowDown':
+                case 'ArrowDown':case's':case'S':
                     this.menuButtons[this.activeButton].setSelected(false);
                     if(this.activeButton == this.menuButtons.length-1) this.activeButton = 0;
                     else this.activeButton++;
