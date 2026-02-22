@@ -60,7 +60,6 @@ cafe
 cacao
 leche
 queso
-yogur
 panes
 sopa
 caldo
@@ -322,3 +321,12 @@ acaros
 rimbombante
 chicote
 montecarmelo
+colico
+kiwi
+yendo
+yogurt
+whisky
+wok
+facundo
+penelope
+therian

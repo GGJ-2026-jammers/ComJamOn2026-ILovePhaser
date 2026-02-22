@@ -22,12 +22,11 @@ export default class GuessWord {
         const audio = this.scene.registry.get('audio');
         this.scene.input.keyboard.on('keydown', event => {
             if (!this.scene.gameStarted) return;
-
             let now = event.keyCode;
             // Sonido de letras
             if (this.scene.letterSounds[now - 65] && this.input) audio.playSFX(this.scene.letterSounds[now - 65].key, 0.6);
             if (event.repeat || this.wrongLetterPressed) return;
-
+            
             if ((event.keyCode >= Phaser.Input.Keyboard.KeyCodes.A && event.keyCode <= Phaser.Input.Keyboard.KeyCodes.Z && this.input)) {
                 let letter = this.word[this.lettersWritten];
                 if (letter) {

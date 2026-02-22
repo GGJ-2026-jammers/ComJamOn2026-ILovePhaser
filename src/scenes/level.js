@@ -37,10 +37,6 @@ export default class Level extends Phaser.Scene {
         this.fondo = this.add.image(0, 0, "fondo2").setOrigin(0, 0).setDepth(-1);
         this.fondo.setScale(2);
         this.initialCutscene();
-
-
-
-
     }
 
     initialCutscene() {
