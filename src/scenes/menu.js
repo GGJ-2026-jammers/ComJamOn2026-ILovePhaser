@@ -95,7 +95,6 @@ export default class Menu extends Phaser.Scene {
             })
             
         this.events.addListener('CHANGE_BUTTON', payload => {
-            console.log(payload)
             if(this.activeButton != payload){
                 this.menuButtons[this.activeButton].setSelected(false);
                 this.activeButton = payload

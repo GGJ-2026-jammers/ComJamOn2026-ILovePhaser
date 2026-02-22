@@ -28,7 +28,6 @@ export default class Level extends Phaser.Scene {
         this.createPauseScene();
         this.audio = this.registry.get('audio'); //GUARDAMOS EL AUDIO
         this.setRandomWords();
-        console.log("Title")
 
         this.setConstants();
         this.multiplier = 1;
@@ -46,7 +45,6 @@ export default class Level extends Phaser.Scene {
 
     initialCutscene() {
         if (!this.anims.exists('telonOpen')) {
-            console.log("Creando animación telonClose");
             this.startGame();
             return;
         }
@@ -168,10 +166,9 @@ export default class Level extends Phaser.Scene {
             let i = 0;
             while (i < this.maxWords) {
                 let rndNum = this.rnd.integerInRange(0, lineas.length - 1);
-                console.log(this.wordsMap.has(rndNum));
-                console.log(this.wordsMap);
+            
                 if (!this.wordsMap.has(rndNum)) {
-                    console.log(this.words);
+              
                     this.words.push(lineas[rndNum]);
                     this.wordsMap.set(rndNum);
                     i++;
@@ -197,7 +194,6 @@ export default class Level extends Phaser.Scene {
         this.pauseKeyHandler = (event) => {
             event.preventDefault();
             if (!this.scene.isActive('pauseScene')) {
-                console.log("Pausa");
                 this.scene.launch('pauseScene');
                 this.scene.pause();
             }
@@ -326,7 +322,6 @@ export default class Level extends Phaser.Scene {
             this.multiplier = 1;
             this.wordsCombo = 0;
             this.score = Math.max(0, this.score - 100);
-            console.log(this.score);
             this.multiplierText.setText("Multi: " + this.multiplier)
             if (this.mode === 1) this.updateHearts(false);
         }
@@ -377,15 +372,12 @@ export default class Level extends Phaser.Scene {
 
     music() {
         this.audio.playMusic('musicaMedia', false);
-        console.log("MusicaMedia");
         this.audio.onMusicComplete(() => {
             this.audio.playMusic('musicaRapida');
-            console.log("musicaRapida", true);
         })
     }
 
     closingSequence() {
-        console.log("Closing Sequence");
         this.gameStarted = false;
         this.registry.get('audio').stopAllSfx();
         this.registry.get('audio').playSFX('whistle'); // Sonido Final
