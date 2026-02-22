@@ -44,21 +44,26 @@ export default class Level extends Phaser.Scene {
             this.startGame();
             return;
         }
-        this.time.addEvent({
-            delay: 1000,
-            repeat: 3,
-        })
-        
         this.comboPanel = this.add.sprite(480, 105, "bonusPanel").setDepth(0).setScale(2);
         this.comboPanel.play('panelLuces');
 
         this.cameras.main.setPostPipeline(TeleAntiguaPipeline);
 
         this.telon = this.add.sprite(0, 0, 'telon').setDepth(1000).setOrigin(0, 0).setScale(2);
-        this.telon.play('telonClose');
+        let vueltas = 0;
+        this.time.addEvent({
+            delay: 1000,
+            repeat: 2, // total = 3 ejecuciones (1 inicial + 2 repeats)
+            callback: () => {
+                vueltas++;
+                if (vueltas === 3) {
+                    this.telon.play('telonClose');
 
-        this.telon.once('animationcomplete', () => {
-            this.startGame();
+                    this.telon.once('animationcomplete', () => {
+                        this.startGame();
+                    });
+                }
+            }
         });
     }
 
