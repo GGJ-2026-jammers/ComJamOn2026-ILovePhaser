@@ -92,7 +92,7 @@ export default class BootScene extends Phaser.Scene {
         this.load.image('paredPiedra', 'assets/images/paredKLK.webp');
         this.load.image('fullScreen', 'assets/images/fullscreen-icon.png');
         this.load.image('minimizeScreen', 'assets/images/minimizecreen-icon.png');
-        this.load.image('logo', 'assets/images/logo.png');
+        this.load.image('logo', 'assets/images/logoblanco.png');
         this.load.image('1', 'assets/images/1.png');
         this.load.image('2', 'assets/images/2.png');
         this.load.image('3', 'assets/images/3.png');
@@ -109,6 +109,7 @@ export default class BootScene extends Phaser.Scene {
         this.load.spritesheet('infoRunPanel', 'assets/images/ticketResultados.webp', { frameWidth: 400, frameHeight: 520 });
         this.load.spritesheet('bonusPanel', 'assets/images/panelBonus/panelBonusSpriteSheet.webp', { frameWidth: 128, frameHeight: 64 });
         this.load.spritesheet('telon', 'assets/images/telon.png', { frameWidth: 480, frameHeight: 270 });
+        this.load.spritesheet('LogoAnimado', 'assets/images/animacionlogo.png', { frameWidth: 480, frameHeight: 270 });
         this.load.spritesheet('breakdance', 'assets/images/breakdance-spritesheet.png', {
             frameWidth: 250,
             frameHeight: 250
@@ -154,6 +155,13 @@ export default class BootScene extends Phaser.Scene {
     }
 
     createAnims() {
+        this.anims.create({
+            key: 'logoAnim',
+            frames: this.anims.generateFrameNumbers('LogoAnimado', { start: 0, end: 59 }),
+            frameRate: 10,
+            repeat: -1
+        });
+
         this.anims.create({
             key: 'telonOpen',
             frames: this.anims.generateFrameNumbers('telon', { start: 0, end: 29 }),

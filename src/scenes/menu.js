@@ -22,7 +22,8 @@ export default class Menu extends Phaser.Scene {
 
         this.add.image(185, 75, "ILovePhaser").setScale(1.65)
 
-        this.add.sprite(650, 100, 'logo').setScale(1.5).setOrigin(0.5, 0.5);
+        this.add.image(650, 100, 'logo').setScale(1.5).setOrigin(0.5, 0.5);
+        this.add.sprite(650, 100, 'LogoAnimado').setScale(1.5).setOrigin(0.5, 0.5).play('logoAnim');
         let jugarBtn = new Button(this, 175, 180, 'JUGAR', 'bitFont', 32, () => { this.goLevel('level') })
         let infiniteBtn = new Button(this, 175, 260, 'INFINITO', 'bitFont', 32, () => { this.goLevel('level', 1) })
         let tutorialBtn = new Button(this, 175, 340, 'TUTORIAL', 'bitFont', 32, () => { this.goLevel('tutorial') })
