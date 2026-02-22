@@ -20,6 +20,8 @@ export default class Menu extends Phaser.Scene {
         this.tabulador = this.add.image(900, 500, "tabulador").setScale(2);
         this.createButtonsPanels();
 
+        this.add.image(185, 75, "ILovePhaser").setScale(1.65)
+
         this.add.sprite(650, 100, 'logo').setScale(1.5).setOrigin(0.5, 0.5);
         let jugarBtn = new Button(this, 175, 180, 'JUGAR', 'bitFont', 32, () => { this.goLevel('level') })
         let infiniteBtn = new Button(this, 175, 260, 'INFINITO', 'bitFont', 32, () => { this.goLevel('level', 1) })

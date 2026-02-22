@@ -97,6 +97,7 @@ export default class BootScene extends Phaser.Scene {
         this.load.image('2', 'assets/images/2.png');
         this.load.image('3', 'assets/images/3.png');
         this.load.image('tabulador', 'assets/images/Tabulador.webp');
+        this.load.image('ILovePhaser', 'assets/images/ILovePhaser.webp');
         this.load.text('palabras', "assets/palabras.txt");
         this.load.spritesheet('letras', 'assets/images/abecedario.png', { frameWidth: 100, frameHeight: 100 });
         this.load.spritesheet('panelJugar', 'assets/images/panelBotonJugar.webp', { frameWidth: 320, frameHeight: 80 });
