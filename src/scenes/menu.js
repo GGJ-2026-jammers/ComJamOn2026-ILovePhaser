@@ -30,8 +30,7 @@ export default class Menu extends Phaser.Scene {
             yoyo: true,
             repeat: -1
         });
-        this.add.bitmapText(850, 450, 'bitFont', 'Menu');
-        this.tabulador = this.add.image(900, 500, "tabulador").setScale(2);
+
         this.createButtonsPanels();
 
         this.add.image(185, 75, "ILovePhaser").setScale(1.65)
