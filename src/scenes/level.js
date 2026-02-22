@@ -28,7 +28,6 @@ export default class Level extends Phaser.Scene {
         this.createPauseScene();
         this.audio = this.registry.get('audio'); //GUARDAMOS EL AUDIO
         this.setRandomWords();
-        this.music();
         console.log("Title")
 
         this.setConstants();
@@ -52,11 +51,29 @@ export default class Level extends Phaser.Scene {
 
         this.telon = this.add.sprite(0, 0, 'telon').setDepth(1000).setOrigin(0, 0).setScale(2);
         let vueltas = 0;
+        this.numero = this.add.image(480, 270, '3').setDepth(1001).setOrigin(0.5, 0.5).setAlpha(0).setScale(0.1);
+        this.tweens.add({
+            targets: this.numero,
+            alpha: 1,
+            scale: 1,
+            duration: 500,
+            ease: 'Power2',
+            yoyo: true,
+        })
         this.time.addEvent({
             delay: 1000,
             repeat: 2, // total = 3 ejecuciones (1 inicial + 2 repeats)
             callback: () => {
                 vueltas++;
+                this.numero.setTexture(String(4 - vueltas));
+                this.tweens.add({
+                    targets: this.numero,
+                    alpha: 1,
+                    scale: 1,
+                    duration: 500,
+                    ease: 'Power2',
+                    yoyo: true,
+                })
                 if (vueltas === 3) {
                     this.telon.play('telonClose');
 
@@ -357,15 +374,6 @@ export default class Level extends Phaser.Scene {
                 });
 
         }
-    }
-    music(){
-
-        this.audio.playMusic('musicaMedia', false);
-            console.log("MusicaMedia");
-            this.audio.onMusicComplete(()=> {
-            this.audio.playMusic('musicaRapida');
-            console.log("musicaRapida", true);
-        })
     }
 
 }
