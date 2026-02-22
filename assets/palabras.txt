@@ -292,6 +292,7 @@ laboratorio
 farmacia
 hospital
 clinica
+calabaza
 medico
 cirujano
 paciente
