@@ -1,4 +1,5 @@
 import AudioManager from "../managers/audioManager.js";
+import TeleAntiguaPipeline from "../shader/crtShader.js";
 export default class BootScene extends Phaser.Scene {
 
     constructor() {
@@ -8,7 +9,16 @@ export default class BootScene extends Phaser.Scene {
 
     //init vacio
     init() {
+        this.cameras.main.setPostPipeline(TeleAntiguaPipeline);
 
+        const cicloPerfecto = (Math.PI * 2) / 0.8; // aprox 2.094
+
+        this.tweens.add({
+            targets: this.cameras.main.getPostPipeline('TeleAntiguaPipeline'),
+            progress: cicloPerfecto, // Llega justo hasta el final de la onda
+            duration: 8000,          // Tarda 3 segundos en bajar (más lento y realista)
+            repeat: -1,              // Se repite infinitamente
+        });
     }
 
 
@@ -25,29 +35,48 @@ export default class BootScene extends Phaser.Scene {
         var progressBox = this.add.graphics();
 
         //textos de relleno
-        let textosRandom = ["Cargando imagenes", "Cargando mapa", "Cargando sonidos"]
-
+        let textosRandom = ["CARGANDO IMAGENES...", "CARGANDO MAPA...", "CARGANDO SONIDOS..."];
         const { centerX, centerY } = this.cameras.main;
-        const minLoadMs = 1200;
-        const loadStartMs = this.time.now;
 
-        //numero + %
-        var texto = this.add.text(centerX, centerY - 40, "Cargando", { font: '50px JosefinMedium', color: '#ffffff' }).setOrigin(0.5, 0.5);
-        var porcentaje = this.add.text(centerX, centerY + 30, "55%", { font: '50px JosefinMedium', color: '#ffffff' }).setOrigin(0.5, 0.5);
+        // 3. Textos con estilo de "Terminal de comandos antigua"
+        var texto = this.add.text(centerX, centerY - 40, "INICIANDO SISTEMA...", {
+            fontFamily: 'monospace', // Fuente retro del sistema
+            fontSize: '24px',
+            color: '#00ff00' // Verde neón estilo Matrix/Fallout
+        }).setOrigin(0.5, 0.5);
 
-        progressBox.fillStyle(0x222222, 0.8);
-        progressBox.fillRect(centerX - 250, centerY + 80, 500, 30);
+        var porcentaje = this.add.text(centerX, centerY + 30, "0%", {
+            fontFamily: 'monospace',
+            fontSize: '40px',
+            color: '#00ff00'
+        }).setOrigin(0.5, 0.5);
 
+        // 4. Caja de progreso estilo retro (Solo el borde, sin fondo)
+        progressBox.lineStyle(4, 0x00ff00, 1);
+        progressBox.strokeRect(centerX - 250, centerY + 80, 500, 30);
 
         this.load.on('progress', function (value) {
             texto.setText(textosRandom[value < 0.33 ? 0 : value < 0.66 ? 1 : 2]);
-
             porcentaje.setText(Phaser.Math.RoundTo(value * 100, 0) + '%');
-            progressBar.clear();
 
-            progressBar.fillStyle(0xffffff, 1);
-            progressBar.fillRect(centerX - 250, centerY + 80, 500 * value, 30);
+            progressBar.clear();
+            // Relleno de la barra (un poco más pequeño para que no pise el borde)
+            progressBar.fillStyle(0x00ff00, 1);
+            progressBar.fillRect(centerX - 246, centerY + 84, 492 * value, 22);
         });
+
+        // Cargamos todos los assets
+        this.loadAssets();
+    }
+
+    //create vacio
+    create() {
+        this.createAnims();
+    }
+
+    loadAssets() {
+        const minLoadMs = 1200;
+        const loadStartMs = this.time.now;
 
         this.load.image('fondoPanel', 'assets/images/fondoPanel.webp');
         this.load.image('fondoMenu', 'assets/images/fondoMenu.webp');
@@ -101,7 +130,6 @@ export default class BootScene extends Phaser.Scene {
 
         }
 
-
         //cuando termina la carga, llamar a la siguiente escena y dormir esta
         this.load.on('complete', () => {
             const elapsedMs = this.time.now - loadStartMs;
@@ -114,11 +142,6 @@ export default class BootScene extends Phaser.Scene {
         });
 
         this.load.bitmapFont('bitFont', 'assets/font/bitFont.png', 'assets/font/bitFont.xml')
-    }
-
-    //create vacio
-    create() {
-        this.createAnims();
     }
 
     createAnims() {

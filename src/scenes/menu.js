@@ -18,24 +18,17 @@ export default class Menu extends Phaser.Scene {
         const buttonJugar = this.add.sprite(600,275,'panelJugar');
         buttonJugar.play('panelJugarAnim')
 
-        this.add.bitmapText(850, 450, 'bitFont', 'Menu');
-        this.tabulador = this.add.image(900,500, "tabulador").setScale(2);
-        
-        this.add.bitmapText(100, 50, 'bitFont', 'La Roca-Chan').setScale(2);
-        this.add.bitmapText(140, 150, 'bitFont', 'Games').setScale(2).setCenterAlign();
-        let jugarBtn = new Button(this, 200, 275, 'JUGAR', 'bitFont', 32, () => { this.goLevel('level') })
-        let infiniteBtn = new Button(this, 200, 325, 'INFINITO', 'bitFont', 32, () => { this.goLevel('level', 1) })
-        let tutorialBtn = new Button(this, 200, 375, 'TUTORIAL', 'bitFont', 32, () => { this.goLevel('tutorial') })
-        let opcionesBtn = new Button(this, 200, 425, 'OPCIONES', 'bitFont', 32,
+        this.add.bitmapText(25, 65, 'bitFont', 'ATRAPALABRA').setScale(1.5).setTint(0xf31010);
+        let jugarBtn = new Button(this, 175, 225, 'JUGAR', 'bitFont', 32, () => { this.goLevel('level') })
+        let infiniteBtn = new Button(this, 175, 275, 'INFINITO', 'bitFont', 32, () => { this.goLevel('level', 1) })
+        let tutorialBtn = new Button(this, 175, 325, 'TUTORIAL', 'bitFont', 32, () => { this.goLevel('tutorial') })
+        let opcionesBtn = new Button(this, 175, 375, 'OPCIONES', 'bitFont', 32,
             () => {
                 this.scene.pause();
                 this.scene.launch('options', { returnTo: 'menu' });
 
             });
-        let creditos = new Button(this, 200, 475, 'CREDITOS', 'bitFont', 32, () => {
-            this.scene.pause();
-            this.scene.launch('creditScene', { returnTo: 'menu' });
-        })
+        let creditos = new Button(this, 175, 425, 'CREDITOS', 'bitFont', 32, () => { console.log("no muestra nada de momento") })
         this.cameras.main.setBackgroundColor('#ffffff');
 
         this.cameras.main.setPostPipeline(TeleAntiguaPipeline);

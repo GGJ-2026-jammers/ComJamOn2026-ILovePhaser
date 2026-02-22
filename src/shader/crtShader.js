@@ -36,6 +36,17 @@ void main() {
     float b = texture2D(uMainSampler, vec2(uv.x - desface, uv.y)).b;
     vec4 color = vec4(r, g, b, 1.0);
 
+    float blur = 0.003; // Qué tan "ancho" es el resplandor (prueba 0.005 para más ancho)
+    vec4 glow = vec4(0.0);
+    
+    glow += texture2D(uMainSampler, vec2(clamp(uv.x - blur, 0.0, 1.0), uv.y));
+    glow += texture2D(uMainSampler, vec2(clamp(uv.x + blur, 0.0, 1.0), uv.y));
+    glow += texture2D(uMainSampler, vec2(uv.x, clamp(uv.y - blur, 0.0, 1.0)));
+    glow += texture2D(uMainSampler, vec2(uv.x, clamp(uv.y + blur, 0.0, 1.0)));
+    
+    // Sumamos el resplandor al color base.
+    color += glow * 0.1;
+
     float ruido = rand(uv + move) * 0.08; // 0.08 es la opacidad del ruido
     color.rgb -= ruido;
 
