@@ -67,6 +67,7 @@ export default class BootScene extends Phaser.Scene {
         this.load.spritesheet('lives', 'assets/images/hearts.webp', { frameWidth: 36, frameHeight: 36 });
         this.load.spritesheet('infoRunPanel', 'assets/images/ticketResultados.webp', { frameWidth: 400, frameHeight: 520 });
         this.load.spritesheet('bonusPanel', 'assets/images/panelBonus/panelBonusSpriteSheet.webp', { frameWidth: 128, frameHeight: 64 });
+        this.load.spritesheet('telon', 'assets/images/telon.png', { frameWidth: 480, frameHeight: 270 });
         this.load.spritesheet('breakdance', 'assets/images/breakdance-spritesheet.png', {
             frameWidth: 250,
             frameHeight: 250
@@ -77,7 +78,7 @@ export default class BootScene extends Phaser.Scene {
         this.load.audio("incorrect", "assets/sounds/incorrect.mp3");
         this.load.audio('musica', "assets/sounds/musicaTestMario.mp3")
         this.load.audio("cheer", "assets/sounds/cheer.wav");
-
+        this.load.audio('boo', "assets/sounds/boo.wav");
         //Sonidos Letras
         for (let i = 0; i < 27; i++) {
             let letter = String.fromCharCode(i + 65);
@@ -108,6 +109,13 @@ export default class BootScene extends Phaser.Scene {
     }
 
     createAnims() {
+        this.anims.create({
+            key: 'telonClose',
+            frames: this.anims.generateFrameNumbers('telon', { start: 0, end: 29 }),
+            frameRate: 30,
+            repeat: 0,
+        });
+
         this.anims.create({
             key: 'panelLuces', // El nombre con el que llamaremos a esta animación
             frames: this.anims.generateFrameNumbers('bonusPanel', { start: 0, end: 1 }),

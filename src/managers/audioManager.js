@@ -76,6 +76,14 @@ class AudioManager {
         this.sfxVolume = Phaser.Math.Clamp(value, 0, 1);
         localStorage.setItem('sfxVolume', this.sfxVolume.toString());
     }
+
+    stopAllSfx() {
+        this.sound.sounds.forEach((soundInstance) => {
+            if (soundInstance !== this.music) {
+                soundInstance.stop();
+            }
+        });
+    }
 }
 
 export default AudioManager;

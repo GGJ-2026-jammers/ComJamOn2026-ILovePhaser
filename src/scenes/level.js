@@ -24,6 +24,7 @@ export default class Level extends Phaser.Scene {
     }
 
     create() {
+        this.gameStarted = false;
         this.createPauseScene();
         this.audio = this.registry.get('audio'); //GUARDAMOS EL AUDIO
         this.setRandomWords();
@@ -35,7 +36,33 @@ export default class Level extends Phaser.Scene {
         this.maxCurrentTime = this.currentTime;
         this.fondo = this.add.image(0, 0, "fondo2").setOrigin(0, 0).setDepth(-1);
         this.fondo.setScale(2);
+        this.initialCutscene();
+    }
 
+    initialCutscene() {
+        if (!this.anims.exists('telonClose')) {
+            this.startGame();
+            return;
+        }
+        this.time.addEvent({
+            delay: 1000,
+            repeat: 3,
+        })
+        
+        this.comboPanel = this.add.sprite(480, 105, "bonusPanel").setDepth(0).setScale(2);
+        this.comboPanel.play('panelLuces');
+
+        this.cameras.main.setPostPipeline(TeleAntiguaPipeline);
+
+        this.telon = this.add.sprite(0, 0, 'telon').setDepth(1000).setOrigin(0, 0).setScale(2);
+        this.telon.play('telonClose');
+
+        this.telon.once('animationcomplete', () => {
+            this.startGame();
+        });
+    }
+
+    startGame() {
         this.font = new Map()
         let abecedario = "abcdefghijklmnopqrstuvwxyz"
         const frames = abecedario.split("")
@@ -69,11 +96,7 @@ export default class Level extends Phaser.Scene {
             this.tweens.killAll();
         });
         if (this.mode === 1) this.createLives();
-
-        this.comboPanel = this.add.sprite(480, 105, "bonusPanel").setDepth(0).setScale(2);
-        this.comboPanel.play('panelLuces');
-
-        this.cameras.main.setPostPipeline(TeleAntiguaPipeline);
+        this.gameStarted = true;
     }
 
     setConstants() {
@@ -145,6 +168,8 @@ export default class Level extends Phaser.Scene {
     }
 
     update(t, dt) {
+        if (!this.gameStarted) return;
+
         const wordAlreadyCompleted = this.palabra && this.palabra.isCompleted();
 
         if (!wordAlreadyCompleted) {
@@ -258,6 +283,7 @@ export default class Level extends Phaser.Scene {
             this.multiplierText.setText("Multi: " + this.multiplier)
         }
         else {
+            this.registry.get('audio').playSFX('boo'); // Sonido Incorrecto
             this.multiplier = 1;
             this.wordsCombo = 0;
             this.score = Math.max(0, this.score - 100);
@@ -269,6 +295,7 @@ export default class Level extends Phaser.Scene {
 
         if (this.mode === 0) {
             if (this.currentWordIndex === this.words.length - 1) {
+                this.registry.get('audio').stopAllSfx();
                 this.scene.sleep();
                 this.scene.stop();
                 this.scene.run('gameOver',
@@ -312,6 +339,7 @@ export default class Level extends Phaser.Scene {
         }
 
         if (this.lives === 0) {
+            this.registry.get('audio').stopAllSfx();
             this.scene.sleep();
             this.scene.stop();
             this.scene.start('gameOver',
