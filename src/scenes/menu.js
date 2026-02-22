@@ -12,10 +12,25 @@ export default class Menu extends Phaser.Scene {
         this.audio.playMusic('musicaTutorial');
 
         let background = this.add.image(this.cameras.main.width / 2, this.cameras.main.height / 2, "fondoMenu").setOrigin(0.5);
-        const simpson = this.add.sprite(650, 400, 'breakdance');
-        simpson.setScale(1);
-        simpson.play('breakdanceMenu');
+        let facundo = this.add.sprite(650, 415, 'facundo').setScale(0.5);
+        facundo.setScale(-0.3, 0.3);
+        this.tweens.add({
+            targets: facundo,
+            y: { from: facundo.y - 10, to: facundo.y + 35 },
+            duration: 800,
+            yoyo: true,
+            repeat: -1
+        });
 
+        this.tweens.add({
+            targets: facundo,
+            scaleX: { from: -0.3, to: 0.3},
+            duration: 500,
+            yoyo: true,
+            repeat: -1
+        });
+        this.add.bitmapText(850, 450, 'bitFont', 'Menu');
+        this.tabulador = this.add.image(900, 500, "tabulador").setScale(2);
         this.createButtonsPanels();
 
         this.add.image(185, 75, "ILovePhaser").setScale(1.65)
