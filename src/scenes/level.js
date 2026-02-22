@@ -142,6 +142,7 @@ export default class Level extends Phaser.Scene {
         this.LETTER_SCORE = 50;
         this.MULTIPLIER = 1.25;
         this.BASE_NEXT_WORD_TIME = 3000;
+        this.WORD_START_DELAY = 500;
         this.LETTER_TIME = 80;
         this.MULTI_BONUS = 0.75;
         this.TIME_REDUCTION_STEP = 200;
@@ -211,7 +212,12 @@ export default class Level extends Phaser.Scene {
         const wordAlreadyCompleted = this.palabra && this.palabra.isCompleted();
 
         if (!wordAlreadyCompleted) {
-            this.currentTime = Math.max(0, this.currentTime - dt);
+            if (this.wordStartDelayRemaining > 0) {
+                this.wordStartDelayRemaining = Math.max(0, this.wordStartDelayRemaining - dt);
+            }
+            else {
+                this.currentTime = Math.max(0, this.currentTime - dt);
+            }
         }
 
         if (this.currentTime <= 0 && !wordAlreadyCompleted) {
@@ -260,6 +266,7 @@ export default class Level extends Phaser.Scene {
 
         this.currentTime = Phaser.Math.Clamp(baseTime - reductionMs, this.MIN_WORD_TIME, this.MAX_WORD_TIME);
         this.maxCurrentTime = this.currentTime;
+        this.wordStartDelayRemaining = this.WORD_START_DELAY;
         this.updateTimeBar();
     }
 
@@ -332,7 +339,7 @@ export default class Level extends Phaser.Scene {
 
 
         if (this.mode === 0) {
-            if (this.currentWordIndex === this.words.length - 1) {
+            if (this.currentWordIndex === this.words.length - 1 && this.gameStarted) {
                 this.closingSequence()
             } else {
                 this.currentWordIndex++;
@@ -382,18 +389,22 @@ export default class Level extends Phaser.Scene {
     }
 
     closingSequence() {
+        console.log("Closing Sequence");
+        this.gameStarted = false;
         this.registry.get('audio').stopAllSfx();
         this.telon.play('telonClose')
         this.telon.once('animationcomplete', () => {
-            this.scene.sleep();
-            this.scene.stop();
-            this.scene.start('gameOver',
-                {
-                    score: this.score,
-                    maxCombo: this.maxCombo,
-                    correctWords: this.correctWords,
-                    mode: this.mode
-                });
+            this.time.delayedCall(1000, () => {
+                this.scene.sleep();
+                this.scene.stop();
+                this.scene.start('gameOver',
+                    {
+                        score: this.score,
+                        maxCombo: this.maxCombo,
+                        correctWords: this.correctWords,
+                        mode: this.mode
+                    });
+            });
         });
 
     }
