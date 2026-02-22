@@ -28,6 +28,7 @@ export default class Level extends Phaser.Scene {
         this.createPauseScene();
         this.audio = this.registry.get('audio'); //GUARDAMOS EL AUDIO
         this.setRandomWords();
+        this.music();
         console.log("Title")
 
         this.setConstants();
@@ -351,6 +352,15 @@ export default class Level extends Phaser.Scene {
                 });
 
         }
+    }
+    music(){
+
+        this.audio.playMusic('musicaMedia', false);
+            console.log("MusicaMedia");
+            this.audio.onMusicComplete(()=> {
+            this.audio.playMusic('musicaRapida');
+            console.log("musicaRapida", true);
+        })
     }
 
 }

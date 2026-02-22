@@ -7,6 +7,9 @@ export default class Tutorial extends Phaser.Scene {
     }
 
     init() {
+        this.audio = this.registry.get('audio'); //GUARDAMOS EL AUDIO
+        this.audio.playMusic('musicaTutorial');
+
         this.correct = this.sound.add("correct");
         this.incorrect = this.sound.add("incorrect");
 

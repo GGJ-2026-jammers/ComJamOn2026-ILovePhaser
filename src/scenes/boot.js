@@ -79,6 +79,11 @@ export default class BootScene extends Phaser.Scene {
         this.load.audio('musica', "assets/sounds/musicaTestMario.mp3")
         this.load.audio("cheer", "assets/sounds/cheer.wav");
         this.load.audio('boo', "assets/sounds/boo.wav");
+        this.load.audio('musicaTutorial', "assets/music/musicaLentaLoop.mp3")
+        this.load.audio('musicaMedia', "assets/music/musicaMediaLoop.mp3")
+        this.load.audio('musicaRapida', "assets/music/musicaRapidaLoop.mp3")
+
+
         //Sonidos Letras
         for (let i = 0; i < 27; i++) {
             let letter = String.fromCharCode(i + 65);

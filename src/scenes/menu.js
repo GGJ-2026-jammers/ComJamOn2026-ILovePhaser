@@ -9,7 +9,7 @@ export default class Menu extends Phaser.Scene {
 
     create() {
         this.audio = this.registry.get('audio'); //GUARDAMOS EL AUDIO
-        this.audio.playMusic('musica');
+        this.audio.playMusic('musicaTutorial');
 
         let background = this.add.image(this.cameras.main.width / 2, this.cameras.main.height / 2, "fondoMenu").setOrigin(0.5);
         const simpson = this.add.sprite(650, 400, 'breakdance');
