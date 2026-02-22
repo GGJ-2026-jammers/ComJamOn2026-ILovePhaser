@@ -10,11 +10,24 @@ export default class BootScene extends Phaser.Scene {
     //init vacio
     init() {
         this.cameras.main.setPostPipeline(TeleAntiguaPipeline);
-
+        const tvShader = this.cameras.main.getPostPipeline('TeleAntiguaPipeline');
         const cicloPerfecto = (Math.PI * 2) / 0.8; // aprox 2.094
+        const shader = /** @type {any} */ (tvShader);
+
+        // 4. Ahora sí, inicializamos la tele apagada
+        shader.turnOnProgress = 0.0;
+
+        // 3. Creamos el Tween que hace la animación de encendido
+        this.tweens.add({
+            targets: tvShader,
+            turnOnProgress: 1.0,  // Va a subir la variable hasta 1.0
+            duration: 1000,        // Tarda unos 600 milisegundos en encenderse
+            delay: 200,           // Espera un instante mínimo en negro para que el jugador esté atento
+            ease: 'Cubic.easeOut' // Empieza súper rápido y frena al final (muy de tubo CRT)
+        });
 
         this.tweens.add({
-            targets: this.cameras.main.getPostPipeline('TeleAntiguaPipeline'),
+            targets: tvShader,
             progress: cicloPerfecto, // Llega justo hasta el final de la onda
             duration: 8000,          // Tarda 3 segundos en bajar (más lento y realista)
             repeat: -1,              // Se repite infinitamente
@@ -24,8 +37,8 @@ export default class BootScene extends Phaser.Scene {
 
     //todo lo del preload quitarlo y dejar solo lo justo y necesario (carga de sprites, audios ,ect)
     preload() {
-        const audio = AudioManager.getInstance(this);
-        this.registry.set('audio', audio);
+        this.audio = AudioManager.getInstance(this);
+        this.registry.set('audio', this.audio);
 
         this.registry.set('maxScore', 0);
         this.registry.set('maxCombo', 0);
@@ -130,7 +143,7 @@ export default class BootScene extends Phaser.Scene {
         this.load.audio('musicaRapida', "assets/music/musicaRapidaLoop.mp3")
         this.load.audio('Boton1', "assets/sounds/Boton1.mp3")
         this.load.audio('Boton2', "assets/sounds/Boton2.mp3")
-        
+        this.load.audio('crtOn', "assets/sounds/crtOn.ogg")
 
         //Sonidos Letras
         for (let i = 0; i < 26; i++) {

@@ -7,8 +7,10 @@ export default class Menu extends Phaser.Scene {
         super({ key: 'menu' });
     }
 
-    create() {
+    init () {
         this.audio = this.registry.get('audio'); //GUARDAMOS EL AUDIO
+    }
+    create() {
         this.audio.playMusic('musicaTutorial');
         this.activeButton = 0;
         this.menuButtons = [];
@@ -65,7 +67,21 @@ export default class Menu extends Phaser.Scene {
         this.selectedButton = this.menuButtons[this.activeButton]
 
         this.cameras.main.setPostPipeline(TeleAntiguaPipeline);
-        const cicloPerfecto = (Math.PI * 2) / 0.8;
+         const tvShader = this.cameras.main.getPostPipeline('TeleAntiguaPipeline');
+        const cicloPerfecto = (Math.PI * 2) / 0.8; // aprox 2.094
+        const shader = /** @type {any} */ (tvShader);
+
+        // 4. Ahora sí, inicializamos la tele apagada
+        shader.turnOnProgress = 0.0;
+
+        // 3. Creamos el Tween que hace la animación de encendido
+        this.tweens.add({
+            targets: tvShader,
+            turnOnProgress: 1.0,  // Va a subir la variable hasta 1.0
+            duration: 1000,        // Tarda unos 600 milisegundos en encenderse
+            delay: 200,           // Espera un instante mínimo en negro para que el jugador esté atento
+            ease: 'Cubic.easeOut' // Empieza súper rápido y frena al final (muy de tubo CRT)
+        });
         this.tweens.add({
             targets: this.cameras.main.getPostPipeline('TeleAntiguaPipeline'),
             progress: cicloPerfecto, // Llega justo hasta el final de la onda
@@ -103,6 +119,7 @@ export default class Menu extends Phaser.Scene {
 
         this.menuButtons[this.activeButton].setSelected(true);
          
+        this.audio.playSFX("crtOn");
     }
 
     goLevel(key, modeLevel = 0) {

@@ -8,6 +8,7 @@ export default class GameOver extends Phaser.Scene {
     //se le pasa si se ha ganado en el nivel o no
     init(data) {
         this.runData = data;
+        this.audio = this.registry.get('audio'); //GUARDAMOS EL AUDIO
     }
 
     create() {
@@ -15,6 +16,8 @@ export default class GameOver extends Phaser.Scene {
         this.audio.playMusic('musicaTutorial');
         this.activeButton = 0;
         this.menuButtons = [];
+        this.audio.playSFX('crtOn');
+        
         this.fondoPiedra = this.add.image(480, 270, "fondoCorcho").setDepth(0);
         let newRecordScore = false;
         let newRecordCombo = false;
@@ -34,15 +37,15 @@ export default class GameOver extends Phaser.Scene {
         let frame = 1;
         if (this.runData.correctWords >= 30) frame = 0;
 
-        this.add.image(100,15,'infoRunPanel',frame).setOrigin(0,0).setDepth(1);
-        let maxScoreText = this.add.bitmapText(135,100,'bitFont',"Max Score: " + this.registry.get('maxScore')).setDepth(2);
-        let score = this.add.bitmapText(135,150,'bitFont',"Score: " + this.runData.score).setDepth(2);
-        let maxComboEver = this.add.bitmapText(135,230,'bitFont',"Max Combo Ever: " + this.registry.get('maxCombo')).setDepth(2);
-        let maxComboText = this.add.bitmapText(135,295,'bitFont',"Max Combo: " + this.runData.maxCombo).setDepth(2);
-        let correctWords = this.add.bitmapText(135,345,'bitFont',"Correct words: " + this.runData.correctWords).setDepth(2);
+        this.add.image(100, 15, 'infoRunPanel', frame).setOrigin(0, 0).setDepth(1);
+        let maxScoreText = this.add.bitmapText(135, 100, 'bitFont', "Max Score: " + this.registry.get('maxScore')).setDepth(2);
+        let score = this.add.bitmapText(135, 150, 'bitFont', "Score: " + this.runData.score).setDepth(2);
+        let maxComboEver = this.add.bitmapText(135, 230, 'bitFont', "Max Combo Ever: " + this.registry.get('maxCombo')).setDepth(2);
+        let maxComboText = this.add.bitmapText(135, 295, 'bitFont', "Max Combo: " + this.runData.maxCombo).setDepth(2);
+        let correctWords = this.add.bitmapText(135, 345, 'bitFont', "Correct words: " + this.runData.correctWords).setDepth(2);
 
-        if(newRecordScore){
-            let newRecordScoreText = this.add.bitmapText(150,70,'bitFont','New Record!!!',18).setTint(0x00ff00).setDepth(10);
+        if (newRecordScore) {
+            let newRecordScoreText = this.add.bitmapText(150, 70, 'bitFont', 'New Record!!!', 18).setTint(0x00ff00).setDepth(10);
             this.multiTween = this.tweens.add({
                 targets: newRecordScoreText,
                 scale: { from: 1, to: 1.15 },
@@ -54,8 +57,8 @@ export default class GameOver extends Phaser.Scene {
             });
         }
 
-        if(newRecordCombo){
-            let newRecordComboText = this.add.bitmapText(150,200,'bitFont','New Record!!!',18).setTint(0x00ff00).setDepth(10);
+        if (newRecordCombo) {
+            let newRecordComboText = this.add.bitmapText(150, 200, 'bitFont', 'New Record!!!', 18).setTint(0x00ff00).setDepth(10);
             this.multiTween = this.tweens.add({
                 targets: newRecordComboText,
                 scale: { from: 1, to: 1.15 },
@@ -73,9 +76,10 @@ export default class GameOver extends Phaser.Scene {
             this.scene.stop();
             this.scene.start('level', { mode: this.runData.mode });
         }, true, true).setDepth(2);
-        this.menuButtons.push(playButton);
-        this.add.image(700,400,'backMenuPanel').setDepth(0);
-        let menuButton = new Button(this,730,400,'MENU \n  PRINCIPAL','bitFont',24,()=>{
+
+        this.add.image(700, 400, 'backMenuPanel').setDepth(0);
+        let menuButton = new Button(this, 730, 400, 'MENU \n  PRINCIPAL', 'bitFont', 24, () => {
+            console.log('menu')
             this.scene.sleep();
             this.scene.stop();
             this.scene.run('menu');
@@ -84,15 +88,28 @@ export default class GameOver extends Phaser.Scene {
         this.menuButtons.push(menuButton);
         
         this.cameras.main.setPostPipeline(TeleAntiguaPipeline);
+        const tvShader = this.cameras.main.getPostPipeline('TeleAntiguaPipeline');
         const cicloPerfecto = (Math.PI * 2) / 0.8; // aprox 2.094
+        const shader = /** @type {any} */ (tvShader);
+
+        // 4. Ahora sí, inicializamos la tele apagada
+        shader.turnOnProgress = 0.0;
+
+        // 3. Creamos el Tween que hace la animación de encendido
+        this.tweens.add({
+            targets: tvShader,
+            turnOnProgress: 1.0,  // Va a subir la variable hasta 1.0
+            duration: 1000,        // Tarda unos 600 milisegundos en encenderse
+            delay: 200,           // Espera un instante mínimo en negro para que el jugador esté atento
+            ease: 'Cubic.easeOut' // Empieza súper rápido y frena al final (muy de tubo CRT)
+        });
 
         this.tweens.add({
-            targets: this.cameras.main.getPostPipeline('TeleAntiguaPipeline'),
+            targets: tvShader,
             progress: cicloPerfecto, // Llega justo hasta el final de la onda
             duration: 8000,          // Tarda 3 segundos en bajar (más lento y realista)
             repeat: -1,              // Se repite infinitamente
         });
-
 
          this.input.keyboard.on('keydown', event => {
             switch (event.key) {

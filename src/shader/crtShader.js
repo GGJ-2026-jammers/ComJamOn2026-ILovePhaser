@@ -5,6 +5,7 @@ precision mediump float;
 uniform sampler2D uMainSampler;
 varying vec2 outTexCoord;
 uniform float move; // Tu variable de tiempo/progreso
+uniform float turnOn;
 
 float rand(vec2 co){
     return fract(sin(dot(co.xy ,vec2(12.9898,78.233))) * 43758.5453);
@@ -12,6 +13,19 @@ float rand(vec2 co){
 
 void main() {
     vec2 uv = outTexCoord;
+
+    // La X se expande el doble de rápido que la Y (típico de las CRT)
+    float scaleX = mix(0.001, 1.0, min(turnOn * 2.0, 1.0)); 
+    float scaleY = max(turnOn, 0.001); // Evitamos dividir por cero
+    
+    // Encogemos la imagen hacia el centro
+    uv = (uv - 0.5) / vec2(scaleX, scaleY) + 0.5;
+
+    // Si el píxel está fuera de nuestra "línea de encendido", lo pintamos negro
+    if (uv.x < 0.0 || uv.x > 1.0 || uv.y < 0.0 || uv.y > 1.0) {
+        gl_FragColor = vec4(0.0, 0.0, 0.0, 1.0);
+        return;
+    }
 
     // Curvatura de la pantalla
     uv = uv * 2.0 - 1.0;
@@ -65,31 +79,10 @@ void main() {
     vignette = clamp(pow(16.0 * vignette, 0.4), 0.0, 1.0);
     color.rgb *= vignette;
 
+    float flashEncendido = pow(1.0 - turnOn, 2.0); 
+    color.rgb += vec3(flashEncendido);
+
     gl_FragColor = color;
-}
-`;
-
-const vertexShader = `
-precision mediump float;
-
-// En PostFX, Phaser solo nos pasa estos dos
-attribute vec2 inPosition;
-attribute vec2 inTexCoord;
-
-varying vec2 outTexCoord;
-
-void main() {
-    vec2 posicion = inPosition;
-
-    // Como el espacio va de -1.0 (izquierda) a 1.0 (derecha), 
-    // sumar 0.2 mueve la pantalla un 10% a la derecha.
-    posicion.x += 0.2; 
-    
-    // Asignamos la posición final (x, y, z=0.0, w=1.0)
-    gl_Position = vec4(posicion, 0.0, 1.0);
-
-    // Pasamos las coordenadas de textura intactas
-    outTexCoord = inTexCoord;
 }
 `;
 
@@ -100,10 +93,10 @@ export default class TeleAntiguaPipeline extends Phaser.Renderer.WebGL.Pipelines
             game: game,
             name: 'TeleAntiguaPipeline',
             fragShader: fragShader,
-            //vertShader: vertexShader
         });
 
         this.progress = 0;
+        this.turnOnProgress = 0.0;
     }
 
     setProgress(val) {
@@ -112,5 +105,6 @@ export default class TeleAntiguaPipeline extends Phaser.Renderer.WebGL.Pipelines
 
     onPreRender() {
         this.set1f('move', this.progress);
+        this.set1f('turnOn', this.turnOnProgress);
     }
 }
