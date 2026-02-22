@@ -45,6 +45,5 @@ export default class Tutorial extends Phaser.Scene {
             duration: 8000,          // Tarda 3 segundos en bajar (más lento y realista)
             repeat: -1,              // Se repite infinitamente
         });
-
     }
 }
