@@ -11,7 +11,7 @@ class AudioManager {
 
         // Volúmenes persistentes
         this.musicVolume = parseFloat(localStorage.getItem('musicVolume'));
-        if (isNaN(this.musicVolume)) this.musicVolume = 1;
+        if (isNaN(this.musicVolume)) this.musicVolume = 0.25;; //a la mitad
 
         this.sfxVolume = parseFloat(localStorage.getItem('sfxVolume'));
         if (isNaN(this.sfxVolume)) this.sfxVolume = 1;
@@ -36,7 +36,6 @@ class AudioManager {
         if (this.music) {
             this.music.stop();
         }
-
         this.music = this.sound.add(key, {
             loop,
             volume: this.musicVolume
@@ -85,10 +84,10 @@ class AudioManager {
         });
     }
     onMusicComplete(callback) {
-    if (this.music) {
-        this.music.once('complete', callback);
+        if (this.music) {
+            this.music.once('complete', callback);
+        }
     }
-}
 }
 
 export default AudioManager;

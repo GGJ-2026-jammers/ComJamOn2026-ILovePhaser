@@ -86,10 +86,7 @@ Todos los derechos reservados.`,
 
         pages[0].setAlpha(1);
 
-        // =========================
         // BOTONES NAVEGACIÓN
-        // =========================
-
         const nextBtn = new Button(
             this,
             centerX + 200,
@@ -120,7 +117,7 @@ Todos los derechos reservados.`,
             this,
             centerX - 200,
             centerY + 120,
-            '< ATRAS',
+            'ATRAS',
             'bitFont',
             18,
             () => {
@@ -152,10 +149,7 @@ Todos los derechos reservados.`,
 
         updateButtons();
 
-        // =========================
         // BOTÓN SALIR
-        // =========================
-
         const closeBtn = new Button(
             this,
             centerX,
@@ -173,10 +167,7 @@ Todos los derechos reservados.`,
             }
         ).setDepth(106);
 
-        // =========================
         // CRT
-        // =========================
-
         this.cameras.main.setPostPipeline(TeleAntiguaPipeline);
 
         const cicloPerfecto = (Math.PI * 2) / 0.8;
