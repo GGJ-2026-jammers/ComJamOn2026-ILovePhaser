@@ -9,21 +9,26 @@ export default class Menu extends Phaser.Scene {
         this.audio = this.registry.get('audio'); //GUARDAMOS EL AUDIO
         this.audio.playMusic('musica');
 
-        let background = this.add.image(this.cameras.main.width / 2, this.cameras.main.height / 2, "laRoca2").setOrigin(0.5);
+        let background = this.add.image(this.cameras.main.width / 2, this.cameras.main.height / 2, "fondoMenu").setOrigin(0.5);
+        const simpson = this.add.sprite(650, 400, 'breakdance');
+        simpson.setScale(1);
+        simpson.play('breakdanceMenu');
 
         this.add.bitmapText(100, 50, 'bitFont', 'La Roca-Chan').setScale(2);
         this.add.bitmapText(140, 150, 'bitFont', 'Games').setScale(2).setCenterAlign();
         let jugarBtn = new Button(this, 200, 275, 'JUGAR', 'bitFont', 32, () => { this.goLevel('level') })
         let infiniteBtn = new Button(this, 200, 325, 'INFINITO', 'bitFont', 32, () => { this.goLevel('level', 1) })
-        let opcionesBtn = new Button(this, 200, 375, 'OPCIONES', 'bitFont', 32,
+        let tutorialBtn = new Button(this, 200, 375, 'TUTORIAL', 'bitFont', 32, () => { this.goLevel('tutorial') })
+        let opcionesBtn = new Button(this, 200, 425, 'OPCIONES', 'bitFont', 32,
             () => {
                 this.scene.pause();
                 this.scene.launch('options', { returnTo: 'menu' });
 
             });
-        let tutorialBtn = new Button(this, 230, 425, 'TUTORIAL', 'bitFont', 32, () => { this.goLevel('tutorial') })
-
+        let creditos = new Button(this, 200, 475, 'CREDITOS', 'bitFont', 32, () => { console.log("no muestra nada de momento") })
         this.cameras.main.setBackgroundColor('#ffffff');
+
+
     }
 
     goLevel(key, modeLevel = 0) {

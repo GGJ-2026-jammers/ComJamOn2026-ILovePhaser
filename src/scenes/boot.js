@@ -49,7 +49,7 @@ export default class BootScene extends Phaser.Scene {
             progressBar.fillRect(centerX - 250, centerY + 80, 500 * value, 30);
         });
 
-        this.load.image('laRoca2', 'assets/images/fondoMenu.webp');
+        this.load.image('fondoMenu', 'assets/images/fondoMenu.webp');
         // this.load.image('laRoca2', 'assets/images/laRoca.webp');
         this.load.image('fondoCorcho', 'assets/images/fondoCorcho.webp');
         this.load.image('replayPanel', 'assets/images/replayPanel.webp');
@@ -65,6 +65,10 @@ export default class BootScene extends Phaser.Scene {
         this.load.spritesheet('lives', 'assets/images/hearts.webp', { frameWidth: 36, frameHeight: 36 });
         this.load.spritesheet('infoRunPanel', 'assets/images/ticketResultados.webp', { frameWidth: 360, frameHeight: 500 });
         this.load.spritesheet('bonusPanel', 'assets/images/panelBonus/panelBonusSpriteSheet.webp', { frameWidth: 128, frameHeight: 64 });
+        this.load.spritesheet('breakdance', 'assets/images/breakdance-spritesheet.png', {
+            frameWidth: 250,
+            frameHeight: 250
+        });
 
         //Sonidos
         this.load.audio("correct", "assets/sounds/correct.mp3");
@@ -114,6 +118,13 @@ export default class BootScene extends Phaser.Scene {
             frames: this.anims.generateFrameNumbers('bonusPanel', { start: 2, end: 3 }),
             frameRate: 10, // Velocidad: 10 cuadros por segundo
             repeat: -1     // -1 significa que se repite en bucle infinito (loop)
+        });
+
+        this.anims.create({
+            key: 'breakdanceMenu',
+            frames: this.anims.generateFrameNumbers('breakdance', { start: 0, end: 146  }),
+            frameRate: 15,
+            repeat: -1
         });
     }
 }
