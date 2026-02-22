@@ -28,7 +28,6 @@ export default class Level extends Phaser.Scene {
         this.createPauseScene();
         this.audio = this.registry.get('audio'); //GUARDAMOS EL AUDIO
         this.setRandomWords();
-        this.music();
         console.log("Title")
 
         this.setConstants();
@@ -39,8 +38,18 @@ export default class Level extends Phaser.Scene {
         this.fondo.setScale(2);
         this.initialCutscene();
 
-        this.cameras.main.setPostPipeline(TeleAntiguaPipeline);
 
+
+
+    }
+
+    initialCutscene() {
+        if (!this.anims.exists('telonOpen')) {
+            console.log("Creando animación telonClose");
+            this.startGame();
+            return;
+        }
+        this.cameras.main.setPostPipeline(TeleAntiguaPipeline);
         const cicloPerfecto = (Math.PI * 2) / 0.8; // aprox 2.094
 
         this.tweens.add({
@@ -49,34 +58,40 @@ export default class Level extends Phaser.Scene {
             duration: 8000,          // Tarda 3 segundos en bajar (más lento y realista)
             repeat: -1,              // Se repite infinitamente
         });
-    }
-
-    initialCutscene() {
-        if (!this.anims.exists('telonClose')) {
-            this.startGame();
-            return;
-        }
-        this.time.addEvent({
-            delay: 1000,
-            repeat: 3,
-        })
 
         this.comboPanel = this.add.sprite(480, 105, "bonusPanel").setDepth(0).setScale(2);
         this.comboPanel.play('panelLuces');
 
         this.telon = this.add.sprite(0, 0, 'telon').setDepth(1000).setOrigin(0, 0).setScale(2);
         let vueltas = 0;
+        this.numero = this.add.image(480, 270, '3').setDepth(1001).setOrigin(0.5, 0.5).setAlpha(0).setScale(0.1);
         this.time.addEvent({
             delay: 1000,
-            repeat: 2, // total = 3 ejecuciones (1 inicial + 2 repeats)
+            repeat: 3, // total = 3 ejecuciones (1 inicial + 2 repeats)
             callback: () => {
                 vueltas++;
+                this.numero.setTexture(String(4 - vueltas));
+                if (vueltas <= 3) {
+                    this.tweens.add({
+                        targets: this.numero,
+                        alpha: 1,
+                        scale: 2,
+                        duration: 500,
+                        ease: 'Power2',
+                        yoyo: true,
+                    })
+                    this.registry.get('audio').playSFX('countdown');
+                }
+                // Sonido Countdown
                 if (vueltas === 3) {
-                    this.telon.play('telonClose');
+                    this.telon.play('telonOpen');
 
                     this.telon.once('animationcomplete', () => {
                         this.startGame();
                     });
+                }
+                else if (vueltas > 3) {
+                    this.registry.get('audio').playSFX('start'); // Sonido Start
                 }
             }
         });
@@ -318,16 +333,7 @@ export default class Level extends Phaser.Scene {
 
         if (this.mode === 0) {
             if (this.currentWordIndex === this.words.length - 1) {
-                this.registry.get('audio').stopAllSfx();
-                this.scene.sleep();
-                this.scene.stop();
-                this.scene.run('gameOver',
-                    {
-                        score: this.score,
-                        maxCombo: this.maxCombo,
-                        correctWords: this.correctWords,
-                        mode: this.mode
-                    })
+                this.closingSequence()
             } else {
                 this.currentWordIndex++;
                 this.palabra.setWord(this.words[this.currentWordIndex]);
@@ -362,7 +368,23 @@ export default class Level extends Phaser.Scene {
         }
 
         if (this.lives === 0) {
-            this.registry.get('audio').stopAllSfx();
+            this.closingSequence()
+        }
+    }
+
+    music() {
+        this.audio.playMusic('musicaMedia', false);
+        console.log("MusicaMedia");
+        this.audio.onMusicComplete(() => {
+            this.audio.playMusic('musicaRapida');
+            console.log("musicaRapida", true);
+        })
+    }
+
+    closingSequence() {
+        this.registry.get('audio').stopAllSfx();
+        this.telon.play('telonClose')
+        this.telon.once('animationcomplete', () => {
             this.scene.sleep();
             this.scene.stop();
             this.scene.start('gameOver',
@@ -372,17 +394,7 @@ export default class Level extends Phaser.Scene {
                     correctWords: this.correctWords,
                     mode: this.mode
                 });
+        });
 
-        }
     }
-    music() {
-
-        this.audio.playMusic('musicaMedia', false);
-        console.log("MusicaMedia");
-        this.audio.onMusicComplete(() => {
-            this.audio.playMusic('musicaRapida');
-            console.log("musicaRapida", true);
-        })
-    }
-
 }

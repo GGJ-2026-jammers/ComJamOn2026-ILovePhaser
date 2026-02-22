@@ -36,7 +36,7 @@ class Options extends Phaser.Scene {
             this.audio.setSFXVolume(value);
         });
 
-        // Botón cerrar
+        // Botón volver
         const closeBtn = new Button(this,
             centerX,
             centerY + 170,
@@ -78,7 +78,7 @@ class Options extends Phaser.Scene {
     createFullscreenToggle(x, y) {
 
         const container = this.add.container(0, 20).setAlpha(0).setDepth(106);
-
+    
         const label = this.add.bitmapText(
             x,
             y,
@@ -86,76 +86,66 @@ class Options extends Phaser.Scene {
             'PANTALLA COMPLETA',
             20
         ).setOrigin(0.5);
-
-        const icon = this.add.image(
+    
+        const fsButton = this.add.image(
             x + 170,
             y,
             this.scale.isFullscreen ? 'minimizeScreen' : 'fullScreen'
         )
-            .setDisplaySize(40, 40)
-            .setInteractive({ useHandCursor: true });
-
-        const baseScaleX = icon.scaleX;
-        const baseScaleY = icon.scaleY;
-
-        // Hover IN
-        icon.on('pointerover', () => {
-
-            this.tweens.killTweensOf(icon);
-
-            this.tweens.add({
-                targets: icon,
-                scaleX: baseScaleX * 1.15,
-                scaleY: baseScaleY * 1.15,
-                duration: 120,
-                ease: 'Back.easeOut'
-            });
-
-            icon.setTint(0xffe066);
+        .setDisplaySize(40, 40)
+        .setInteractive({ useHandCursor: true });
+    
+        // Guardamos el tamaño base
+        const baseWidth = 40;
+        const baseHeight = 40;
+    
+        // Hover
+        fsButton.on('pointerover', () => {
+            fsButton.setDisplaySize(baseWidth * 1.15, baseHeight * 1.15);
+            fsButton.setTint(0xffe066);
         });
-
-        // Hover OUT
-        icon.on('pointerout', () => {
-
-            this.tweens.killTweensOf(icon);
-
-            this.tweens.add({
-                targets: icon,
-                scaleX: baseScaleX,
-                scaleY: baseScaleY,
-                duration: 120,
-                ease: 'Quad.easeOut'
-            });
-
-            icon.clearTint();
+    
+        fsButton.on('pointerout', () => {
+            fsButton.setDisplaySize(baseWidth, baseHeight);
+            fsButton.clearTint();
         });
-
-        // Click
-        icon.on('pointerdown', () => {
-
+    
+        // Click toggle fullscreen
+        fsButton.on('pointerdown', () => {
             if (this.scale.isFullscreen) {
                 this.scale.stopFullscreen();
+                fsButton.setTexture('fullScreen');
             } else {
                 this.scale.startFullscreen();
+                fsButton.setTexture('minimizeScreen');
             }
-
-            icon.setTexture(
-                this.scale.isFullscreen ? 'minimizeScreen' : 'fullScreen'
-            );
-
-            icon.setDisplaySize(40, 40);
-
+    
+            // Mantener tamaño exacto
+            fsButton.setDisplaySize(baseWidth, baseHeight);
+    
+            // Micro feedback
             this.tweens.add({
-                targets: icon,
-                scaleX: baseScaleX * 0.9,
-                scaleY: baseScaleY * 0.9,
+                targets: fsButton,
+                displayWidth: baseWidth * 0.9,
+                displayHeight: baseHeight * 0.9,
                 duration: 80,
                 yoyo: true
             });
         });
-
-        container.add([label, icon]);
-
+    
+        // Animación de entrada
+        fsButton.setDisplaySize(0, 0);
+        this.tweens.add({
+            targets: fsButton,
+            displayWidth: baseWidth,
+            displayHeight: baseHeight,
+            duration: 200,
+            ease: 'Back.easeOut',
+            delay: 200
+        });
+    
+        container.add([label, fsButton]);
+    
         return container;
     }
 

@@ -15,6 +15,8 @@ export default class Menu extends Phaser.Scene {
         const simpson = this.add.sprite(650, 400, 'breakdance');
         simpson.setScale(1);
         simpson.play('breakdanceMenu');
+        const buttonJugar = this.add.sprite(600,275,'panelJugar');
+        buttonJugar.play('panelJugarAnim')
 
         this.add.bitmapText(25, 65, 'bitFont', 'ATRAPALABRA').setScale(1.5).setTint(0xf31010);
         let jugarBtn = new Button(this, 175, 225, 'JUGAR', 'bitFont', 32, () => { this.goLevel('level') })
@@ -30,7 +32,7 @@ export default class Menu extends Phaser.Scene {
         this.cameras.main.setBackgroundColor('#ffffff');
 
         this.cameras.main.setPostPipeline(TeleAntiguaPipeline);
-        const cicloPerfecto = (Math.PI * 2) / 0.8; 
+        const cicloPerfecto = (Math.PI * 2) / 0.8;
 
         this.tweens.add({
             targets: this.cameras.main.getPostPipeline('TeleAntiguaPipeline'),
