@@ -80,12 +80,14 @@ export default class BootScene extends Phaser.Scene {
         this.load.audio("correct", "assets/sounds/correct.mp3");
         this.load.audio("incorrect", "assets/sounds/incorrect.mp3");
         this.load.audio('musica', "assets/sounds/musicaTestMario.mp3")
+        this.load.audio('countdown', "assets/sounds/countdown.wav")
+        this.load.audio('start', "assets/sounds/start   .wav")
         this.load.audio("cheer", "assets/sounds/cheer.wav");
         this.load.audio('boo', "assets/sounds/boo.wav");
         this.load.audio('musicaTutorial', "assets/music/musicaLentaLoop.mp3")
         this.load.audio('musicaMedia', "assets/music/musicaMediaLoop.mp3")
         this.load.audio('musicaRapida', "assets/music/musicaRapidaLoop.mp3")
-
+        
 
         //Sonidos Letras
         for (let i = 0; i < 27; i++) {
@@ -118,7 +120,7 @@ export default class BootScene extends Phaser.Scene {
 
     createAnims() {
         this.anims.create({
-            key: 'telonClose',
+            key: 'telonOpen',
             frames: this.anims.generateFrameNumbers('telon', { start: 0, end: 29 }),
             frameRate: 30,
             repeat: 0,

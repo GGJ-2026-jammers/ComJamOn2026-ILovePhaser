@@ -52,14 +52,6 @@ export default class Level extends Phaser.Scene {
         this.telon = this.add.sprite(0, 0, 'telon').setDepth(1000).setOrigin(0, 0).setScale(2);
         let vueltas = 0;
         this.numero = this.add.image(480, 270, '3').setDepth(1001).setOrigin(0.5, 0.5).setAlpha(0).setScale(0.1);
-        this.tweens.add({
-            targets: this.numero,
-            alpha: 1,
-            scale: 1,
-            duration: 500,
-            ease: 'Power2',
-            yoyo: true,
-        })
         this.time.addEvent({
             delay: 1000,
             repeat: 2, // total = 3 ejecuciones (1 inicial + 2 repeats)
@@ -69,13 +61,15 @@ export default class Level extends Phaser.Scene {
                 this.tweens.add({
                     targets: this.numero,
                     alpha: 1,
-                    scale: 1,
+                    scale: 2,
                     duration: 500,
                     ease: 'Power2',
                     yoyo: true,
                 })
+                this.registry.get('audio').playSFX('countdown'); // Sonido Countdown
                 if (vueltas === 3) {
-                    this.telon.play('telonClose');
+                    this.registry.get('audio').playSFX('start'); // Sonido Start
+                    this.telon.play('telonOpen');
 
                     this.telon.once('animationcomplete', () => {
                         this.startGame();
