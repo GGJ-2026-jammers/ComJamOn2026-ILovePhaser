@@ -18,6 +18,9 @@ export default class Menu extends Phaser.Scene {
         const buttonJugar = this.add.sprite(600,275,'panelJugar');
         buttonJugar.play('panelJugarAnim')
 
+        this.add.bitmapText(850, 450, 'bitFont', 'Menu');
+        this.tabulador = this.add.image(900,500, "tabulador").setScale(2);
+        
         this.add.bitmapText(100, 50, 'bitFont', 'La Roca-Chan').setScale(2);
         this.add.bitmapText(140, 150, 'bitFont', 'Games').setScale(2).setCenterAlign();
         let jugarBtn = new Button(this, 200, 275, 'JUGAR', 'bitFont', 32, () => { this.goLevel('level') })
