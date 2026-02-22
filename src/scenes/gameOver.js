@@ -11,6 +11,8 @@ export default class GameOver extends Phaser.Scene {
     }
 
     create() {
+        this.audio = this.registry.get('audio'); //GUARDAMOS EL AUDIO
+        this.audio.playMusic('musicaTutorial');
         this.fondoPiedra = this.add.image(480, 270, "fondoCorcho").setDepth(0);
         let newRecordScore = false;
         let newRecordCombo = false;

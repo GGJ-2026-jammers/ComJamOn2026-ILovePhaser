@@ -84,6 +84,11 @@ class AudioManager {
             }
         });
     }
+    onMusicComplete(callback) {
+    if (this.music) {
+        this.music.once('complete', callback);
+    }
+}
 }
 
 export default AudioManager;
