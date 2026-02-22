@@ -38,9 +38,9 @@ export default class Button extends Phaser.GameObjects.BitmapText {
         })
         //al poner el raton encima
         this.on('pointerover', function () {
+            this.hoverSound.play()
             if (hover) {
                 this.setScale(1.1, 1.1);
-                this.hoverSound.play()
             }
 
             if (hoverChangeColor) {

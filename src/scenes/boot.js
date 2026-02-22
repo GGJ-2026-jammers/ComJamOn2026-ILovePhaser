@@ -124,8 +124,8 @@ export default class BootScene extends Phaser.Scene {
         this.load.audio('musicaTutorial', "assets/music/musicaLentaLoop.mp3")
         this.load.audio('musicaMedia', "assets/music/musicaMediaLoop.mp3")
         this.load.audio('musicaRapida', "assets/music/musicaRapidaLoop.mp3")
-        this.load.audio('Boton1', "assets/music/Boton1.mp3")
-        this.load.audio('Boton2', "assets/music/Boton2.mp3")
+        this.load.audio('Boton1', "assets/sounds/Boton1.mp3")
+        this.load.audio('Boton2', "assets/sounds/Boton2.mp3")
         
 
         //Sonidos Letras
