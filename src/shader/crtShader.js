@@ -1,4 +1,4 @@
-const codigoGLSL = `
+const fragShader = `
 #define SHADER_NAME CRT_FS
 precision mediump float;
 uniform sampler2D uMainSampler;
@@ -34,13 +34,23 @@ void main() {
 }
 `;
 
+const vertexShader = `
+    attribute vec4 a_position;
+    uniform vec4 u_offset;
+
+    void main() {
+        gl_Position = a_position + u_offset;
+    }
+`;
+
 // Exportamos la clase para poder usarla en el resto del juego
 export default class TeleAntiguaPipeline extends Phaser.Renderer.WebGL.Pipelines.PostFXPipeline {
     constructor(game) {
         super({
             game: game,
             name: 'TeleAntiguaPipeline',
-            fragShader: codigoGLSL
+            fragShader: fragShader,
+            //vertShader: vertexShader
         });
     }
 }
