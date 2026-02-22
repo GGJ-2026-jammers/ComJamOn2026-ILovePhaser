@@ -129,7 +129,7 @@ export default class BootScene extends Phaser.Scene {
         
 
         //Sonidos Letras
-        for (let i = 0; i < 27; i++) {
+        for (let i = 0; i < 26; i++) {
             let letter = String.fromCharCode(i + 65);
             let string = "assets/sounds/letters/" + letter + ".ogg";
             console.log("String: ", string);

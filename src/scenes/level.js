@@ -278,7 +278,7 @@ export default class Level extends Phaser.Scene {
             if (this.wordsCombo > this.maxCombo) this.maxCombo = this.wordsCombo;
             this.score += this.BASE_WORD_SCORE * this.multiplier;
             this.multiplier += this.MULTIPLIER;
-            if (this.words[this.currentWordIndex].length >= 0) {
+            if (this.words[this.currentWordIndex].length >= 9) {
                 this.multiplier += this.MULTI_BONUS;
 
                 let bonusText = this.add.bitmapText(484, 125, 'bitFont', "BONUS!!!").setOrigin(0.5, 0.5);
