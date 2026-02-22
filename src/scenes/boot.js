@@ -98,7 +98,11 @@ export default class BootScene extends Phaser.Scene {
         this.load.image('tabulador', 'assets/images/Tabulador.webp');
         this.load.text('palabras', "assets/palabras.txt");
         this.load.spritesheet('letras', 'assets/images/abecedario.png', { frameWidth: 100, frameHeight: 100 });
-        this.load.spritesheet('panelJugar', 'assets/images/panelBotonesMenu.webp', { frameWidth: 320, frameHeight: 80 });
+        this.load.spritesheet('panelJugar', 'assets/images/panelBotonJugar.webp', { frameWidth: 320, frameHeight: 80 });
+        this.load.spritesheet('panelInfinito', 'assets/images/panelBotonInfinito.webp', { frameWidth: 320, frameHeight: 80 });
+        this.load.spritesheet('panelTutorial', 'assets/images/panelBotonTutorial.webp', { frameWidth: 320, frameHeight: 80 });
+        this.load.spritesheet('panelOpciones', 'assets/images/panelBotonOpciones.webp', { frameWidth: 320, frameHeight: 80 });
+        this.load.spritesheet('panelCreditos', 'assets/images/panelBotonCreditos.webp', { frameWidth: 320, frameHeight: 80 });
         this.load.spritesheet('lives', 'assets/images/hearts.webp', { frameWidth: 36, frameHeight: 36 });
         this.load.spritesheet('infoRunPanel', 'assets/images/ticketResultados.webp', { frameWidth: 400, frameHeight: 520 });
         this.load.spritesheet('bonusPanel', 'assets/images/panelBonus/panelBonusSpriteSheet.webp', { frameWidth: 128, frameHeight: 64 });
@@ -181,9 +185,17 @@ export default class BootScene extends Phaser.Scene {
             repeat: -1
         });
 
+        this.createPanelAnim('panelJugar');
+        this.createPanelAnim('panelInfinito');
+        this.createPanelAnim('panelTutorial');
+        this.createPanelAnim('panelOpciones');
+        this.createPanelAnim('panelCreditos');
+    }
+
+    createPanelAnim(key){
         this.anims.create({
-            key:'panelJugarAnim',
-            frames: this.anims.generateFrameNumbers('panelJugar',{frames:[2,3,2,3,2,3,0,0,
+            key: key+ 'Anim',
+            frames: this.anims.generateFrameNumbers(key,{frames:[2,3,2,3,2,3,0,0,
                 4,5,6,4,5,6,
                 7,8,9,10,11,12,13,13,12,11,10,9,8,7,
                 0,1,0,1,0,1,0,1]}),
