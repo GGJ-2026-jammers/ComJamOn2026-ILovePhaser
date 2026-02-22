@@ -3,6 +3,7 @@ import Letter from "../objects/letter.js";
 import PauseScene from "./pauseScene.js";
 import textBox from "../objects/textBox.js";
 import GuessWord from "../guessWord.js";
+import TeleAntiguaPipeline from "../shader/crtShader.js";
 
 export default class Level extends Phaser.Scene {
     constructor() {
@@ -71,6 +72,8 @@ export default class Level extends Phaser.Scene {
 
         this.comboPanel = this.add.sprite(480, 105, "bonusPanel").setDepth(0).setScale(2);
         this.comboPanel.play('panelLuces');
+
+        this.cameras.main.setPostPipeline(TeleAntiguaPipeline);
     }
 
     setConstants() {
@@ -165,9 +168,9 @@ export default class Level extends Phaser.Scene {
         this.timeBar.setDepth(-2);
 
         let rect = this.add.rectangle(
-           this.timeBarX + 367, this.timeBarY + 54,
+            this.timeBarX + 367, this.timeBarY + 54,
             this.timeBarWidth, this.timeBarHeight,
-            0x5596c7, 1).setOrigin(0.5,0.5).setDepth(-3);
+            0x5596c7, 1).setOrigin(0.5, 0.5).setDepth(-3);
     }
 
     updateTimeBar() {

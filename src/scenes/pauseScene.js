@@ -1,4 +1,5 @@
 import Button from "../objects/button.js";
+import TeleAntiguaPipeline from "../shader/crtShader.js";
 class PauseScene extends Phaser.Scene {
     constructor() {
         super({ key: 'pauseScene' });
@@ -34,6 +35,8 @@ class PauseScene extends Phaser.Scene {
                 this.resumeKeyHandler = null;
             }
         });
+
+        this.cameras.main.setPostPipeline(TeleAntiguaPipeline);
     }
 
 
