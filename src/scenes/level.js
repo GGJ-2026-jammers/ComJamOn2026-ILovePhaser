@@ -35,9 +35,6 @@ export default class Level extends Phaser.Scene {
         this.fondo = this.add.image(0, 0, "fondo2").setOrigin(0, 0).setDepth(-1);
         this.fondo.setScale(2);
 
-        this.add.image(840, 350, "laRocaPresentadora").setOrigin(0.5, 0.5).setDepth(-5).setScale(-1.25, 1.25);
-        this.add.bitmapText(771, 472, "bitFont", 'LA ROCA');
-
         this.font = new Map()
         let abecedario = "abcdefghijklmnopqrstuvwxyz"
         const frames = abecedario.split("")
@@ -47,7 +44,7 @@ export default class Level extends Phaser.Scene {
         this.palabra = new GuessWord(this.words[this.currentWordIndex], this.font, this, () => { this.nextWord(true); });
         this.palabra.showWord();
 
-        this.multiplierText = this.add.bitmapText(404, 95, 'bitFont', 'MULTI : ' + this.multiplier).setTint(0xd71818);
+        this.multiplierText = this.add.bitmapText(484, 95, 'bitFont', 'MULTI : ' + this.multiplier).setTint(0xd71818).setLetterSpacing(1.2);
         this.multiplierText.setOrigin(0.5, 0.5).setDepth(1);
 
         this.multiTween = this.tweens.add({
@@ -72,7 +69,7 @@ export default class Level extends Phaser.Scene {
         });
         if (this.mode === 1) this.createLives();
 
-        this.comboPanel = this.add.sprite(403, 105, "bonusPanel").setDepth(0).setScale(2);
+        this.comboPanel = this.add.sprite(480, 105, "bonusPanel").setDepth(0).setScale(2);
         this.comboPanel.play('panelLuces');
     }
 
@@ -88,8 +85,8 @@ export default class Level extends Phaser.Scene {
         this.REFERENCE_WORD_LENGTH = 8;
         this.MIN_WORD_TIME = 2900;
         this.MAX_WORD_TIME = 3600;
-        this.HEARTS_INI_X = 300;
-        this.HEARTS_INI_Y = 330;
+        this.HEARTS_INI_X = 400;
+        this.HEARTS_INI_Y = 345;
         this.HEARTS_SPACING = 40;
     }
 
@@ -160,8 +157,8 @@ export default class Level extends Phaser.Scene {
     }
 
     createTimeBar() {
-        this.timeBarX = 27;
-        this.timeBarY = 192;
+        this.timeBarX = 119;
+        this.timeBarY = 206;
         this.timeBarWidth = 733;
         this.timeBarHeight = 110;
         this.timeBar = this.add.graphics();
@@ -218,7 +215,7 @@ export default class Level extends Phaser.Scene {
             if (this.words[this.currentWordIndex].length >= 0) {
                 this.multiplier += this.MULTI_BONUS;
 
-                let bonusText = this.add.bitmapText(404, 125, 'bitFont', "BONUS!!!").setOrigin(0.5, 0.5);
+                let bonusText = this.add.bitmapText(484, 125, 'bitFont', "BONUS!!!").setOrigin(0.5, 0.5);
                 this.comboPanel.play("panelCombo");
                 // Tween de pulso (scale + alpha)
                 this.tweens.add({

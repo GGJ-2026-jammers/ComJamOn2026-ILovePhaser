@@ -1,4 +1,5 @@
 import Button from "../objects/button.js";
+//import CRTPipelinePlugin from 'phaser3-rex-plugins/plugins/crtpipeline-plugin.js';
 
 export default class Menu extends Phaser.Scene {
     constructor() {
@@ -28,7 +29,14 @@ export default class Menu extends Phaser.Scene {
         let creditos = new Button(this, 200, 475, 'CREDITOS', 'bitFont', 32, () => { console.log("no muestra nada de momento") })
         this.cameras.main.setBackgroundColor('#ffffff');
 
+        //const crtPlugin = /** @type {any} */ (this.plugins.get('rexCrtPipeline'));
 
+        // // 2. Ahora ya no se quejará del .add()
+        // crtPlugin.add(this.cameras.main, {
+        //     warp: 0.3,
+        //     scanLineStrength: 0.2,
+        //     colorStrength: 0.5
+        // });
     }
 
     goLevel(key, modeLevel = 0) {

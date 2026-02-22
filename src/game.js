@@ -5,6 +5,7 @@ import PauseScene from "./scenes/pauseScene.js";
 import GameOver from "./scenes/gameOver.js";
 import Tutorial from "./scenes/tutorial.js";
 import VolumeOption from "./scenes/volumeOptionScene.js"
+//import CRTPipelinePlugin from 'phaser3-rex-plugins/plugins/crtpipeline-plugin.js';
 
 let config = {
 	type: Phaser.AUTO,
@@ -34,6 +35,13 @@ let config = {
 			right: true
 		}
 	},
+	// plugins: {
+    //     global: [{
+    //         key: 'rexCrtPipeline',
+    //         plugin: CRTPipelinePlugin,
+    //         start: true
+    //     }]
+    // },
 	title: "PVLI Ordinaria 23/24",
 	version: "1.0.0",
 	transparent: false
