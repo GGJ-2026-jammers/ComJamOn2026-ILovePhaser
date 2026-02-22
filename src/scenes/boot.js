@@ -60,6 +60,7 @@ export default class BootScene extends Phaser.Scene {
         this.load.spritesheet('letras', 'assets/images/abecedario.png', { frameWidth: 100, frameHeight: 100 });
         this.load.spritesheet('lives', 'assets/images/hearts.webp', { frameWidth: 36, frameHeight: 36 });
         this.load.spritesheet('infoRunPanel', 'assets/images/ticketResultados.webp', { frameWidth: 360, frameHeight: 500 });
+        this.load.spritesheet('bonusPanel', 'assets/images/panelBonus/panelBonusSpriteSheet.webp', { frameWidth: 128, frameHeight: 64 });
 
         //Sonidos
         this.load.audio("correct", "assets/sounds/correct.mp3");
@@ -93,10 +94,22 @@ export default class BootScene extends Phaser.Scene {
 
     //create vacio
     create() {
-
+        this.createAnims();
     }
 
     createAnims() {
-        //crear aqui las animaciones
+        this.anims.create({
+            key: 'panelLuces', // El nombre con el que llamaremos a esta animación
+            frames: this.anims.generateFrameNumbers('bonusPanel', { start: 0, end: 1 }),
+            frameRate: 10, // Velocidad: 10 cuadros por segundo
+            repeat: -1     // -1 significa que se repite en bucle infinito (loop)
+        });
+
+        this.anims.create({
+            key: 'panelCombo', // El nombre con el que llamaremos a esta animación
+            frames: this.anims.generateFrameNumbers('bonusPanel', { start: 2, end: 3 }),
+            frameRate: 10, // Velocidad: 10 cuadros por segundo
+            repeat: -1     // -1 significa que se repite en bucle infinito (loop)
+        });
     }
 }

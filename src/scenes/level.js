@@ -44,8 +44,8 @@ export default class Level extends Phaser.Scene {
         this.palabra = new GuessWord(this.words[this.currentWordIndex], this.font, this, () => { this.nextWord(true); });
         this.palabra.showWord();
 
-        this.multiplierText = this.add.text(404,130,'MULTI:' + this.multiplier,{fontSize:30, fontFamily:'babelgam',color:"#fd0000"})
-        this.multiplierText.setOrigin(0.5, 0.5);
+        this.multiplierText = this.add.bitmapText(404, 125, 'bitFont', 'MULTI : ' + this.multiplier).setTint(0xd71818);
+        this.multiplierText.setOrigin(0.5, 0.5).setDepth(1);
 
         this.multiTween = this.tweens.add({
             targets: this.multiplierText,
@@ -68,6 +68,9 @@ export default class Level extends Phaser.Scene {
             this.tweens.killAll();
         });
         if(this.mode === 1)this.createLives();
+
+        this.comboPanel = this.add.sprite(403, 135, "bonusPanel").setDepth(0).setScale(2);
+        this.comboPanel.play('panelLuces');
     }
 
     setConstants() {
@@ -204,9 +207,11 @@ export default class Level extends Phaser.Scene {
             if (this.wordsCombo > this.maxCombo) this.maxCombo = this.wordsCombo;
             this.score += this.BASE_WORD_SCORE * this.multiplier;
             this.multiplier += this.MULTIPLIER;
-            if (this.words[this.currentWordIndex].length >= 9) {
+            if (this.words[this.currentWordIndex].length >= 1) {
                 this.multiplier += this.MULTI_BONUS;
-                let bonusText = this.add.text(720, 80, "BONUS!!!", { fontSize: 30, fontFamily: 'babelgam', color: "#ffffff" })
+
+                let bonusText = this.add.bitmapText(404, 155, 'bitFont', "BONUS!!!").setOrigin(0.5, 0.5);
+                this.comboPanel.play("panelCombo");
                 // Tween de pulso (scale + alpha)
                 this.tweens.add({
                     targets: bonusText,
@@ -235,6 +240,7 @@ export default class Level extends Phaser.Scene {
                 this.time.addEvent({
                     callback: () => {
                         rainbowTween.stop();
+                        this.comboPanel.play("panelLuces");
                         bonusText.destroy();
                     },
                     repeat: 0,

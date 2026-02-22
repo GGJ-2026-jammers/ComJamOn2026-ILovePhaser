@@ -1,4 +1,3 @@
-casa
 perro
 gato
 libro
