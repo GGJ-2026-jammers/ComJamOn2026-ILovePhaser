@@ -24,7 +24,7 @@ class VolumeOption extends Phaser.Scene {
         const panel = this.add.rectangle(
             centerX,
             centerY,
-            450,
+            390,
             300,
             0x2c3e50
         ).setStrokeStyle(3, 0xe74c3c).setDepth(105);
