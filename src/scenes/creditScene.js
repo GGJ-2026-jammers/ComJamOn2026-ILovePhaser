@@ -138,7 +138,7 @@ Todos los derechos reservados.`,
                 );
             }
         ).setDepth(106);
-        backBtn.index =2;
+        backBtn.index =1;
         this.menuButtons.push(backBtn)
 
         // Mostrar / ocultar botones según página
@@ -168,7 +168,7 @@ Todos los derechos reservados.`,
                 }
             }
         ).setDepth(106);
-        closeBtn.index = 1;
+        closeBtn.index = 2;
         this.menuButtons.push(closeBtn)
         // CRT
         this.cameras.main.setPostPipeline(TeleAntiguaPipeline);
