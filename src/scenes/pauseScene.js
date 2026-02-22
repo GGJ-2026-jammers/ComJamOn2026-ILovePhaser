@@ -16,7 +16,6 @@ class PauseScene extends Phaser.Scene {
         this.panel();
         this.titulo();
         this.botones();
-        this.fullscreen();
 
         // Tecla para reanudar
         this.resumeKeyHandler = (event) => {
@@ -179,59 +178,7 @@ class PauseScene extends Phaser.Scene {
         });
     }
 
-    fullscreen() {
-
-        const fsButton = this.add.image(20, 20, 'fullScreen')
-            .setOrigin(0)
-            .setDepth(102)
-            .setInteractive({ useHandCursor: true });
-
-
-        //Toggle fullscreen
-        fsButton.on('pointerdown', () => {
-
-            const isFull = this.scale.isFullscreen;
-
-            if (isFull) {
-                this.scale.stopFullscreen();
-                fsButton.setTexture('fullScreen');
-            } else {
-                this.scale.startFullscreen();
-                fsButton.setTexture('minimizeScreen');
-            }
-
-            // reaplicar tamaño tras cambiar textura
-            fsButton.setDisplaySize(40, 40);
-
-            // micro feedback
-            this.tweens.add({
-                targets: fsButton,
-                scale: fsButton.scaleX * 0.9,
-                duration: 80,
-                yoyo: true
-            });
-        });
-
-        // primero tamaño final
-        fsButton.setDisplaySize(40, 40);
-
-        // guardamos escala final real
-        const finalScaleX = fsButton.scaleX;
-        const finalScaleY = fsButton.scaleY;
-
-        // empezamos en 0
-        fsButton.setScale(0);
-
-        this.tweens.add({
-            targets: fsButton,
-            scaleX: finalScaleX,
-            scaleY: finalScaleY,
-            duration: 200,
-            ease: 'Back.easeOut',
-            delay: 200
-        });
-
-    }
+  
 }
 
 export default PauseScene

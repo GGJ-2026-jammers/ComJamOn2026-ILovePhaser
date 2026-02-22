@@ -4,7 +4,7 @@ import Level from "./scenes/level.js";
 import PauseScene from "./scenes/pauseScene.js";
 import GameOver from "./scenes/gameOver.js";
 import Tutorial from "./scenes/tutorial.js";
-import VolumeOption from "./scenes/volumeOptionScene.js"
+import Options from "./scenes/OptionScene.js"
 import TeleAntiguaPipeline from "./shader/crtShader.js";
 //import CRTPipelinePlugin from 'phaser3-rex-plugins/plugins/crtpipeline-plugin.js';
 
@@ -22,7 +22,7 @@ let config = {
 		height: 540,
 		zoom: 1
 	},
-	scene: [BootScene, Level, Menu, PauseScene, GameOver, Tutorial, VolumeOption],
+	scene: [BootScene, Level, Menu, PauseScene, GameOver, Tutorial, Options],
 	physics: {
 		default: 'arcade',
 		arcade: {
