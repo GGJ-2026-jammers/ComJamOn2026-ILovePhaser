@@ -158,6 +158,9 @@ class Options extends Phaser.Scene {
         const width = 250;
 
         const text = this.add.bitmapText(x - width / 2, y - 25, 'bitFont', label, 20);
+        const originalTint = 0xffffff; // color normal
+        const hoverTint = 0xFFFF00;    // amarillo al pasar el mouse
+
         const bar = this.add.rectangle(x, y + 10, width, 6, 0xffffff);
         const knob = this.add.circle(
             x - width / 2 + (initialValue * width),
@@ -177,6 +180,16 @@ class Options extends Phaser.Scene {
             knob.x = dragX;
             const value = (dragX - (x - width / 2)) / width;
             onChange(value);
+        });
+
+        // Cambiar color al pasar el mouse sobre la bola
+        knob.on('pointerover', () => {
+            text.setTint(hoverTint);
+        });
+
+        // Volver al color normal al salir de la bola
+        knob.on('pointerout', () => {
+            text.setTint(originalTint);
         });
 
         return container;
