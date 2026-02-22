@@ -142,7 +142,6 @@ export default class Level extends Phaser.Scene {
         this.LETTER_SCORE = 50;
         this.MULTIPLIER = 1.25;
         this.BASE_NEXT_WORD_TIME = 3000;
-        this.WORD_START_DELAY = 500;
         this.LETTER_TIME = 80;
         this.MULTI_BONUS = 0.75;
         this.TIME_REDUCTION_STEP = 200;
@@ -212,12 +211,7 @@ export default class Level extends Phaser.Scene {
         const wordAlreadyCompleted = this.palabra && this.palabra.isCompleted();
 
         if (!wordAlreadyCompleted) {
-            if (this.wordStartDelayRemaining > 0) {
-                this.wordStartDelayRemaining = Math.max(0, this.wordStartDelayRemaining - dt);
-            }
-            else {
-                this.currentTime = Math.max(0, this.currentTime - dt);
-            }
+            this.currentTime = Math.max(0, this.currentTime - dt);
         }
 
         if (this.currentTime <= 0 && !wordAlreadyCompleted) {
@@ -266,7 +260,6 @@ export default class Level extends Phaser.Scene {
 
         this.currentTime = Phaser.Math.Clamp(baseTime - reductionMs, this.MIN_WORD_TIME, this.MAX_WORD_TIME);
         this.maxCurrentTime = this.currentTime;
-        this.wordStartDelayRemaining = this.WORD_START_DELAY;
         this.updateTimeBar();
     }
 
@@ -392,6 +385,7 @@ export default class Level extends Phaser.Scene {
         console.log("Closing Sequence");
         this.gameStarted = false;
         this.registry.get('audio').stopAllSfx();
+        this.registry.get('audio').playSFX('whistle'); // Sonido Final
         this.telon.play('telonClose')
         this.telon.once('animationcomplete', () => {
             this.time.delayedCall(1000, () => {

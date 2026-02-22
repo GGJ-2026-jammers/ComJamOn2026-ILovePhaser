@@ -11,17 +11,21 @@ export default class GuessWord {
         this.initialX = x;
         this.initialY = y;
         this.spacing = spacing;
+        this.INPUT_LOCK_MS = 170;
 
         this.letters = this.generateLetters();
         this.lettersWritten = 0;
         this.revealEvent = null;
+        this.inputUnlockEvent = null;
 
         this.wrongLetterPressed = false;
         const audio = this.scene.registry.get('audio');
         this.scene.input.keyboard.on('keydown', event => {
+            if (!this.scene.gameStarted) return;
+
             let now = event.keyCode;
             // Sonido de letras
-            if (this.scene.letterSounds[now - 65]) audio.playSFX(this.scene.letterSounds[now - 65].key, 0.6);
+            if (this.scene.letterSounds[now - 65] && this.input) audio.playSFX(this.scene.letterSounds[now - 65].key, 0.6);
             if (event.repeat || this.wrongLetterPressed) return;
 
             if ((event.keyCode >= Phaser.Input.Keyboard.KeyCodes.A && event.keyCode <= Phaser.Input.Keyboard.KeyCodes.Z && this.input)) {
@@ -100,6 +104,11 @@ export default class GuessWord {
             this.revealEvent = null;
         }
 
+        if (this.inputUnlockEvent) {
+            this.inputUnlockEvent.remove(false);
+            this.inputUnlockEvent = null;
+        }
+
         if (this.letters) {
             this.letters.forEach(letra => letra.destroy());
             this.letters = []; // Vaciamos el array
@@ -109,10 +118,22 @@ export default class GuessWord {
     showWord() {
         const length = this.word.length;
         let i = 0;
+        this.input = false;
+
         if (this.revealEvent) {
             this.revealEvent.remove(false);
             this.revealEvent = null;
         }
+
+        if (this.inputUnlockEvent) {
+            this.inputUnlockEvent.remove(false);
+            this.inputUnlockEvent = null;
+        }
+
+        this.inputUnlockEvent = this.scene.time.delayedCall(this.INPUT_LOCK_MS, () => {
+            this.input = true;
+            this.inputUnlockEvent = null;
+        });
 
         this.revealEvent = this.scene.time.addEvent({
             callback: () => {
@@ -120,9 +141,6 @@ export default class GuessWord {
                 if (!letter) {
                     return;
                 }
-                this.scene.time.delayedCall(600, () => {
-                    this.input = true
-                })
                 letter.setVisible(true);
                 this.scene.tweens.add({
                     targets: letter,
@@ -158,7 +176,7 @@ export default class GuessWord {
         this.lettersWritten = 0;
         this.letters = this.generateLetters();
         this.showWord();
-        this.input = true;
+        this.input = false;
     }
 
     setWord(word) {
