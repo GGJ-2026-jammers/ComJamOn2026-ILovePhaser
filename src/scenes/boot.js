@@ -92,6 +92,7 @@ export default class BootScene extends Phaser.Scene {
         this.load.image('paredPiedra', 'assets/images/paredKLK.webp');
         this.load.image('fullScreen', 'assets/images/fullscreen-icon.png');
         this.load.image('minimizeScreen', 'assets/images/minimizecreen-icon.png');
+        this.load.image('logo', 'assets/images/logo.png');
         this.load.image('1', 'assets/images/1.png');
         this.load.image('2', 'assets/images/2.png');
         this.load.image('3', 'assets/images/3.png');
