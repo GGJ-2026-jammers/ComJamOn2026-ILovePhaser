@@ -37,6 +37,17 @@ export default class Level extends Phaser.Scene {
         this.fondo = this.add.image(0, 0, "fondo2").setOrigin(0, 0).setDepth(-1);
         this.fondo.setScale(2);
         this.initialCutscene();
+
+        this.cameras.main.setPostPipeline(TeleAntiguaPipeline);
+
+        const cicloPerfecto = (Math.PI * 2) / 0.8; // aprox 2.094
+
+        this.tweens.add({
+            targets: this.cameras.main.getPostPipeline('TeleAntiguaPipeline'),
+            progress: cicloPerfecto, // Llega justo hasta el final de la onda
+            duration: 8000,          // Tarda 3 segundos en bajar (más lento y realista)
+            repeat: -1,              // Se repite infinitamente
+        });
     }
 
     initialCutscene() {
@@ -44,10 +55,13 @@ export default class Level extends Phaser.Scene {
             this.startGame();
             return;
         }
+        this.time.addEvent({
+            delay: 1000,
+            repeat: 3,
+        })
+
         this.comboPanel = this.add.sprite(480, 105, "bonusPanel").setDepth(0).setScale(2);
         this.comboPanel.play('panelLuces');
-
-        this.cameras.main.setPostPipeline(TeleAntiguaPipeline);
 
         this.telon = this.add.sprite(0, 0, 'telon').setDepth(1000).setOrigin(0, 0).setScale(2);
         let vueltas = 0;
@@ -114,6 +128,9 @@ export default class Level extends Phaser.Scene {
         });
         if (this.mode === 1) this.createLives();
         this.gameStarted = true;
+
+        this.comboPanel = this.add.sprite(480, 105, "bonusPanel").setDepth(0).setScale(2);
+        this.comboPanel.play('panelLuces');
     }
 
     setConstants() {
@@ -370,4 +387,13 @@ export default class Level extends Phaser.Scene {
         }
     }
 
+    music() {
+
+        this.audio.playMusic('musicaMedia', false);
+        console.log("MusicaMedia");
+        this.audio.onMusicComplete(() => {
+            this.audio.playMusic('musicaRapida');
+            console.log("musicaRapida", true);
+        })
+    }
 }

@@ -81,6 +81,14 @@ export default class GameOver extends Phaser.Scene {
         }, true, false);
 
         this.cameras.main.setPostPipeline(TeleAntiguaPipeline);
+        const cicloPerfecto = (Math.PI * 2) / 0.8; // aprox 2.094
+
+        this.tweens.add({
+            targets: this.cameras.main.getPostPipeline('TeleAntiguaPipeline'),
+            progress: cicloPerfecto, // Llega justo hasta el final de la onda
+            duration: 8000,          // Tarda 3 segundos en bajar (más lento y realista)
+            repeat: -1,              // Se repite infinitamente
+        });
 
     }
 }
