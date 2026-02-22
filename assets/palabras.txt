@@ -60,7 +60,6 @@ cafe
 cacao
 leche
 queso
-yogur
 panes
 sopa
 caldo
