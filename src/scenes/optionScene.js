@@ -36,7 +36,7 @@ class Options extends Phaser.Scene {
             this.audio.setSFXVolume(value);
         });
 
-        // Botón cerrar
+        // Botón volver
         const closeBtn = new Button(this,
             centerX,
             centerY + 170,

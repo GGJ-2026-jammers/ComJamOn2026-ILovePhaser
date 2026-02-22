@@ -27,11 +27,14 @@ export default class Menu extends Phaser.Scene {
                 this.scene.launch('options', { returnTo: 'menu' });
 
             });
-        let creditos = new Button(this, 200, 475, 'CREDITOS', 'bitFont', 32, () => { console.log("no muestra nada de momento") })
+        let creditos = new Button(this, 200, 475, 'CREDITOS', 'bitFont', 32, () => {
+            this.scene.pause();
+            this.scene.launch('creditScene', { returnTo: 'menu' });
+        })
         this.cameras.main.setBackgroundColor('#ffffff');
 
         this.cameras.main.setPostPipeline(TeleAntiguaPipeline);
-        const cicloPerfecto = (Math.PI * 2) / 0.8; 
+        const cicloPerfecto = (Math.PI * 2) / 0.8;
 
         this.tweens.add({
             targets: this.cameras.main.getPostPipeline('TeleAntiguaPipeline'),
