@@ -61,7 +61,7 @@ class PauseScene extends Phaser.Scene {
             this.centerX,
             this.centerY,
             390,
-            260,
+            300,
             0x2c3e50
         )
             .setDepth(101)
@@ -82,7 +82,7 @@ class PauseScene extends Phaser.Scene {
     titulo() {
         const titulo = this.add.bitmapText(
             this.centerX,
-            this.centerY - 120,
+            this.centerY - 150,
             'bitFont',
             'PAUSA',
             32
@@ -94,7 +94,7 @@ class PauseScene extends Phaser.Scene {
 
         this.tweens.add({
             targets: titulo,
-            y: this.centerY - 90,
+            y: this.centerY - 120,
             alpha: 1,
             duration: 350,
             ease: 'Cubic.easeOut',
@@ -108,7 +108,7 @@ class PauseScene extends Phaser.Scene {
 
         this.btnReanudar = new Button(this,
             this.centerX,
-            this.centerY - 25,
+            this.centerY - 55,
             'Reanudar',
             'bitFont',
             26,
@@ -118,24 +118,37 @@ class PauseScene extends Phaser.Scene {
             }
         ).setDepth(102);
 
+        this.btnReiniciar = new Button(
+            this,
+            this.centerX,
+            this.centerY + 0,
+            'Reiniciar',
+            'bitFont',
+            26,
+            () => {
+                this.scene.stop();
+                this.scene.stop('level');
+                this.scene.start('level');
+            }
+        ).setDepth(102);
+
         this.btnOpciones = new Button(
             this,
             this.centerX,
-            this.centerY + 30,
+            this.centerY + 55,
             'Opciones',
             'bitFont',
             26,
             () => {
                 this.scene.pause();
                 this.scene.launch('options', { returnTo: 'pauseScene' });
-
             }
         ).setDepth(102);
 
         this.btnMenu = new Button(
             this,
             this.centerX,
-            this.centerY + 85,
+            this.centerY + 110,
             'Volver al menu',
             'bitFont',
             26,
@@ -146,7 +159,7 @@ class PauseScene extends Phaser.Scene {
             }
         ).setDepth(102);
 
-        botones.push(this.btnReanudar, this.btnOpciones, this.btnMenu);
+        botones.push(this.btnReanudar, this.btnReiniciar, this.btnOpciones, this.btnMenu);
 
         // Estado inicial
         botones.forEach(btn => {
