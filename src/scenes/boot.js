@@ -128,6 +128,13 @@ export default class BootScene extends Phaser.Scene {
         });
 
         this.anims.create({
+            key: 'telonClose',
+            frames: this.anims.generateFrameNumbers('telon', { start: 29, end: 0 }),
+            frameRate: 30,
+            repeat: 0,
+        });
+
+        this.anims.create({
             key: 'panelLuces', // El nombre con el que llamaremos a esta animación
             frames: this.anims.generateFrameNumbers('bonusPanel', { start: 0, end: 1 }),
             frameRate: 10, // Velocidad: 10 cuadros por segundo

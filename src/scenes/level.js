@@ -82,8 +82,8 @@ export default class Level extends Phaser.Scene {
                     })
                     this.registry.get('audio').playSFX('countdown');
                 }
-                 // Sonido Countdown
-                if (vueltas === 3) {  
+                // Sonido Countdown
+                if (vueltas === 3) {
                     this.telon.play('telonOpen');
 
                     this.telon.once('animationcomplete', () => {
@@ -333,16 +333,7 @@ export default class Level extends Phaser.Scene {
 
         if (this.mode === 0) {
             if (this.currentWordIndex === this.words.length - 1) {
-                this.registry.get('audio').stopAllSfx();
-                this.scene.sleep();
-                this.scene.stop();
-                this.scene.run('gameOver',
-                    {
-                        score: this.score,
-                        maxCombo: this.maxCombo,
-                        correctWords: this.correctWords,
-                        mode: this.mode
-                    })
+                this.closingSequence()
             } else {
                 this.currentWordIndex++;
                 this.palabra.setWord(this.words[this.currentWordIndex]);
@@ -377,7 +368,23 @@ export default class Level extends Phaser.Scene {
         }
 
         if (this.lives === 0) {
-            this.registry.get('audio').stopAllSfx();
+            this.closingSequence()
+        }
+    }
+
+    music() {
+        this.audio.playMusic('musicaMedia', false);
+        console.log("MusicaMedia");
+        this.audio.onMusicComplete(() => {
+            this.audio.playMusic('musicaRapida');
+            console.log("musicaRapida", true);
+        })
+    }
+
+    closingSequence() {
+        this.registry.get('audio').stopAllSfx();
+        this.telon.play('telonClose')
+        this.telon.once('animationcomplete', () => {
             this.scene.sleep();
             this.scene.stop();
             this.scene.start('gameOver',
@@ -387,17 +394,7 @@ export default class Level extends Phaser.Scene {
                     correctWords: this.correctWords,
                     mode: this.mode
                 });
+        });
 
-        }
-    }
-
-    music() {
-
-        this.audio.playMusic('musicaMedia', false);
-        console.log("MusicaMedia");
-        this.audio.onMusicComplete(() => {
-            this.audio.playMusic('musicaRapida');
-            console.log("musicaRapida", true);
-        })
     }
 }
