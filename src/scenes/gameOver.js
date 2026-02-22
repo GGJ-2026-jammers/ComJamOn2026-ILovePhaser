@@ -76,7 +76,6 @@ export default class GameOver extends Phaser.Scene {
         this.menuButtons.push(playButton);
         this.add.image(700,400,'backMenuPanel').setDepth(0);
         let menuButton = new Button(this,730,400,'MENU \n  PRINCIPAL','bitFont',24,()=>{
-            console.log('menu')
             this.scene.sleep();
             this.scene.stop();
             this.scene.run('menu');
@@ -116,7 +115,6 @@ export default class GameOver extends Phaser.Scene {
             })
             
         this.events.addListener('CHANGE_BUTTON', payload => {
-            console.log(payload)
             if(this.activeButton != payload){
                 this.menuButtons[this.activeButton].setSelected(false);
                 this.activeButton = payload

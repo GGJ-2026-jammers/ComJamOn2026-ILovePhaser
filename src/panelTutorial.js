@@ -72,7 +72,6 @@ export default class PanelTutorial {
             
             let palabra = Phaser.Utils.String.RemoveAt(line, 0);
             this.guessWordExample = new GuessWord(palabra, this.font, this.scene, () => {
-                console.log('cositas')
                 this.currentText++
                 this.nextText();
             },  480 - (palabra.length * 40 / 2), 100, 40);

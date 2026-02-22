@@ -67,7 +67,6 @@ export default class Button extends Phaser.GameObjects.BitmapText {
     }
 
     playFunction(){
-        console.log('klkkkk')
         this.function(this.text);
         this.audio.playSFX('Boton1', 0.3);
     }

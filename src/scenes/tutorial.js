@@ -23,7 +23,6 @@ export default class Tutorial extends Phaser.Scene {
     }
 
     create() {
-        console.log("Tutorial");
         this.laRoca = this.add.image(30, 180, "laRocaPresentadora").setOrigin(0, 0);
         this.fondoTuto = this.add.image(0, 0, "fondoTuto").setOrigin(0, 0).setScale(2).setDepth(-1);
         this.laRoca.setScale(3);
