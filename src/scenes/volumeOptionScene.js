@@ -1,4 +1,5 @@
 import Button from "../objects/button.js";
+import TeleAntiguaPipeline from "../shader/crtShader.js";
 
 class VolumeOption extends Phaser.Scene {
 
@@ -98,6 +99,9 @@ class VolumeOption extends Phaser.Scene {
 
             onChange(value);
         });
+
+        this.cameras.main.setPostPipeline(TeleAntiguaPipeline);
+
     }
 }
 

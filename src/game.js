@@ -5,9 +5,11 @@ import PauseScene from "./scenes/pauseScene.js";
 import GameOver from "./scenes/gameOver.js";
 import Tutorial from "./scenes/tutorial.js";
 import VolumeOption from "./scenes/volumeOptionScene.js"
+import TeleAntiguaPipeline from "./shader/crtShader.js";
+//import CRTPipelinePlugin from 'phaser3-rex-plugins/plugins/crtpipeline-plugin.js';
 
 let config = {
-	type: Phaser.AUTO,
+	type: Phaser.WEBGL,
 	parent: 'juego',
 	pixelArt: true,
 	roundPixels: true,
@@ -34,6 +36,7 @@ let config = {
 			right: true
 		}
 	},
+	pipeline: { 'TeleAntigua': TeleAntiguaPipeline },
 	title: "PVLI Ordinaria 23/24",
 	version: "1.0.0",
 	transparent: false
