@@ -28,17 +28,17 @@ export default class GameOver extends Phaser.Scene {
         }
 
         let frame = 1;
-        if (this.runData.correctWords === 30) frame = 0;
+        if (this.runData.correctWords >= 30) frame = 0;
 
-        this.add.image(100, 30, 'infoRunPanel', frame).setOrigin(0, 0).setDepth(1);
-        let maxScoreText = this.add.bitmapText(150, 100, 'bitFont', "Max Score: " + this.registry.get('maxScore')).setDepth(2);
-        let score = this.add.bitmapText(150, 150, 'bitFont', "Score: " + this.runData.score).setDepth(2);
-        let maxComboEver = this.add.bitmapText(150, 230, 'bitFont', "Max Combo Ever: " + this.registry.get('maxCombo')).setDepth(2);
-        let maxComboText = this.add.bitmapText(150, 295, 'bitFont', "Max Combo: " + this.runData.maxCombo).setDepth(2);
-        let correctWords = this.add.bitmapText(150, 345, 'bitFont', "Correct words: " + this.runData.correctWords).setDepth(2);
+        this.add.image(100,15,'infoRunPanel',frame).setOrigin(0,0).setDepth(1);
+        let maxScoreText = this.add.bitmapText(135,100,'bitFont',"Max Score: " + this.registry.get('maxScore')).setDepth(2);
+        let score = this.add.bitmapText(135,150,'bitFont',"Score: " + this.runData.score).setDepth(2);
+        let maxComboEver = this.add.bitmapText(135,230,'bitFont',"Max Combo Ever: " + this.registry.get('maxCombo')).setDepth(2);
+        let maxComboText = this.add.bitmapText(135,295,'bitFont',"Max Combo: " + this.runData.maxCombo).setDepth(2);
+        let correctWords = this.add.bitmapText(135,345,'bitFont',"Correct words: " + this.runData.correctWords).setDepth(2);
 
-        if (newRecordScore) {
-            let newRecordScoreText = this.add.bitmapText(150, 70, 'bitFont', 'New Record!!!', 18).setTint(0x00ff00);
+        if(newRecordScore){
+            let newRecordScoreText = this.add.bitmapText(150,70,'bitFont','New Record!!!',18).setTint(0x00ff00).setDepth(10);
             this.multiTween = this.tweens.add({
                 targets: newRecordScoreText,
                 scale: { from: 1, to: 1.15 },
@@ -50,8 +50,8 @@ export default class GameOver extends Phaser.Scene {
             });
         }
 
-        if (newRecordCombo) {
-            let newRecordComboText = this.add.bitmapText(150, 200, 'bitFont', 'New Record!!!', 18).setTint(0x00ff00);
+        if(newRecordCombo){
+            let newRecordComboText = this.add.bitmapText(150,200,'bitFont','New Record!!!',18).setTint(0x00ff00).setDepth(10);
             this.multiTween = this.tweens.add({
                 targets: newRecordComboText,
                 scale: { from: 1, to: 1.15 },
@@ -70,8 +70,8 @@ export default class GameOver extends Phaser.Scene {
             this.scene.start('level', { mode: this.runData.mode });
         }, true, false).setDepth(2);
 
-
-        let menuButton = new Button(this, 700, 400, 'MENU PRINCIPAL', 'bitFont', 24, () => {
+        this.add.image(700,400,'backMenuPanel').setDepth(0);
+        let menuButton = new Button(this,730,400,'MENU \n  PRINCIPAL','bitFont',24,()=>{
             console.log('menu')
             this.scene.sleep();
             this.scene.stop();

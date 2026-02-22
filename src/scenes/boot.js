@@ -50,9 +50,10 @@ export default class BootScene extends Phaser.Scene {
         });
 
         this.load.image('fondoMenu', 'assets/images/fondoMenu.webp');
-        // this.load.image('laRoca2', 'assets/images/laRoca.webp');
+        this.load.image('laRoca2', 'assets/images/laRoca.webp');
         this.load.image('fondoCorcho', 'assets/images/fondoCorcho.webp');
         this.load.image('replayPanel', 'assets/images/replayPanel.webp');
+        this.load.image('backMenuPanel', 'assets/images/backMenuPanel.webp');
         this.load.image('fondo', 'assets/images/Fondo.jpg');
         this.load.image('fondo2', 'assets/images/Fondo3.webp');
         this.load.image('laRocaPresentadora', 'assets/images/La_roca.webp');
@@ -63,7 +64,7 @@ export default class BootScene extends Phaser.Scene {
         this.load.text('palabras', "assets/palabras.txt");
         this.load.spritesheet('letras', 'assets/images/abecedario.png', { frameWidth: 100, frameHeight: 100 });
         this.load.spritesheet('lives', 'assets/images/hearts.webp', { frameWidth: 36, frameHeight: 36 });
-        this.load.spritesheet('infoRunPanel', 'assets/images/ticketResultados.webp', { frameWidth: 360, frameHeight: 500 });
+        this.load.spritesheet('infoRunPanel', 'assets/images/ticketResultados.webp', { frameWidth: 400, frameHeight: 520 });
         this.load.spritesheet('bonusPanel', 'assets/images/panelBonus/panelBonusSpriteSheet.webp', { frameWidth: 128, frameHeight: 64 });
         this.load.spritesheet('breakdance', 'assets/images/breakdance-spritesheet.png', {
             frameWidth: 250,
