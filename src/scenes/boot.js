@@ -157,9 +157,10 @@ export default class BootScene extends Phaser.Scene {
     createAnims() {
         this.anims.create({
             key: 'logoAnim',
-            frames: this.anims.generateFrameNumbers('LogoAnimado', { start: 0, end: 59 }),
+            frames: this.anims.generateFrameNumbers('LogoAnimado', { start: 0, end: 48 }),
             frameRate: 10,
-            repeat: -1
+            repeat: -1,
+            repeatDelay: 1000
         });
 
         this.anims.create({
