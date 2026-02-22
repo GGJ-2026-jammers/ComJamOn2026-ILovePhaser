@@ -15,6 +15,8 @@ export default class Menu extends Phaser.Scene {
         const simpson = this.add.sprite(650, 400, 'breakdance');
         simpson.setScale(1);
         simpson.play('breakdanceMenu');
+        const buttonJugar = this.add.sprite(600,275,'panelJugar');
+        buttonJugar.play('panelJugarAnim')
 
         this.add.bitmapText(100, 50, 'bitFont', 'La Roca-Chan').setScale(2);
         this.add.bitmapText(140, 150, 'bitFont', 'Games').setScale(2).setCenterAlign();
