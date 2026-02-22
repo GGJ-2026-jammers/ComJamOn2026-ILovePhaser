@@ -1,6 +1,7 @@
 const fragShader = `
 #define SHADER_NAME CRT_FS
 precision mediump float;
+
 uniform sampler2D uMainSampler;
 varying vec2 outTexCoord;
 
@@ -35,12 +36,32 @@ void main() {
 `;
 
 const vertexShader = `
-    attribute vec4 a_position;
-    uniform vec4 u_offset;
+precision mediump float;
 
-    void main() {
-        gl_Position = a_position + u_offset;
-    }
+// Variables que Phaser nos pasa automáticamente
+uniform mat4 uProjectionMatrix;
+attribute vec2 inPosition;
+attribute vec2 inTexCoord;
+
+// Variable que le pasaremos al Fragment Shader
+varying vec2 outTexCoord;
+
+void main() {
+    // 1. Copiamos la posición original
+    vec2 posicion = inPosition;
+
+    // 2. ¡AQUÍ ESTÁ LA MAGIA! 
+    // Le sumamos 50 píxeles a la X para mover toda la geometría a la derecha
+    posicion.x += 0.0; 
+    
+    // (Si quisieras moverlo abajo, le sumarías a posicion.y)
+
+    // 3. Calculamos la posición final en la pantalla
+    gl_Position = uProjectionMatrix * vec4(posicion, 1.0, 1.0);
+
+    // 4. Pasamos las coordenadas de textura sin tocar
+    outTexCoord = inTexCoord;
+}
 `;
 
 // Exportamos la clase para poder usarla en el resto del juego
