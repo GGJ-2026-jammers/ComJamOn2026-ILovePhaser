@@ -157,7 +157,7 @@ export default class Level extends Phaser.Scene {
         this.BASE_WORD_SCORE = 300;
         this.LETTER_SCORE = 50;
         this.MULTIPLIER = 1.25;
-        this.BASE_NEXT_WORD_TIME = 3000;
+        this.BASE_NEXT_WORD_TIME = 2800;
         this.LETTER_TIME = 80;
         this.MULTI_BONUS = 0.75;
         this.TIME_REDUCTION_STEP = 200;
@@ -175,7 +175,7 @@ export default class Level extends Phaser.Scene {
         this.words = [];
         this.wordsMap = new Map();
         this.score = 500;
-        this.maxWords = 5;
+        this.maxWords = 30;
         this.currentWordIndex = 0;
         const txt = this.cache.text.get('palabras');
         const lineas = txt.replace(/\r\n/g, "\n").split("\n");
@@ -408,7 +408,8 @@ export default class Level extends Phaser.Scene {
                         score: this.score,
                         maxCombo: this.maxCombo,
                         correctWords: this.correctWords,
-                        mode: this.mode
+                        mode: this.mode,
+                        maxWords: this.maxWords
                     });
             });
         });

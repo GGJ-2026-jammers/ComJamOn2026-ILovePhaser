@@ -37,12 +37,13 @@ export default class GameOver extends Phaser.Scene {
         let frame = 1;
         if (this.runData.correctWords >= 30) frame = 0;
 
-        this.add.image(100, 15, 'infoRunPanel', frame).setOrigin(0, 0).setDepth(1);
-        let maxScoreText = this.add.bitmapText(135, 100, 'bitFont', "Max Score: " + this.registry.get('maxScore')).setDepth(2);
-        let score = this.add.bitmapText(135, 150, 'bitFont', "Score: " + this.runData.score).setDepth(2);
-        let maxComboEver = this.add.bitmapText(135, 230, 'bitFont', "Max Combo Ever: " + this.registry.get('maxCombo')).setDepth(2);
-        let maxComboText = this.add.bitmapText(135, 295, 'bitFont', "Max Combo: " + this.runData.maxCombo).setDepth(2);
-        let correctWords = this.add.bitmapText(135, 345, 'bitFont', "Correct words: " + this.runData.correctWords).setDepth(2);
+        this.add.image(80, 15, 'infoRunPanel', frame).setOrigin(0, 0).setDepth(1).setScale(1.1, 1);
+        let maxScoreText = this.add.bitmapText(126, 100, 'bitFont', "Max Score: " + this.registry.get('maxScore')).setDepth(2);
+        let score = this.add.bitmapText(126, 150, 'bitFont', "Score: " + this.runData.score).setDepth(2);
+        let maxComboEver = this.add.bitmapText(126, 230, 'bitFont', "Max Combo Ever: " + this.registry.get('maxCombo')).setDepth(2);
+        let maxComboText = this.add.bitmapText(126, 295, 'bitFont', "Max Combo: " + this.runData.maxCombo).setDepth(2);
+        let correctWords = this.add.bitmapText(126, 345, 'bitFont', "Correct words: " + this.runData.correctWords + (this.runData.mode == 0 ? "/" + this.runData.maxWords : "")).setDepth(2);
+
 
         if (newRecordScore) {
             let newRecordScoreText = this.add.bitmapText(150, 70, 'bitFont', 'New Record!!!', 18).setTint(0x00ff00).setDepth(10);
@@ -76,7 +77,6 @@ export default class GameOver extends Phaser.Scene {
             this.scene.stop();
             this.scene.start('level', { mode: this.runData.mode });
         }, true, true).setDepth(2);
-
         this.add.image(700, 400, 'backMenuPanel').setDepth(0);
         let menuButton = new Button(this, 730, 400, 'MENU \n  PRINCIPAL', 'bitFont', 24, () => {
             this.scene.stop();
@@ -84,7 +84,7 @@ export default class GameOver extends Phaser.Scene {
         }, true, true);
         menuButton.index = 1;
         this.menuButtons.push(menuButton);
-        
+
         this.cameras.main.setPostPipeline(TeleAntiguaPipeline);
         const tvShader = this.cameras.main.getPostPipeline('TeleAntiguaPipeline');
         const cicloPerfecto = (Math.PI * 2) / 0.8; // aprox 2.094
@@ -119,7 +119,7 @@ export default class GameOver extends Phaser.Scene {
                 break
                 case 'ArrowDown':case's':case'S':
                     this.menuButtons[this.activeButton].setSelected(false);
-                    if(this.activeButton == this.menuButtons.length-1) this.activeButton = 0;
+                    if (this.activeButton == this.menuButtons.length - 1) this.activeButton = 0;
                     else this.activeButton++;
                     this.menuButtons[this.activeButton].setSelected(true);
                     break
@@ -127,8 +127,8 @@ export default class GameOver extends Phaser.Scene {
                     this.menuButtons[this.activeButton].playFunction();
                     break
             }
-            })
-            
+        })
+
         this.events.addListener('CHANGE_BUTTON', payload => {
             if(this.activeButton != payload){
                 this.menuButtons[this.activeButton].setSelected(false);
@@ -139,7 +139,7 @@ export default class GameOver extends Phaser.Scene {
 
         this.menuButtons[this.activeButton].setSelected(true);
     }
-    updateSelectedButton(index){
+    updateSelectedButton(index) {
         this.menuButtons[this.activeButton].setSelected(false);
         this.activeButton = index;
     }

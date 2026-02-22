@@ -53,8 +53,10 @@ export default class GuessWord {
                     }
                     else {
                         this.wrongLetterPressed = true;
+                        const pressedChar = String.fromCharCode(now).toLowerCase();
+                        const wrongLetterFrame = this.font.get(pressedChar);
                         let wrongLetter = new Letter(this.scene, this.initialX + this.spacing * this.lettersWritten, this.initialY,
-                            'letras', this.font.get(event.key)
+                            'letras', wrongLetterFrame
                         )
                         wrongLetter.setTint(0xff0000);
                         const wrongLetterY = wrongLetter.y;
