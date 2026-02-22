@@ -15,7 +15,8 @@ class Options extends Phaser.Scene {
     create() {
 
         this.audio = this.registry.get('audio');
-
+        this.activeButton = 0;
+        this.menuButtons = [];
         const centerX = this.cameras.main.width / 2;
         const centerY = this.cameras.main.height / 2;
         this.add.image(centerX, centerY, 'fondoPanel').setDepth(105).setOrigin(0.5);
@@ -52,6 +53,7 @@ class Options extends Phaser.Scene {
                 }
             }
         ).setDepth(106).setAlpha(0);
+        this.menuButtons.push(closeBtn)
 
         // Animación escalonada
         this.tweens.add({
@@ -73,6 +75,37 @@ class Options extends Phaser.Scene {
             duration: 8000,          // Tarda 3 segundos en bajar (más lento y realista)
             repeat: -1,              // Se repite infinitamente
         });
+
+        this.input.keyboard.on('keydown', event => {
+            switch (event.key) {
+                case 'ArrowUp':
+                this.menuButtons[this.activeButton].setSelected(false);
+                if(this.activeButton ==0) this.activeButton= this.menuButtons.length-1;
+                else this.activeButton--;
+                this.menuButtons[this.activeButton].setSelected(true);
+                break
+                case 'ArrowDown':
+                    this.menuButtons[this.activeButton].setSelected(false);
+                    if(this.activeButton == this.menuButtons.length-1) this.activeButton = 0;
+                    else this.activeButton++;
+                    this.menuButtons[this.activeButton].setSelected(true);
+                    break
+                case 'Enter':
+                    this.menuButtons[this.activeButton].playFunction();
+                    break
+            }
+            })
+            
+        this.events.addListener('CHANGE_BUTTON', payload => {
+            console.log(payload)
+            if(this.activeButton != payload){
+                this.menuButtons[this.activeButton].setSelected(false);
+                this.activeButton = payload
+                this.menuButtons[this.activeButton].setSelected(true);
+            }
+        })
+
+        this.menuButtons[this.activeButton].setSelected(true);
     }
 
     createFullscreenToggle(x, y) {
@@ -194,6 +227,11 @@ class Options extends Phaser.Scene {
         });
 
         return container;
+    }
+
+    updateSelectedButton(index){
+        this.menuButtons[this.activeButton].setSelected(false);
+        this.activeButton = index;
     }
 }
 

@@ -9,17 +9,19 @@ export default class Button extends Phaser.GameObjects.BitmapText {
      * @param {Function} func funcion llamada al pulsar el boton
      * @param {boolean} hover bool para si se cambia la escala del texto al pasar por encima
      * @param {boolean} hoverChangeColor bool para si se cambia el color del texto al pasar por encima
-     * @param {string} hoverColor color al que cambiar el texto en caso de que hoverChangeColor sea true
+     * @param {integer} hoverColor color al que cambiar el texto en caso de que hoverChangeColor sea true
      */
-    constructor(scene, x, y, text, font, size, func, hover = true, hoverChangeColor = true, hoverColor = '0xFFFF00') {
+    constructor(scene, x, y, text, font, size, func, hover = true, hoverChangeColor = true, hoverColor = 0xFFFF00) {
 
         super(scene, x, y, font, text, size);
 
         this.setOrigin(0.5, 0.5)
         this.setScale(1, 1);
         this.setInteractive();
-
-
+        this.isSelected = false;
+        this.index=0;
+        this.function = func;
+        this.selectedColor = hoverColor;
         this.originalTint = 0xffffff; //blanco
         this.scene.add.existing(this);
         this.texture.setFilter(Phaser.Textures.FilterMode.NEAREST);
@@ -32,19 +34,18 @@ export default class Button extends Phaser.GameObjects.BitmapText {
 
         //al hacer click
         this.on('pointerdown', function () {
-            func(this.text);
+            this.function(this.text);
             this.audio.playSFX('Boton1', 0.3);
 
         })
+
         //al poner el raton encima
-        this.on('pointerover', function () {
+        this.on('pointerover', () =>{
+            this.scene.events.emit('CHANGE_BUTTON', this.index)
+            this.isSelected= true;
             this.audio.playSFX('Boton2',0.8);
             if (hover) {
                 this.setScale(1.1, 1.1);
-            }
-
-            if (hoverChangeColor) {
-                this.setTint(hoverColor);
             }
         })
         //al quitar el raton
@@ -52,9 +53,22 @@ export default class Button extends Phaser.GameObjects.BitmapText {
             if (hover) {
                 this.setScale(1, 1);
             }
-            if (hoverChangeColor) {
-                this.setTint(this.originalTint);
-            }
         })
+    }
+    
+    setSelected(selected){
+        if(selected){
+            this.setTint(this.selectedColor);
+            this.audio.playSFX('Boton2',0.8);
+        }
+        else{
+            this.setTint(this.originalTint);
+        }
+    }
+
+    playFunction(){
+        console.log('klkkkk')
+        this.function(this.text);
+        this.audio.playSFX('Boton1', 0.3);
     }
 }

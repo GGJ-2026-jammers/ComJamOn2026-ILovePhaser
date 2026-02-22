@@ -10,7 +10,8 @@ class PauseScene extends Phaser.Scene {
     create() {
         this.centerX = this.cameras.main.width / 2;
         this.centerY = this.cameras.main.height / 2;
-
+        this.activeButton = 0;
+        this.menuButtons = [];
 
         this.overlay();
         this.panel();
@@ -42,6 +43,37 @@ class PauseScene extends Phaser.Scene {
             duration: 8000,          // Tarda 3 segundos en bajar (más lento y realista)
             repeat: -1,              // Se repite infinitamente
         });
+
+        this.input.keyboard.on('keydown', event => {
+            switch (event.key) {
+                case 'ArrowUp':
+                this.menuButtons[this.activeButton].setSelected(false);
+                if(this.activeButton ==0) this.activeButton= this.menuButtons.length-1;
+                else this.activeButton--;
+                this.menuButtons[this.activeButton].setSelected(true);
+                break
+                case 'ArrowDown':
+                    this.menuButtons[this.activeButton].setSelected(false);
+                    if(this.activeButton == this.menuButtons.length-1) this.activeButton = 0;
+                    else this.activeButton++;
+                    this.menuButtons[this.activeButton].setSelected(true);
+                    break
+                case 'Enter':
+                    this.menuButtons[this.activeButton].playFunction();
+                    break
+            }
+            })
+            
+        this.events.addListener('CHANGE_BUTTON', payload => {
+            console.log(payload)
+            if(this.activeButton != payload){
+                this.menuButtons[this.activeButton].setSelected(false);
+                this.activeButton = payload
+                this.menuButtons[this.activeButton].setSelected(true);
+            }
+        })
+
+        this.menuButtons[this.activeButton].setSelected(true);
     }
 
 
@@ -139,7 +171,8 @@ class PauseScene extends Phaser.Scene {
                 this.scene.start('level');
             }
         ).setDepth(102);
-
+        this.btnReiniciar.index = 1;
+        
         this.btnOpciones = new Button(
             this,
             this.centerX,
@@ -152,7 +185,8 @@ class PauseScene extends Phaser.Scene {
                 this.scene.launch('options', { returnTo: 'pauseScene' });
             }
         ).setDepth(102);
-
+        this.btnOpciones.index = 2;
+        
         this.btnMenu = new Button(
             this,
             this.centerX,
@@ -166,7 +200,8 @@ class PauseScene extends Phaser.Scene {
                 this.scene.start('menu');
             }
         ).setDepth(102);
-
+        this.btnMenu.index = 3;
+        
         botones.push(this.btnReanudar, this.btnReiniciar, this.btnOpciones, this.btnMenu);
 
         // Estado inicial
@@ -184,8 +219,17 @@ class PauseScene extends Phaser.Scene {
             duration: 300,
             delay: this.tweens.stagger(120, { start: 400 })
         });
-    }
 
+        this.menuButtons.push(this.btnReanudar);
+        this.menuButtons.push(this.btnReiniciar);
+        this.menuButtons.push(this.btnOpciones);
+        this.menuButtons.push(this.btnMenu);
+    }
+    
+    updateSelectedButton(index){
+        this.menuButtons[this.activeButton].setSelected(false);
+        this.activeButton = index;
+    }
   
 }
 

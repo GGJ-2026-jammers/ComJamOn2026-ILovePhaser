@@ -13,6 +13,8 @@ export default class GameOver extends Phaser.Scene {
     create() {
         this.audio = this.registry.get('audio'); //GUARDAMOS EL AUDIO
         this.audio.playMusic('musicaTutorial');
+        this.activeButton = 0;
+        this.menuButtons = [];
         this.fondoPiedra = this.add.image(480, 270, "fondoCorcho").setDepth(0);
         let newRecordScore = false;
         let newRecordCombo = false;
@@ -71,7 +73,7 @@ export default class GameOver extends Phaser.Scene {
             this.scene.stop();
             this.scene.start('level', { mode: this.runData.mode });
         }, true, true).setDepth(2);
-
+        this.menuButtons.push(playButton);
         this.add.image(700,400,'backMenuPanel').setDepth(0);
         let menuButton = new Button(this,730,400,'MENU \n  PRINCIPAL','bitFont',24,()=>{
             console.log('menu')
@@ -79,7 +81,9 @@ export default class GameOver extends Phaser.Scene {
             this.scene.stop();
             this.scene.run('menu');
         }, true, true);
-
+        menuButton.index = 1;
+        this.menuButtons.push(menuButton);
+        
         this.cameras.main.setPostPipeline(TeleAntiguaPipeline);
         const cicloPerfecto = (Math.PI * 2) / 0.8; // aprox 2.094
 
@@ -90,5 +94,40 @@ export default class GameOver extends Phaser.Scene {
             repeat: -1,              // Se repite infinitamente
         });
 
+
+        this.input.keyboard.on('keydown', event => {
+            switch (event.key) {
+                case 'ArrowUp':
+                this.menuButtons[this.activeButton].setSelected(false);
+                if(this.activeButton ==0) this.activeButton= this.menuButtons.length-1;
+                else this.activeButton--;
+                this.menuButtons[this.activeButton].setSelected(true);
+                break
+                case 'ArrowDown':
+                    this.menuButtons[this.activeButton].setSelected(false);
+                    if(this.activeButton == this.menuButtons.length-1) this.activeButton = 0;
+                    else this.activeButton++;
+                    this.menuButtons[this.activeButton].setSelected(true);
+                    break
+                case 'Enter':
+                    this.menuButtons[this.activeButton].playFunction();
+                    break
+            }
+            })
+            
+        this.events.addListener('CHANGE_BUTTON', payload => {
+            console.log(payload)
+            if(this.activeButton != payload){
+                this.menuButtons[this.activeButton].setSelected(false);
+                this.activeButton = payload
+                this.menuButtons[this.activeButton].setSelected(true);
+            }
+        })
+
+        this.menuButtons[this.activeButton].setSelected(true);
+    }
+    updateSelectedButton(index){
+        this.menuButtons[this.activeButton].setSelected(false);
+        this.activeButton = index;
     }
 }
