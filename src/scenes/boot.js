@@ -49,7 +49,7 @@ export default class BootScene extends Phaser.Scene {
             progressBar.fillRect(centerX - 250, centerY + 80, 500 * value, 30);
         });
 
-        this.load.image('laRoca2', 'assets/images/laRoca.webp');
+        this.load.image('laRoca2', 'assets/images/fondoMenu.webp');
         this.load.image('fondo', 'assets/images/Fondo.jpg');
         this.load.image('laRocaPresentadora', 'assets/images/La_roca.webp');
         this.load.image('fondoPalabras', 'assets/images/FondoPalabras.png');
