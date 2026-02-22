@@ -21,7 +21,7 @@ export default class GuessWord {
         this.scene.input.keyboard.on('keydown', event => {
             let now = event.keyCode;
             // Sonido de letras
-            if (this.scene.letterSounds[now - 65]) audio.playSFX(this.scene.letterSounds[now - 65].key);
+            if (this.scene.letterSounds[now - 65]) audio.playSFX(this.scene.letterSounds[now - 65].key, 0.6);
             if (event.repeat || this.wrongLetterPressed) return;
 
             if ((event.keyCode >= Phaser.Input.Keyboard.KeyCodes.A && event.keyCode <= Phaser.Input.Keyboard.KeyCodes.Z && this.input)) {
@@ -33,7 +33,7 @@ export default class GuessWord {
                         this.letters[this.lettersWritten].setTint(0x00ff00);
                         this.lettersWritten++;
                         if (this.lettersWritten >= this.word.length) {
-                            this.scene.registry.get('audio').playSFX('cheer'); // Sonido Correcto
+                            this.scene.registry.get('audio').playSFX('cheer', 0.6); // Sonido Correcto
                             this.wrongLetterPressed = true;
                             this.scene.tweens.add({
                                 targets: this.letters,
