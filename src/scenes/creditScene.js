@@ -12,7 +12,8 @@ class CreditScene extends Phaser.Scene {
     }
 
     create() {
-
+        this.activeButton = 0;
+        this.menuButtons = [];
         const centerX = this.cameras.main.width / 2;
         const centerY = this.cameras.main.height / 2;
 
@@ -111,6 +112,7 @@ Todos los derechos reservados.`,
                 );
             }
         ).setDepth(106);
+        this.menuButtons.push(nextBtn)
 
         const backBtn = new Button(
             this,
@@ -137,6 +139,8 @@ Todos los derechos reservados.`,
                 );
             }
         ).setDepth(106);
+        backBtn.index =2;
+        this.menuButtons.push(backBtn)
 
         // Mostrar / ocultar botones según página
         const updateButtons = () => {
@@ -165,7 +169,8 @@ Todos los derechos reservados.`,
                 }
             }
         ).setDepth(106);
-
+        closeBtn.index = 1;
+        this.menuButtons.push(closeBtn)
         // CRT
         this.cameras.main.setPostPipeline(TeleAntiguaPipeline);
 
@@ -177,6 +182,37 @@ Todos los derechos reservados.`,
             duration: 8000,
             repeat: -1,
         });
+
+        this.input.keyboard.on('keydown', event => {
+            switch (event.key) {
+                case 'ArrowUp':
+                this.menuButtons[this.activeButton].setSelected(false);
+                if(this.activeButton ==0) this.activeButton= this.menuButtons.length-1;
+                else this.activeButton--;
+                this.menuButtons[this.activeButton].setSelected(true);
+                break
+                case 'ArrowDown':
+                    this.menuButtons[this.activeButton].setSelected(false);
+                    if(this.activeButton == this.menuButtons.length-1) this.activeButton = 0;
+                    else this.activeButton++;
+                    this.menuButtons[this.activeButton].setSelected(true);
+                    break
+                case 'Enter':
+                    this.menuButtons[this.activeButton].playFunction();
+                    break
+            }
+            })
+            
+        this.events.addListener('CHANGE_BUTTON', payload => {
+            console.log(payload)
+            if(this.activeButton != payload){
+                this.menuButtons[this.activeButton].setSelected(false);
+                this.activeButton = payload
+                this.menuButtons[this.activeButton].setSelected(true);
+            }
+        })
+
+        this.menuButtons[this.activeButton].setSelected(true);
     }
 
     switchPage(fromPage, toPage, onComplete) {
