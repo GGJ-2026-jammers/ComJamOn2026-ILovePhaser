@@ -4,7 +4,7 @@ import Level from "./scenes/level.js";
 import PauseScene from "./scenes/pauseScene.js";
 import GameOver from "./scenes/gameOver.js";
 import Tutorial from "./scenes/tutorial.js";
-import Options from "./scenes/optionScene.js"
+import Options from "./scenes/OptionScene.js";
 import TeleAntiguaPipeline from "./shader/crtShader.js";
 import CreditScene from "./scenes/creditScene.js";
 //import CRTPipelinePlugin from 'phaser3-rex-plugins/plugins/crtpipeline-plugin.js';
