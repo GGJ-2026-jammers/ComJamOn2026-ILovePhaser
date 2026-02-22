@@ -31,6 +31,14 @@ export default class Menu extends Phaser.Scene {
         this.cameras.main.setBackgroundColor('#ffffff');
 
         this.cameras.main.setPostPipeline(TeleAntiguaPipeline);
+        const cicloPerfecto = (Math.PI * 2) / 0.8; 
+
+        this.tweens.add({
+            targets: this.cameras.main.getPostPipeline('TeleAntiguaPipeline'),
+            progress: cicloPerfecto, // Llega justo hasta el final de la onda
+            duration: 8000,          // Tarda 3 segundos en bajar (más lento y realista)
+            repeat: -1,              // Se repite infinitamente
+        });
     }
 
     goLevel(key, modeLevel = 0) {
