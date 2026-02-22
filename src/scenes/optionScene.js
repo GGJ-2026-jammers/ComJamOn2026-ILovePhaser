@@ -78,7 +78,7 @@ class Options extends Phaser.Scene {
     createFullscreenToggle(x, y) {
 
         const container = this.add.container(0, 20).setAlpha(0).setDepth(106);
-    
+
         const label = this.add.bitmapText(
             x,
             y,
@@ -86,32 +86,35 @@ class Options extends Phaser.Scene {
             'PANTALLA COMPLETA',
             20
         ).setOrigin(0.5);
-    
+
         const fsButton = this.add.image(
             x + 170,
             y,
             this.scale.isFullscreen ? 'minimizeScreen' : 'fullScreen'
         )
-        .setDisplaySize(40, 40)
-        .setInteractive({ useHandCursor: true });
-    
+            .setDisplaySize(40, 40)
+            .setInteractive({ useHandCursor: true });
+
         // Guardamos el tamaño base
         const baseWidth = 40;
         const baseHeight = 40;
-    
+
         // Hover
         fsButton.on('pointerover', () => {
             fsButton.setDisplaySize(baseWidth * 1.15, baseHeight * 1.15);
             fsButton.setTint(0xffe066);
+            this.audio.playSFX('Boton2',0.8);
+
         });
-    
+
         fsButton.on('pointerout', () => {
             fsButton.setDisplaySize(baseWidth, baseHeight);
             fsButton.clearTint();
         });
-    
+
         // Click toggle fullscreen
         fsButton.on('pointerdown', () => {
+            this.audio.playSFX('Boton1', 0.5);
             if (this.scale.isFullscreen) {
                 this.scale.stopFullscreen();
                 fsButton.setTexture('fullScreen');
@@ -119,10 +122,10 @@ class Options extends Phaser.Scene {
                 this.scale.startFullscreen();
                 fsButton.setTexture('minimizeScreen');
             }
-    
+
             // Mantener tamaño exacto
             fsButton.setDisplaySize(baseWidth, baseHeight);
-    
+
             // Micro feedback
             this.tweens.add({
                 targets: fsButton,
@@ -132,7 +135,7 @@ class Options extends Phaser.Scene {
                 yoyo: true
             });
         });
-    
+
         // Animación de entrada
         fsButton.setDisplaySize(0, 0);
         this.tweens.add({
@@ -143,9 +146,9 @@ class Options extends Phaser.Scene {
             ease: 'Back.easeOut',
             delay: 200
         });
-    
+
         container.add([label, fsButton]);
-    
+
         return container;
     }
 
