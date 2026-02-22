@@ -46,7 +46,7 @@ class CreditScene extends Phaser.Scene {
         pages.push(createPage(`CREADO POR\n\nILovePhaser`, 0xFFFF00, 28));
 
         pages.push(createPage(
-            `MIEMBROS DEL EQUIPO
+            `MIEMBROS DEL EQUIPO\n
 Gabriel Garcia
 Samuel Manzaneque
 Diego Jimenez
@@ -59,17 +59,14 @@ Ricardo Luy`
             `CREDITOS
 
 SONIDO
-Click boton — Pixabay
-Hover boton — Pixabay
-Pitidos — Freesound
-Wrong letter — Pixabay
-Cheering — Freesound
-Booing — Freesound
-
-ANIMACIONES
-Flanders bailando — Tenor.com`,
+Click boton - Pixabay
+Hover boton - Pixabay
+Pitidos - Freesound
+Wrong letter - Pixabay
+Cheering - Freesound
+Booing - Freesound`,
             0xFFFFFF,
-            18
+            22
         ));
 
         pages.push(createPage(

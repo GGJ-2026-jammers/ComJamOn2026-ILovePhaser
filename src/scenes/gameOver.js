@@ -69,14 +69,14 @@ export default class GameOver extends Phaser.Scene {
 
         this.add.image(700, 200, 'replayPanel').setDepth(0);
         let playButton = new Button(this, 730, 200, 'VOLVER A \n CONCURSAR', 'bitFont', 24, () => {
-            this.scene.sleep();
+         
             this.scene.stop();
             this.scene.start('level', { mode: this.runData.mode });
         }, true, true).setDepth(2);
         this.menuButtons.push(playButton);
         this.add.image(700,400,'backMenuPanel').setDepth(0);
         let menuButton = new Button(this,730,400,'MENU \n  PRINCIPAL','bitFont',24,()=>{
-            this.scene.sleep();
+            
             this.scene.stop();
             this.scene.run('menu');
         }, true, true);
