@@ -29,7 +29,7 @@ export default class PanelTutorial {
             "Bienvenido al concurso",
             "Te voy a explicar como funciona",
             "Aparece una palabra...",
-            "Escribela muy rapido",
+            "Escríbela muy rápido",
             "Hay tiempo limitado por palabra",
             "Si encadenas aciertos...",
             "Ganas MULTIPLICADOR",
