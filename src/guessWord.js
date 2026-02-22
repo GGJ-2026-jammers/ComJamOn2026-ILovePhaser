@@ -56,6 +56,7 @@ export default class GuessWord {
                         wrongLetter.setTint(0xff0000);
                         const wrongLetterY = wrongLetter.y;
                         this.scene.registry.get('audio').playSFX('incorrect'); // Sonido Correcto
+                        this.scene.cameras.main.shake(120, 0.005);
                         this.scene.tweens.add({
                             targets: wrongLetter,
                             y: { from: wrongLetterY - 7, to: wrongLetterY + 7 },
