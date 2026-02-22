@@ -19,6 +19,7 @@ export default class Tutorial extends Phaser.Scene {
             let letter = String.fromCharCode(i + 65);
             this.letterSounds.push(this.sound.add(letter));
         }
+        this.gameStarted = true;
     }
 
     create() {

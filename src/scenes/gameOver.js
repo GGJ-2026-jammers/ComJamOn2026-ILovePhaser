@@ -70,7 +70,7 @@ export default class GameOver extends Phaser.Scene {
             this.scene.sleep();
             this.scene.stop();
             this.scene.start('level', { mode: this.runData.mode });
-        }, true, false).setDepth(2);
+        }, true, true).setDepth(2);
 
         this.add.image(700,400,'backMenuPanel').setDepth(0);
         let menuButton = new Button(this,730,400,'MENU \n  PRINCIPAL','bitFont',24,()=>{
@@ -78,7 +78,7 @@ export default class GameOver extends Phaser.Scene {
             this.scene.sleep();
             this.scene.stop();
             this.scene.run('menu');
-        }, true, false);
+        }, true, true);
 
         this.cameras.main.setPostPipeline(TeleAntiguaPipeline);
         const cicloPerfecto = (Math.PI * 2) / 0.8; // aprox 2.094
