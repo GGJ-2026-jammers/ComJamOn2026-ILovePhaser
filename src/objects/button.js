@@ -25,14 +25,22 @@ export default class Button extends Phaser.GameObjects.BitmapText {
         this.texture.setFilter(Phaser.Textures.FilterMode.NEAREST);
         this.setLetterSpacing(4);
 
+        
+        // sonidos
+        this.hoverSound = this.scene.sound.add('Boton1');
+        this.clickSound = this.scene.sound.add('Boton2');
+
+
         //al hacer click
         this.on('pointerdown', function () {
             func(this.text);
+            this.clickSound.play();
         })
         //al poner el raton encima
         this.on('pointerover', function () {
             if (hover) {
                 this.setScale(1.1, 1.1);
+                this.hoverSound.play()
             }
 
             if (hoverChangeColor) {
