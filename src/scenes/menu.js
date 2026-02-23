@@ -7,12 +7,18 @@ export default class Menu extends Phaser.Scene {
         super({ key: 'menu' });
     }
 
-    init () {
+    init() {
         this.audio = this.registry.get('audio'); //GUARDAMOS EL AUDIO
+        // Inicializar el nombre del jugador si no existe
+        if (!this.registry.get('playerName')) {
+            this.registry.set('playerName', '');
+        }
     }
     create() {
+
         this.audio.playMusic('musicaTutorial');
         this.activeButton = 0;
+        this.gotId = false
         this.menuButtons = [];
         let background = this.add.image(this.cameras.main.width / 2, this.cameras.main.height / 2, "fondoMenu").setOrigin(0.5);
         let facundo = this.add.sprite(650, 415, 'facundo').setScale(0.5);
@@ -27,7 +33,7 @@ export default class Menu extends Phaser.Scene {
 
         this.tweens.add({
             targets: facundo,
-            scaleX: { from: -0.3, to: 0.3},
+            scaleX: { from: -0.3, to: 0.3 },
             duration: 500,
             yoyo: true,
             repeat: -1
@@ -48,7 +54,7 @@ export default class Menu extends Phaser.Scene {
             () => {
                 this.scene.pause();
                 this.scene.launch('options', { returnTo: 'menu' });
-                
+
             });
         opcionesBtn.index = 3;
         let creditos = new Button(this, 175, 500, 'CREDITOS', 'bitFont', 32, () => {
@@ -58,6 +64,9 @@ export default class Menu extends Phaser.Scene {
         })
         creditos.index = 4;
         this.cameras.main.setBackgroundColor('#ffffff');
+        
+        this.getPlayerId()
+
 
         this.menuButtons.push(jugarBtn);
         this.menuButtons.push(infiniteBtn);
@@ -67,7 +76,7 @@ export default class Menu extends Phaser.Scene {
         this.selectedButton = this.menuButtons[this.activeButton]
 
         this.cameras.main.setPostPipeline(TeleAntiguaPipeline);
-         const tvShader = this.cameras.main.getPostPipeline('TeleAntiguaPipeline');
+        const tvShader = this.cameras.main.getPostPipeline('TeleAntiguaPipeline');
         const cicloPerfecto = (Math.PI * 2) / 0.8; // aprox 2.094
         const shader = /** @type {any} */ (tvShader);
 
@@ -88,29 +97,9 @@ export default class Menu extends Phaser.Scene {
             duration: 8000,          // Tarda 3 segundos en bajar (más lento y realista)
             repeat: -1,              // Se repite infinitamente
         });
-        
-        this.input.keyboard.on('keydown', event => {
-            switch (event.key) {
-                case 'ArrowUp':case'w':case'W':
-                this.menuButtons[this.activeButton].setSelected(false);
-                if(this.activeButton ==0) this.activeButton= this.menuButtons.length-1;
-                else this.activeButton--;
-                this.menuButtons[this.activeButton].setSelected(true);
-                break
-                case 'ArrowDown':case's':case'S':
-                    this.menuButtons[this.activeButton].setSelected(false);
-                    if(this.activeButton == this.menuButtons.length-1) this.activeButton = 0;
-                    else this.activeButton++;
-                    this.menuButtons[this.activeButton].setSelected(true);
-                    break
-                case 'Enter':
-                    this.menuButtons[this.activeButton].playFunction();
-                    break
-            }
-            })
-            
+
         this.events.addListener('CHANGE_BUTTON', payload => {
-            if(this.activeButton != payload){
+            if (this.activeButton != payload) {
                 this.menuButtons[this.activeButton].setSelected(false);
                 this.activeButton = payload
                 this.menuButtons[this.activeButton].setSelected(true);
@@ -118,7 +107,7 @@ export default class Menu extends Phaser.Scene {
         })
 
         this.menuButtons[this.activeButton].setSelected(true);
-         
+
         this.audio.playSFX("crtOn");
     }
 
@@ -140,8 +129,169 @@ export default class Menu extends Phaser.Scene {
         buttonCreditos.play('panelCreditosAnim')
     }
 
-    updateSelectedButton(index){
+    updateSelectedButton(index) {
         this.menuButtons[this.activeButton].setSelected(false);
         this.activeButton = index;
+    }
+
+    getPlayerId() {
+        // Verificar si ya tiene nombre guardado
+        const savedName = this.registry.get('playerName');
+        if (savedName && savedName.length > 0) {
+            this.gotId = true;
+            return;
+        }
+
+        this.gotId = false;
+
+        // Deshabilitar botones del menú completamente
+        this.menuButtons.forEach(button => {
+            button.setAlpha(0.3);
+            button.disableInteractive();
+        });
+
+        // Remover el listener del menú mientras se introduce el nombre
+        if (this.menuKeyHandler) {
+            this.input.keyboard.off('keydown');
+        }
+
+        // Crear overlay oscuro semi-transparente
+        this.nameOverlay = this.add.rectangle(480, 270, 960, 540, 0x000000, 0.8).setDepth(100);
+
+        // Crear panel para el input
+        this.namePanel = this.add.rectangle(480, 270, 600, 200, 0x333333).setDepth(101);
+        this.namePanel.setStrokeStyle(4, 0xe74c3c);
+
+        // Texto de instrucción
+        this.namePromptText = this.add.bitmapText(480, 200, 'bitFont', 'INGRESA TU NOMBRE:', 24)
+            .setOrigin(0.5)
+            .setDepth(102)
+            .setTint(0xe74c3c);
+
+        // Variable para almacenar el nombre temporal
+        this.tempPlayerName = '';
+
+        // Texto que muestra el nombre siendo escrito
+        this.nameDisplayText = this.add.bitmapText(480, 270, 'bitFont', '_', 32)
+            .setOrigin(0.5)
+            .setDepth(102);
+
+        // Texto de ayuda
+        this.nameHelpText = this.add.bitmapText(480, 330, 'bitFont', 'ENTER para confirmar\nMinimo 2 caracteres', 18)
+            .setOrigin(0.5)
+            .setDepth(102)
+            .setTint(0xaaaaaa);
+
+        // Animación de parpadeo del cursor
+        this.time.addEvent({
+            delay: 500,
+            callback: () => {
+                if (!this.gotId && this.nameDisplayText) {
+                    const currentText = this.tempPlayerName.length > 0 ? this.tempPlayerName : '';
+                    const hasUnderscore = this.nameDisplayText.text.endsWith('_');
+                    this.nameDisplayText.setText(hasUnderscore ? currentText : currentText + '_');
+                }
+            },
+            loop: true
+        });
+
+        // Listener de teclado para capturar el nombre
+        this.nameInputHandler = this.input.keyboard.on('keydown', event => {
+            if (this.gotId) return;
+
+            const key = event.key;
+            const keyCode = event.keyCode;
+
+            // Letras y números
+            if (key.length === 1 && /[a-zA-Z0-9]/.test(key) && this.tempPlayerName.length < 15) {
+                event.preventDefault();
+                this.tempPlayerName += key.toUpperCase();
+                this.nameDisplayText.setText(this.tempPlayerName + '_');
+                // Reproducir sonido de letra si es una letra
+                if (/[A-Z]/.test(key.toUpperCase())) {
+                    this.sound.play(key.toUpperCase(), { volume: 0.3 });
+                }
+            }
+            // Backspace para borrar
+            else if (keyCode === Phaser.Input.Keyboard.KeyCodes.BACKSPACE && this.tempPlayerName.length > 0) {
+                event.preventDefault();
+                this.tempPlayerName = this.tempPlayerName.slice(0, -1);
+                this.nameDisplayText.setText(this.tempPlayerName.length > 0 ? this.tempPlayerName + '_' : '_');
+            }
+            // Enter para confirmar
+            else if (keyCode === Phaser.Input.Keyboard.KeyCodes.ENTER && this.tempPlayerName.length >= 2) {
+                event.preventDefault();
+                this.confirmPlayerName();
+            }
+            // Enter pero nombre muy corto - mostrar error
+            else if (keyCode === Phaser.Input.Keyboard.KeyCodes.ENTER && this.tempPlayerName.length < 2) {
+                event.preventDefault();
+                this.nameHelpText.setTint(0xff0000);
+                this.tweens.add({
+                    targets: this.namePanel,
+                    scaleX: 1.05,
+                    scaleY: 1.05,
+                    duration: 100,
+                    yoyo: true,
+                    repeat: 2
+                });
+                this.time.delayedCall(1000, () => {
+                    if (this.nameHelpText) this.nameHelpText.setTint(0xaaaaaa);
+                });
+            }
+        });
+    }
+
+    confirmPlayerName() {
+        // Guardar el nombre
+        this.registry.set('playerName', this.tempPlayerName);
+        this.gotId = true;
+
+        // Remover el listener de nombre
+        this.input.keyboard.off('keydown');
+
+        // Reacticar el listener del menú
+        this.menuKeyHandler = this.input.keyboard.on('keydown', event => {
+            switch (event.key) {
+                case 'ArrowUp': case 'w': case 'W':
+                    this.menuButtons[this.activeButton].setSelected(false);
+                    if (this.activeButton == 0) this.activeButton = this.menuButtons.length - 1;
+                    else this.activeButton--;
+                    this.menuButtons[this.activeButton].setSelected(true);
+                    break
+                case 'ArrowDown': case 's': case 'S':
+                    this.menuButtons[this.activeButton].setSelected(false);
+                    if (this.activeButton == this.menuButtons.length - 1) this.activeButton = 0;
+                    else this.activeButton++;
+                    this.menuButtons[this.activeButton].setSelected(true);
+                    break
+                case 'Enter':
+                    this.menuButtons[this.activeButton].playFunction();
+                    break
+            }
+        });
+
+        // Animación de salida
+        this.tweens.add({
+            targets: [this.nameOverlay, this.namePanel, this.namePromptText, this.nameDisplayText, this.nameHelpText],
+            alpha: 0,
+            duration: 300,
+            onComplete: () => {
+                this.nameOverlay.destroy();
+                this.namePanel.destroy();
+                this.namePromptText.destroy();
+                this.nameDisplayText.destroy();
+                this.nameHelpText.destroy();
+            }
+        });
+
+        // Re-habilitar botones del menú
+        this.menuButtons.forEach(button => {
+            button.setAlpha(1);
+            button.enableInteractive();
+        });
+
+        // Sonido de confirmación
+        this.audio.playSFX('cheer');
     }
 }

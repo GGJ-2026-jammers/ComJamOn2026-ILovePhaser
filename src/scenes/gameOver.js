@@ -38,6 +38,11 @@ export default class GameOver extends Phaser.Scene {
         if (this.runData.correctWords >= 30) frame = 0;
 
         this.add.image(80, 15, 'infoRunPanel', frame).setOrigin(0, 0).setDepth(1).setScale(1.1, 1);
+        
+        // Mostrar nombre del jugador
+        const playerName = this.registry.get('playerName') || 'JUGADOR';
+        let playerNameText = this.add.bitmapText(126, 35, 'bitFont', "Jugador: " + playerName).setDepth(2).setTint(0xffff00);
+        
         let maxScoreText = this.add.bitmapText(126, 100, 'bitFont', "Max Score: " + this.registry.get('maxScore')).setDepth(2);
         let score = this.add.bitmapText(126, 150, 'bitFont', "Score: " + this.runData.score).setDepth(2);
         let maxComboEver = this.add.bitmapText(126, 230, 'bitFont', "Max Combo Ever: " + this.registry.get('maxCombo')).setDepth(2);
