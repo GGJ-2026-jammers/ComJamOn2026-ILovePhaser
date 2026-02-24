@@ -175,7 +175,7 @@ export default class Level extends Phaser.Scene {
         this.words = [];
         this.wordsMap = new Map();
         this.score = 500;
-        this.maxWords = 30;
+        this.maxWords = 5;
         this.currentWordIndex = 0;
         const txt = this.cache.text.get('palabras');
         const lineas = txt.replace(/\r\n/g, "\n").split("\n");

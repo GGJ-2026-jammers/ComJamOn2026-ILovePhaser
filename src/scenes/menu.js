@@ -41,7 +41,7 @@ export default class Menu extends Phaser.Scene {
 
         this.createButtonsPanels();
 
-        this.add.image(185, 75, "ILovePhaser").setScale(1.65)
+        this.add.image(185, 45, "ILovePhaser").setScale(1.65)
 
         this.add.image(650, 100, 'logo').setScale(1.5).setOrigin(0.5, 0.5);
         this.add.sprite(650, 100, 'LogoAnimado').setScale(1.5).setOrigin(0.5, 0.5).play('logoAnim');
@@ -63,16 +63,21 @@ export default class Menu extends Phaser.Scene {
 
         })
         creditos.index = 4;
+        let leaderboardBtn = new Button(this, 175, 110, 'LEADERBOARD', 'bitFont', 24, () => {
+            this.scene.pause();
+            this.scene.launch('leaderboard', { returnTo: 'menu' });
+        })
+        leaderboardBtn.index = 5;
         this.cameras.main.setBackgroundColor('#ffffff');
         
         this.getPlayerId()
-
 
         this.menuButtons.push(jugarBtn);
         this.menuButtons.push(infiniteBtn);
         this.menuButtons.push(tutorialBtn);
         this.menuButtons.push(opcionesBtn);
         this.menuButtons.push(creditos);
+        this.menuButtons.push(leaderboardBtn);
         this.selectedButton = this.menuButtons[this.activeButton]
 
         this.cameras.main.setPostPipeline(TeleAntiguaPipeline);
@@ -143,12 +148,6 @@ export default class Menu extends Phaser.Scene {
         }
 
         this.gotId = false;
-
-        // Deshabilitar botones del menú completamente
-        this.menuButtons.forEach(button => {
-            button.setAlpha(0.3);
-            button.disableInteractive();
-        });
 
         // Remover el listener del menú mientras se introduce el nombre
         if (this.menuKeyHandler) {
@@ -246,6 +245,8 @@ export default class Menu extends Phaser.Scene {
         // Guardar el nombre
         this.registry.set('playerName', this.tempPlayerName);
         this.gotId = true;
+        
+        console.log("Nombre guardado:", this.registry.get('playerName'));
 
         // Remover el listener de nombre
         this.input.keyboard.off('keydown');
@@ -283,12 +284,6 @@ export default class Menu extends Phaser.Scene {
                 this.nameDisplayText.destroy();
                 this.nameHelpText.destroy();
             }
-        });
-
-        // Re-habilitar botones del menú
-        this.menuButtons.forEach(button => {
-            button.setAlpha(1);
-            button.enableInteractive();
         });
 
         // Sonido de confirmación

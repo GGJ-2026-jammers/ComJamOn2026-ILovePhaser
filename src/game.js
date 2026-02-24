@@ -7,6 +7,7 @@ import Tutorial from "./scenes/tutorial.js";
 import Options from "./scenes/optionScene.js";
 import TeleAntiguaPipeline from "./shader/crtShader.js";
 import CreditScene from "./scenes/creditScene.js";
+import Leaderboard from "./scenes/leaderboard.js";
 //import CRTPipelinePlugin from 'phaser3-rex-plugins/plugins/crtpipeline-plugin.js';
 
 let config = {
@@ -23,7 +24,7 @@ let config = {
 		height: 540,
 		zoom: 1
 	},
-	scene: [BootScene, Level, Menu, PauseScene, GameOver, Tutorial, Options, CreditScene],
+	scene: [BootScene, Level, Menu, PauseScene, GameOver, Tutorial, Options, CreditScene, Leaderboard],
 	physics: {
 		default: 'arcade',
 		arcade: {
