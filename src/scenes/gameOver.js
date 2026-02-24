@@ -42,7 +42,7 @@ export default class GameOver extends Phaser.Scene {
         this.add.image(80, 15, 'infoRunPanel', frame).setOrigin(0, 0).setDepth(1).setScale(1.1, 1);
 
         // Mostrar nombre del jugador
-        const playerName = this.registry.get('playerName') || 'JUGADOR';
+        const playerName = localStorage.getItem('playerName') || 'JUGADOR';
         let playerNameText = this.add.bitmapText(500, 35, 'bitFont', "Jugador: " + playerName).setDepth(2).setTint(0xffff00);
 
         let maxScoreText = this.add.bitmapText(126, 100, 'bitFont', "Max Score: " + this.registry.get('maxScore')).setDepth(2);

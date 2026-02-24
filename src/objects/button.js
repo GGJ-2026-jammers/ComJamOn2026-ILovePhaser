@@ -27,7 +27,6 @@ export default class Button extends Phaser.GameObjects.BitmapText {
         this.texture.setFilter(Phaser.Textures.FilterMode.NEAREST);
         this.setLetterSpacing(4);
 
-
         // Sonidos
         this.audio = this.scene.registry.get('audio');
 

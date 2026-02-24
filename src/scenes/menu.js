@@ -17,7 +17,7 @@ export default class Menu extends Phaser.Scene {
     create() {
 
         this.audio.playMusic('musicaTutorial');
-        this.activeButton = 0;
+        this.activeButton = 1;
         this.gotId = false
         this.menuButtons = [];
         let background = this.add.image(this.cameras.main.width / 2, this.cameras.main.height / 2, "fondoMenu").setOrigin(0.5);
@@ -46,38 +46,45 @@ export default class Menu extends Phaser.Scene {
         this.add.image(650, 100, 'logo').setScale(1.5).setOrigin(0.5, 0.5);
         this.add.sprite(650, 100, 'LogoAnimado').setScale(1.5).setOrigin(0.5, 0.5).play('logoAnim');
         let jugarBtn = new Button(this, 175, 180, 'JUGAR', 'bitFont', 32, () => { this.goLevel('level') })
+        jugarBtn.index = 1;
         let infiniteBtn = new Button(this, 175, 260, 'INFINITO', 'bitFont', 32, () => { this.goLevel('level', 1) })
-        infiniteBtn.index = 1;
+        infiniteBtn.index = 2;
         let tutorialBtn = new Button(this, 175, 340, 'TUTORIAL', 'bitFont', 32, () => { this.goLevel('tutorial') })
-        tutorialBtn.index = 2;
+        tutorialBtn.index = 3;
         let opcionesBtn = new Button(this, 175, 420, 'OPCIONES', 'bitFont', 32,
             () => {
                 this.scene.pause();
                 this.scene.launch('options', { returnTo: 'menu' });
 
             });
-        opcionesBtn.index = 3;
+        opcionesBtn.index = 4;
         let creditos = new Button(this, 175, 500, 'CREDITOS', 'bitFont', 32, () => {
             this.scene.pause();
             this.scene.launch('creditScene', { returnTo: 'menu' });
 
         })
-        creditos.index = 4;
+        creditos.index = 5;
         let leaderboardBtn = new Button(this, 175, 110, 'LEADERBOARD', 'bitFont', 24, () => {
             this.scene.pause();
             this.scene.launch('leaderboard', { returnTo: 'menu' });
         })
-        leaderboardBtn.index = 5;
+        leaderboardBtn.index = 0;
         this.cameras.main.setBackgroundColor('#ffffff');
-        
-        this.getPlayerId()
 
+        this.userBtn = new Button(this, 380, 465, "Username:\n" + localStorage.getItem('playerName'), 'bitFont', 20, () => {
+            localStorage.setItem('playerName', '');
+            this.getPlayerId();
+        }, true, true).setOrigin(0, 0);
+        this.userBtn.index = 6;
+
+        this.menuButtons.push(leaderboardBtn);
         this.menuButtons.push(jugarBtn);
         this.menuButtons.push(infiniteBtn);
         this.menuButtons.push(tutorialBtn);
         this.menuButtons.push(opcionesBtn);
         this.menuButtons.push(creditos);
-        this.menuButtons.push(leaderboardBtn);
+        this.menuButtons.push(this.userBtn);
+
         this.selectedButton = this.menuButtons[this.activeButton]
 
         this.cameras.main.setPostPipeline(TeleAntiguaPipeline);
@@ -114,6 +121,34 @@ export default class Menu extends Phaser.Scene {
         this.menuButtons[this.activeButton].setSelected(true);
 
         this.audio.playSFX("crtOn");
+        this.inputsMenu();
+        this.getPlayerId();
+    }
+
+    inputsMenu() {
+        this.isEnteringName = false;
+
+        this.menuKeyHandler = this.input.keyboard.on('keydown', event => {
+            if (this.isEnteringName) return;
+
+            switch (event.key) {
+                case 'ArrowUp': case 'w': case 'W':
+                    this.menuButtons[this.activeButton].setSelected(false);
+                    if (this.activeButton == 0) this.activeButton = this.menuButtons.length - 1;
+                    else this.activeButton--;
+                    this.menuButtons[this.activeButton].setSelected(true);
+                    break
+                case 'ArrowDown': case 's': case 'S':
+                    this.menuButtons[this.activeButton].setSelected(false);
+                    if (this.activeButton == this.menuButtons.length - 1) this.activeButton = 0;
+                    else this.activeButton++;
+                    this.menuButtons[this.activeButton].setSelected(true);
+                    break
+                case 'Enter':
+                    this.menuButtons[this.activeButton].playFunction();
+                    break
+            }
+        });
     }
 
     goLevel(key, modeLevel = 0) {
@@ -141,28 +176,29 @@ export default class Menu extends Phaser.Scene {
 
     getPlayerId() {
         // Verificar si ya tiene nombre guardado
-        const savedName = this.registry.get('playerName');
+        const savedName = localStorage.getItem('playerName');
+
         if (savedName && savedName.length > 0) {
             this.gotId = true;
             return;
         }
 
         this.gotId = false;
+        this.isEnteringName = true;
 
-        // Remover el listener del menú mientras se introduce el nombre
-        if (this.menuKeyHandler) {
-            this.input.keyboard.off('keydown');
+        for (let btn of this.menuButtons) {
+            btn.disableInteractive();
         }
 
         // Crear overlay oscuro semi-transparente
-        this.nameOverlay = this.add.rectangle(480, 270, 960, 540, 0x000000, 0.8).setDepth(100);
+        this.nameOverlay = this.add.rectangle(480, 270, 960, 540, 0x000000, 0.8).setDepth(100).setAlpha(0);
 
         // Crear panel para el input
-        this.namePanel = this.add.rectangle(480, 270, 600, 200, 0x333333).setDepth(101);
+        this.namePanel = this.add.rectangle(480, 270, 600, 200, 0x333333).setDepth(101).setAlpha(0);
         this.namePanel.setStrokeStyle(4, 0xe74c3c);
 
         // Texto de instrucción
-        this.namePromptText = this.add.bitmapText(480, 200, 'bitFont', 'INGRESA TU NOMBRE:', 24)
+        this.namePromptText = this.add.bitmapText(480, 200, 'bitFont', 'INGRESA TU NOMBRE:', 24).setAlpha(0)
             .setOrigin(0.5)
             .setDepth(102)
             .setTint(0xe74c3c);
@@ -172,11 +208,13 @@ export default class Menu extends Phaser.Scene {
 
         // Texto que muestra el nombre siendo escrito
         this.nameDisplayText = this.add.bitmapText(480, 270, 'bitFont', '_', 32)
+            .setAlpha(0)
             .setOrigin(0.5)
             .setDepth(102);
 
         // Texto de ayuda
         this.nameHelpText = this.add.bitmapText(480, 330, 'bitFont', 'ENTER para confirmar\nMinimo 2 caracteres', 18)
+            .setAlpha(0)
             .setOrigin(0.5)
             .setDepth(102)
             .setTint(0xaaaaaa);
@@ -192,6 +230,12 @@ export default class Menu extends Phaser.Scene {
                 }
             },
             loop: true
+        });
+
+        this.tweens.add({
+            targets: [this.nameOverlay, this.namePanel, this.namePromptText, this.nameDisplayText, this.nameHelpText],
+            alpha: 1,
+            duration: 300,
         });
 
         // Listener de teclado para capturar el nombre
@@ -243,34 +287,15 @@ export default class Menu extends Phaser.Scene {
 
     confirmPlayerName() {
         // Guardar el nombre
-        this.registry.set('playerName', this.tempPlayerName);
+        localStorage.setItem('playerName', this.tempPlayerName);
         this.gotId = true;
-        
-        console.log("Nombre guardado:", this.registry.get('playerName'));
+
+        console.log("Nombre guardado:", localStorage.getItem('playerName'));
 
         // Remover el listener de nombre
         this.input.keyboard.off('keydown');
 
-        // Reacticar el listener del menú
-        this.menuKeyHandler = this.input.keyboard.on('keydown', event => {
-            switch (event.key) {
-                case 'ArrowUp': case 'w': case 'W':
-                    this.menuButtons[this.activeButton].setSelected(false);
-                    if (this.activeButton == 0) this.activeButton = this.menuButtons.length - 1;
-                    else this.activeButton--;
-                    this.menuButtons[this.activeButton].setSelected(true);
-                    break
-                case 'ArrowDown': case 's': case 'S':
-                    this.menuButtons[this.activeButton].setSelected(false);
-                    if (this.activeButton == this.menuButtons.length - 1) this.activeButton = 0;
-                    else this.activeButton++;
-                    this.menuButtons[this.activeButton].setSelected(true);
-                    break
-                case 'Enter':
-                    this.menuButtons[this.activeButton].playFunction();
-                    break
-            }
-        });
+        this.inputsMenu();
 
         // Animación de salida
         this.tweens.add({
@@ -283,10 +308,18 @@ export default class Menu extends Phaser.Scene {
                 this.namePromptText.destroy();
                 this.nameDisplayText.destroy();
                 this.nameHelpText.destroy();
+
+                this.isEnteringName = true;
+                for (let btn of this.menuButtons) {
+                    btn.setInteractive();
+                }
             }
         });
 
         // Sonido de confirmación
         this.audio.playSFX('cheer');
+
+        this.userBtn.text = "Username:\n" + localStorage.getItem('playerName');
+
     }
 }
