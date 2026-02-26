@@ -168,6 +168,7 @@ export default class Level extends Phaser.Scene {
         this.HEARTS_INI_X = 400;
         this.HEARTS_INI_Y = 345;
         this.HEARTS_SPACING = 40;
+        this.REGEN_HEART = 40;
     }
 
     setRandomWords() {
@@ -199,6 +200,7 @@ export default class Level extends Phaser.Scene {
 
         this.correctWords = 0;
         this.wordsCombo = 0;
+        this.wordsToNextLife = 0;
         this.maxCombo = 0;
     }
 
@@ -287,7 +289,8 @@ export default class Level extends Phaser.Scene {
 
         if (correct) {
             this.wordsCombo++;
-            if (this.wordsCombo % 40 == 0 && this.wordsCombo != 0) this.updateHearts();
+            this.wordsToNextLife++;
+            if (this.wordsToNextLife % this.REGEN_HEART == 0 && this.wordsCombo != 0) this.updateHearts();
             this.correctWords++;
             if (this.wordsCombo > this.maxCombo) this.maxCombo = this.wordsCombo;
             this.score += this.BASE_WORD_SCORE * this.multiplier;
@@ -338,6 +341,7 @@ export default class Level extends Phaser.Scene {
             this.registry.get('audio').playSFX('boo'); // Sonido Incorrecto
             this.multiplier = 1;
             this.wordsCombo = 0;
+            this.wordsToNextLife = 0;
             this.score = Math.max(0, this.score - 100);
             this.multiplierText.setText("Multi: " + this.multiplier)
             if (this.mode === 1) this.updateHearts(false);
@@ -385,6 +389,9 @@ export default class Level extends Phaser.Scene {
         if (this.lives === 0) {
             this.closingSequence()
         }
+
+        this.REGEN_HEART += 10;
+        this.wordsToNextLife = 0;
     }
 
     music() {

@@ -17,7 +17,7 @@ export default class Menu extends Phaser.Scene {
     create() {
 
         this.audio.playMusic('musicaTutorial');
-        this.activeButton = 1;
+        this.activeButton = 0;
         this.gotId = false
         this.menuButtons = [];
         let background = this.add.image(this.cameras.main.width / 2, this.cameras.main.height / 2, "fondoMenu").setOrigin(0.5);
@@ -45,41 +45,40 @@ export default class Menu extends Phaser.Scene {
 
         this.add.image(650, 100, 'logo').setScale(1.5).setOrigin(0.5, 0.5);
         this.add.sprite(650, 100, 'LogoAnimado').setScale(1.5).setOrigin(0.5, 0.5).play('logoAnim');
-        let jugarBtn = new Button(this, 175, 180, 'JUGAR', 'bitFont', 32, () => { this.goLevel('level') })
-        jugarBtn.index = 1;
-        let infiniteBtn = new Button(this, 175, 260, 'INFINITO', 'bitFont', 32, () => { this.goLevel('level', 1) })
-        infiniteBtn.index = 2;
+        let jugarBtn = new Button(this, 175, 180, 'JUGAR', 'bitFont', 32, () => { 
+            this.scene.pause();
+            this.scene.launch('modeSelector', { returnTo: 'menu' });
+         })
+        let leaderboardBtn = new Button(this, 175, 260, 'LEADERBOARD', 'bitFont', 28, () => { 
+            this.scene.pause();
+            this.scene.launch('leaderboard', { returnTo: 'menu' });
+         })
+        leaderboardBtn.index = 1;
         let tutorialBtn = new Button(this, 175, 340, 'TUTORIAL', 'bitFont', 32, () => { this.goLevel('tutorial') })
-        tutorialBtn.index = 3;
+        tutorialBtn.index = 2;
         let opcionesBtn = new Button(this, 175, 420, 'OPCIONES', 'bitFont', 32,
             () => {
                 this.scene.pause();
                 this.scene.launch('options', { returnTo: 'menu' });
 
             });
-        opcionesBtn.index = 4;
+        opcionesBtn.index = 3;
         let creditos = new Button(this, 175, 500, 'CREDITOS', 'bitFont', 32, () => {
             this.scene.pause();
             this.scene.launch('creditScene', { returnTo: 'menu' });
 
         })
-        creditos.index = 5;
-        let leaderboardBtn = new Button(this, 175, 110, 'LEADERBOARD', 'bitFont', 24, () => {
-            this.scene.pause();
-            this.scene.launch('leaderboard', { returnTo: 'menu' });
-        })
-        leaderboardBtn.index = 0;
+        creditos.index = 4;
         this.cameras.main.setBackgroundColor('#ffffff');
 
         this.userBtn = new Button(this, 380, 465, "Username:\n" + localStorage.getItem('playerName'), 'bitFont', 20, () => {
             localStorage.setItem('playerName', '');
             this.getPlayerId();
         }, true, true).setOrigin(0, 0);
-        this.userBtn.index = 6;
+        this.userBtn.index = 5;
 
-        this.menuButtons.push(leaderboardBtn);
         this.menuButtons.push(jugarBtn);
-        this.menuButtons.push(infiniteBtn);
+        this.menuButtons.push(leaderboardBtn);
         this.menuButtons.push(tutorialBtn);
         this.menuButtons.push(opcionesBtn);
         this.menuButtons.push(creditos);
@@ -159,8 +158,8 @@ export default class Menu extends Phaser.Scene {
     createButtonsPanels() {
         const buttonJugar = this.add.sprite(0, 140, 'panelJugar').setOrigin(0, 0).setScale(1.135, 1);
         buttonJugar.play('panelJugarAnim')
-        const buttonInfinito = this.add.sprite(0, 220, 'panelInfinito').setOrigin(0, 0).setScale(1.135, 1);
-        buttonInfinito.play('panelInfinitoAnim')
+        const buttonLeaderboard = this.add.sprite(0, 220, 'panelInfinito').setOrigin(0, 0).setScale(1.135, 1);
+        buttonLeaderboard.play('panelInfinitoAnim')
         const buttonTutorial = this.add.sprite(0, 300, 'panelTutorial').setOrigin(0, 0).setScale(1.135, 1);
         buttonTutorial.play('panelTutorialAnim')
         const buttonOpciones = this.add.sprite(0, 380, 'panelOpciones').setOrigin(0, 0).setScale(1.135, 1);
