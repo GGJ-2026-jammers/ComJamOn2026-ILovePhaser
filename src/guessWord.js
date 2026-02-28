@@ -211,4 +211,8 @@ export default class GuessWord {
     isCompleted() {
         return this.lettersWritten >= this.word.length;
     }
+
+    getWord() {
+        return this.word;
+    }
 }

@@ -4,11 +4,13 @@ import PauseScene from "./pauseScene.js";
 import textBox from "../objects/textBox.js";
 import GuessWord from "../guessWord.js";
 import TeleAntiguaPipeline from "../shader/crtShader.js";
+import Dificulty from "../objects/dificulty.js";
 
 export default class Level extends Phaser.Scene {
     constructor() {
         super({ key: "level" });
     }
+
 
     init(data) {
         this.mode = data.mode
@@ -24,6 +26,12 @@ export default class Level extends Phaser.Scene {
     }
 
     create() {
+        this.DIFICULTY_MODE = Object.freeze({
+            EASY: 0, MEDIUM: 1, HARD: 2, EXTREME: 3
+        });
+
+        this.actualDificulty = this.DIFICULTY_MODE.EASY;
+
         this.gameStarted = false;
         this.createPauseScene();
         this.audio = this.registry.get('audio'); //GUARDAMOS EL AUDIO
@@ -48,7 +56,7 @@ export default class Level extends Phaser.Scene {
             this.startGame();
             return;
         }
-        
+
         this.cameras.main.setPostPipeline(TeleAntiguaPipeline);
         const tvShader = this.cameras.main.getPostPipeline('TeleAntiguaPipeline');
         const cicloPerfecto = (Math.PI * 2) / 0.8; // aprox 2.094
@@ -120,7 +128,12 @@ export default class Level extends Phaser.Scene {
         frames.forEach((frame, index) => {
             this.font.set(frame, index)
         });
-        this.palabra = new GuessWord(this.words[this.currentWordIndex], this.font, this, () => { this.nextWord(true); });
+        if (this.mode == 0) {
+            this.palabra = new GuessWord(this.words[this.currentWordIndex], this.font, this, () => { this.nextWord(true); });
+        }
+        else {
+            this.palabra = new GuessWord(this.dificulty.getWord(this.actualDificulty), this.font, this, () => { this.nextWord(true); });
+        }
         this.palabra.showWord();
 
         this.multiplierText = this.add.bitmapText(484, 95, 'bitFont', 'MULTI : ' + this.multiplier).setTint(0xd71818).setLetterSpacing(1.2);
@@ -175,6 +188,8 @@ export default class Level extends Phaser.Scene {
         this.rnd = new Phaser.Math.RandomDataGenerator();
         this.words = [];
         this.wordsMap = new Map();
+        this.wordsDataBase = [];
+
         this.score = 500;
         this.maxWords = 30;
         this.currentWordIndex = 0;
@@ -184,9 +199,9 @@ export default class Level extends Phaser.Scene {
             let i = 0;
             while (i < this.maxWords) {
                 let rndNum = this.rnd.integerInRange(0, lineas.length - 1);
-            
+
                 if (!this.wordsMap.has(rndNum)) {
-              
+
                     this.words.push(lineas[rndNum]);
                     this.wordsMap.set(rndNum);
                     i++;
@@ -194,14 +209,21 @@ export default class Level extends Phaser.Scene {
             }
         }
         else {
-            this.words = lineas;
-            this.currentWordIndex = this.rnd.integerInRange(0, this.words.length - 1);
+            for (let i = 0; i < 13; i++) {
+                this.wordsDataBase.push([]);
+            }
+
+            for (let i = 0; i < lineas.length; i++) {
+                const word = lineas[i];
+                this.wordsDataBase[word.length].push(word);
+            }
         }
 
         this.correctWords = 0;
         this.wordsCombo = 0;
         this.wordsToNextLife = 0;
         this.maxCombo = 0;
+        this.dificulty = new Dificulty(this.DIFICULTY_MODE.EASY, this.wordsDataBase);
     }
 
 
@@ -270,7 +292,7 @@ export default class Level extends Phaser.Scene {
     resetTime() {
         const reductionLevel = Math.floor(this.currentWordIndex / this.TIME_REDUCTION_EVERY_WORDS);
         const reductionMs = reductionLevel * this.TIME_REDUCTION_STEP;
-        const wordLength = this.words[this.currentWordIndex].length;
+        const wordLength = this.palabra.getWord().length;
         const lengthDelta = wordLength - this.REFERENCE_WORD_LENGTH;
         const baseTime = this.BASE_NEXT_WORD_TIME + (lengthDelta * this.LETTER_TIME);
 
@@ -291,11 +313,15 @@ export default class Level extends Phaser.Scene {
             this.wordsCombo++;
             this.wordsToNextLife++;
             if (this.wordsToNextLife % this.REGEN_HEART == 0 && this.wordsCombo != 0) this.updateHearts();
+
             this.correctWords++;
+            this.actualDificulty = this.dificulty.getDynamicDifficulty(this.wordsCombo);
             if (this.wordsCombo > this.maxCombo) this.maxCombo = this.wordsCombo;
+
             this.score += this.BASE_WORD_SCORE * this.multiplier;
             this.multiplier += this.MULTIPLIER;
-            if (this.words[this.currentWordIndex].length >= 9) {
+
+            if (this.palabra.getWord().length >= 9) {
                 this.multiplier += this.MULTI_BONUS;
 
                 let bonusText = this.add.bitmapText(484, 125, 'bitFont', "BONUS!!!").setOrigin(0.5, 0.5);
@@ -358,11 +384,7 @@ export default class Level extends Phaser.Scene {
             }
         }
         else {
-            let lastWord = this.currentWordIndex;
-            do {
-                this.currentWordIndex = this.rnd.integerInRange(0, this.words.length - 1);
-            } while (this.currentWordIndex == lastWord)
-            this.palabra.setWord(this.words[this.currentWordIndex]);
+            this.palabra.setWord(this.dificulty.getWord(this.actualDificulty));
             this.resetTime();
         }
 
@@ -384,6 +406,7 @@ export default class Level extends Phaser.Scene {
         else if (!add) {
             this.lives--;
             this.livesImages[this.lives].setFrame(1);
+            this.actualDificulty = this.DIFICULTY_MODE.EASY;
         }
 
         if (this.lives === 0) {
